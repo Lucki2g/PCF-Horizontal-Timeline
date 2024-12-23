@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<manifest>
+  <control namespace="ape.dataset.timeline" constructor="timeline" version="0.1.0" display-name-key="timeline" description-key="timeline description" control-type="virtual" >
+    <!--external-service-usage node declares whether this 3rd party PCF control is using external service or not, if yes, this control will be considered as premium and please also add the external domain it is using.
+    If it is not using any external service, please set the enabled="false" and DO NOT add any domain below. The "enabled" will be false by default.
+    Example1:
+      <external-service-usage enabled="true">
+        <domain>www.Microsoft.com</domain>
+      </external-service-usage>
+    Example2:
+      <external-service-usage enabled="false">
+      </external-service-usage>
+    -->
+    <external-service-usage enabled="false">
+      <!--UNCOMMENT TO ADD EXTERNAL DOMAINS
+      <domain></domain>
+      <domain></domain>
+      -->
+    </external-service-usage>
+
+    <!-- dataset node represents a set of entity records on CDS; alFlow more than one datasets -->
+    <property description-key="Model Driven App ID" display-name-key="App ID" name="appid" usage="input" of-type="SingleLine.Text" />
+    <property default-value='{"createdon":"Created On","estimatedclosedate":"Estimated Close","actualclose":"Actual Close"}' description-key="milestonedata" display-name-key="Milestones" name="milestonedata" usage="input" of-type="SingleLine.TextArea" />
+    <property default-value='en-US' description-key="Locale in LCID string format" display-name-key="Locale" name="locale" usage="input" of-type="SingleLine.Text" />
+    <property default-value='{"years":"full","quarterPrefix":"","weeksPrefix":"","hours":"24h","minutes":"2-digit","seconds":"2-digit","days":"2-digit","months":"long"}' description-key="timedata" display-name-key="Timedata" name="timedata" usage="input" of-type="SingleLine.TextArea" />
+    <property default-value='day' description-key="Rounding method (the smallest shown item)" display-name-key="Rounding" name="rounding" usage="input" of-type="SingleLine.Text" />
+    <property default-value='4,2,0' description-key="Commaseperated list of timeunits to be shown" display-name-key="Timeunit list" name="timeunits" usage="input" of-type="SingleLine.Text" />
+
+    <data-set name="activities" display-name-key="activities">
+      <property-set name="name" display-name-key="name" description-key="name" of-type="SingleLine.Text" usage="bound" required="true" />
+      <property-set name="scheduledend" display-name-key="scheduledend" description-key="scheduledend" of-type="DateAndTime.DateAndTime" usage="bound" required="true" />
+    </data-set>
+
+    <resources>
+      <code path="index.ts" order="1"/>
+      <platform-library name="React" version="16.8.6" />
+      <css path="css/styles.css" order="1" />
+      <!-- UNCOMMENT TO ADD MORE RESOURCES
+      <platform-library name="Fluent" version="8.29.0" />
+      <resx path="strings/timeline.1033.resx" version="1.0.0" />
+      -->
+    </resources>
+    <feature-usage>
+      <uses-feature name="Utility" required="true" />
+      <uses-feature name="WebAPI" required="true" />
+    </feature-usage>
+    <!-- UNCOMMENT TO ENABLE THE SPECIFIED API
+    <feature-usage>
+      <uses-feature name="Device.captureAudio" required="true" />
+      <uses-feature name="Device.captureImage" required="true" />
+      <uses-feature name="Device.captureVideo" required="true" />
+      <uses-feature name="Device.getBarcodeValue" required="true" />
+      <uses-feature name="Device.getCurrentPosition" required="true" />
+      <uses-feature name="Device.pickFile" required="true" />
+    </feature-usage>
+    -->
+  </control>
+</manifest>
