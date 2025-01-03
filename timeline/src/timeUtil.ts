@@ -38,7 +38,6 @@ export const ITEM_PADDING: number = 12;
 export const fontSize: number = 10;
 export const xSize: number = 32;
 export const ySize: number = 24;
-
 export const defaultOptions: any = {
     years: "full",
     quarterPrefix: "",

@@ -16,18 +16,19 @@ interface IFilterDialogProps {
 export default function FilterDialog({ locale, items, onSave }: IFilterDialogProps) {
 
     const { hideDialog } = useGlobalDialogContext();
-    const { initialState, filter, setEndDate, setStartDate, updateSearch, toggleItemType, resetFilters } = useFilter();
+    const { initialState, filter, resetFilters } = useFilter();
     const { t } = useTranslation();
 
+    const [currentFilter, setCurrentFilter] = React.useState<FilterState>(filter);
     const [filteredActivities, setFilteredActivities] = React.useState<number>();
 
     React.useEffect(() => {
         setFilteredActivities(items.filter((i: TimelineItem) => 
-            i.name.toLowerCase().includes(filter.search) &&
-            filter.itemTypes[i.type] &&
-            i.date && filter.startDate <= i.date && i.date <= filter.endDate
+            i.name.toLowerCase().includes(currentFilter.search) &&
+            currentFilter.itemTypes[i.type] &&
+            i.date && currentFilter.startDate <= i.date && i.date <= currentFilter.endDate
         ).length);
-    }, [filter]);
+    }, [currentFilter]);
 
     return (
         <div className='flex flex-col items-start justify-start m-2 w-full'>
@@ -52,8 +53,8 @@ export default function FilterDialog({ locale, items, onSave }: IFilterDialogPro
                 <p className='text-start text-xs font-semibold text-gray-500 tracking-wide mb-1'>{t("filter_search")}:</p>
                 <div className='relative w-full'>
                     <input 
-                    value={filter.search} 
-                    onChange={(e) => updateSearch(e.target.value)} 
+                    value={currentFilter.search} 
+                    onChange={(e) => setCurrentFilter({ ...currentFilter, search: e.target.value })} 
                     type='text' 
                     tabIndex={1}
                     className='w-full box-border bg-neutral-100 focus:outline-none peer p-1 rounded-[4px]'></input>
@@ -77,18 +78,18 @@ export default function FilterDialog({ locale, items, onSave }: IFilterDialogPro
                                     id={type}
                                     tabIndex={1}
                                     className="hidden peer"
-                                    checked={!!filter.itemTypes[type]}
-                                    onChange={() => toggleItemType(type)}
+                                    checked={!!currentFilter.itemTypes[type]}
+                                    onChange={() => setCurrentFilter({ ...currentFilter, itemTypes: { ...currentFilter.itemTypes, [type]: !currentFilter.itemTypes[type] }})}
                                 />
-                                <div className={`flex items-center justify-center rounded-full mx-1 my-px px-2 py-0.5 transition-all duration-300 bg-opacity-20 hover:bg-opacity-40 cursor-pointer border-solid border select-none`} onClick={() => toggleItemType(type)} 
+                                <div className={`flex items-center justify-center rounded-full mx-1 my-px px-2 py-0.5 transition-all duration-300 bg-opacity-20 hover:bg-opacity-40 cursor-pointer border-solid border select-none`} onClick={() => setCurrentFilter({ ...currentFilter, itemTypes: { ...currentFilter.itemTypes, [type]: !currentFilter.itemTypes[type] }})} 
                                     style={{
-                                        borderColor: filter.itemTypes[type] ? styleInformation.color : "#9ca3af",
-                                        backgroundColor: filter.itemTypes[type] ? `rgba(${hexToRgb(styleInformation.color)}, 0.2)` : `rgba(${hexToRgb("#9ca3af")}, 0.2)`,
+                                        borderColor: currentFilter.itemTypes[type] ? styleInformation.color : "#9ca3af",
+                                        backgroundColor: currentFilter.itemTypes[type] ? `rgba(${hexToRgb(styleInformation.color)}, 0.2)` : `rgba(${hexToRgb("#9ca3af")}, 0.2)`,
                                     }}>
-                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2048 2048" className="w-3 h-3" style={{ fill: filter.itemTypes[type] ? styleInformation.color : "#9ca3af" }}>
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2048 2048" className="w-3 h-3" style={{ fill: currentFilter.itemTypes[type] ? styleInformation.color : "#9ca3af" }}>
                                         <path d="M640 1755L19 1133l90-90 531 530L1939 275l90 90L640 1755z"></path>
                                     </svg>
-                                    <label htmlFor={type} className="pl-1 peer-checked:font-bold pointer-events-none" style={{ color: filter.itemTypes[type] ? styleInformation.color : "#9ca3af" }}>
+                                    <label htmlFor={type} className="pl-1 peer-checked:font-bold pointer-events-none" style={{ color: currentFilter.itemTypes[type] ? styleInformation.color : "#9ca3af" }}>
                                         {type}
                                     </label>
                                 </div>
@@ -107,8 +108,21 @@ export default function FilterDialog({ locale, items, onSave }: IFilterDialogPro
             <div className='my-2 w-full flex-col'>
                 <p className='text-start text-xs font-semibold text-gray-500 tracking-wide mb-1'>{t("filter_dates")}:</p>
                 <div className='flex item-center flex-wrap'>
-                    <DatePicker locale={locale} minDate={initialState.startDate} maxDate={initialState.endDate} size='xs' defaultLevel="decade" onChange={setStartDate} value={filter.startDate} />
-                    <DatePicker locale={locale} minDate={initialState.startDate} maxDate={initialState.endDate} size='xs' defaultLevel="decade" onChange={setEndDate} value={filter.endDate} />
+                    <div className='flex flex-col'>
+                        <div className='flex w-full mb-2'>
+                            <p className='text-start text-xs font-semibold text-gray-500 tracking-wide pr-1'>{t("filter_startdate")}:</p>
+                            <p className='text-xs font-semibold'>{currentFilter.startDate.toLocaleString(locale, { year: "numeric", month: "2-digit", day: "2-digit" })}</p>
+                        </div>
+                        <DatePicker locale={locale} minDate={initialState.startDate} maxDate={initialState.endDate} size='xs' defaultLevel="decade" onChange={(val) => setCurrentFilter({ ...currentFilter, startDate: val ?? initialState.startDate })} value={currentFilter.startDate} />
+                    </div>
+                        
+                    <div className='flex flex-col'>
+                        <div className='flex w-full mb-2'>
+                            <p className='text-start text-xs font-semibold text-gray-500 tracking-wide pr-1'>{t("filter_enddate")}:</p>
+                            <p className='text-xs font-semibold'>{currentFilter.endDate.toLocaleString(locale, { year: "numeric", month: "2-digit", day: "2-digit" })}</p>
+                        </div>
+                        <DatePicker locale={locale} minDate={initialState.startDate} maxDate={initialState.endDate} size='xs' defaultLevel="decade" onChange={(val) => setCurrentFilter({ ...currentFilter, endDate: val ?? initialState.endDate })} value={currentFilter.endDate} />
+                    </div>
                 </div>
             </div>
 
@@ -117,7 +131,7 @@ export default function FilterDialog({ locale, items, onSave }: IFilterDialogPro
             {/* BUTTONS */}
             <div className='flex w-full justify-center text-sm mt-8'>
                 {/* SAVE */}
-                <button onClick={() => { hideDialog(); onSave(filter) }} className='rounded-[4px] mx-1 py-2 px-4 font-semibold flex items-center hover:text-white text-sky-600 bg-sky-200 hover:bg-sky-300 duration-200 transition-colors group'>
+                <button onClick={() => { hideDialog(); onSave(currentFilter) }} className='rounded-[4px] mx-1 py-2 px-4 font-semibold flex items-center hover:text-white text-sky-600 bg-sky-200 hover:bg-sky-300 duration-200 transition-colors group'>
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2048 2048" className='w-3.5 h-3.5 mr-1 fill-sky-600 group-hover:fill-white duration-200 transition-colors'>
                         <path d="M1792 128q27 0 50 10t40 27 28 41 10 50v1664H357l-229-230V256q0-27 10-50t27-30 41-28 50-10h1536zM512 896h1024V256H512v640zm768 512H640v384h128v-256h128v256h384v-384zm512-1152h-128v768H384V256H256v1381l154 155h102v-512h896v512h384V256z"></path>
                     </svg>

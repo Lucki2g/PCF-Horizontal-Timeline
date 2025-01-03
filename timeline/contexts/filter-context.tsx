@@ -16,6 +16,7 @@ interface FilterContextProps {
     setStartDate: (date: Date) => void;
     setEndDate: (date: Date) => void;
     resetFilters: () => void;
+    setFilter: React.Dispatch<React.SetStateAction<FilterState>>;
 }
 
 // Create the context
@@ -55,7 +56,7 @@ export const FilterProvider = ({
         setFilter(state);
     }
 
-    return (<FilterContext.Provider value={{ filter, initialState, initialize, setStartDate, setEndDate, updateSearch, toggleItemType, resetFilters }}>
+    return (<FilterContext.Provider value={{ filter, initialState, initialize, setFilter, setStartDate, setEndDate, updateSearch, toggleItemType, resetFilters }}>
             {children}
         </FilterContext.Provider>
     );

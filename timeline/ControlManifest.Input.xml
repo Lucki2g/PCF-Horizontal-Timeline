@@ -23,6 +23,7 @@
     <property default-value='{"createdon":"Created On","estimatedclosedate":"Estimated Close","actualclose":"Actual Close"}' description-key="milestonedata" display-name-key="Milestones" name="milestonedata" usage="input" of-type="SingleLine.TextArea" />
     <property default-value='en-US' description-key="Locale in LCID string format" display-name-key="Locale" name="locale" usage="input" of-type="SingleLine.Text" />
     <property default-value='{"years":"full","quarterPrefix":"","weeksPrefix":"","hours":"24h","minutes":"2-digit","seconds":"2-digit","days":"2-digit","months":"long"}' description-key="timedata" display-name-key="Timedata" name="timedata" usage="input" of-type="SingleLine.TextArea" />
+    <property default-value='{"task":{"color":"#eab308"},"appointment":{"color":"#7e22ce"},"milestone":{"color":"#e11d48"},"email":{"color":"#16a34a"},"phonecall":{"color":"#fb7185"}}' description-key="activitydata" display-name-key="Activitydata" name="activitydata" usage="input" of-type="SingleLine.TextArea" />
     <property default-value='day' description-key="Rounding method (the smallest shown item)" display-name-key="Rounding" name="rounding" usage="input" of-type="SingleLine.Text" />
     <property default-value='4,2,0' description-key="Commaseperated list of timeunits to be shown" display-name-key="Timeunit list" name="timeunits" usage="input" of-type="SingleLine.Text" />
 

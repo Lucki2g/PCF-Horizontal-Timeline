@@ -7,6 +7,8 @@ import TimelineItems from './components/TimelineItems';
 import { ActivityType, ActivityTypeOptions } from './icons/Icon';
 import TimelineActions from './components/TimelineActions';
 import { FilterState, useFilter } from '../contexts/filter-context';
+import TimelessTimelineItemBlock from './components/TimelessTimelineItem';
+import { useTranslation } from 'react-i18next';
 
 interface ITimelineProps {
     context: ComponentFramework.Context<IInputs>;
@@ -24,6 +26,7 @@ export default function Timeline({ context }: ITimelineProps) {
     
     // States
     const [isMouseDown, setMouseDown] = React.useState<boolean>(false);
+    const [isPaneOpen, setPaneOpen] = React.useState<boolean>(false);
     const [startX, setStartX] = React.useState<number>(0.0);
     const [left, setLeft] = React.useState<number>(0.0);
     const [items, setItems] = React.useState<TimelineItem[]>([]);
@@ -33,7 +36,8 @@ export default function Timeline({ context }: ITimelineProps) {
     const timelineRef = React.useRef<HTMLDivElement>(null);
 
     // Context
-    const { filter, initialize } = useFilter();
+    const { filter, initialize, setFilter } = useFilter();
+    const { t } = useTranslation();
 
     // Events
     function mouseDown(e: any, mobile: boolean = false) {
@@ -70,14 +74,13 @@ export default function Timeline({ context }: ITimelineProps) {
     }
 
     const updateLeft = (newLeft: number, element: HTMLElement) => {
-      
+        const maxScrollLeft = element.scrollWidth - element.clientWidth;
+        if (newLeft >= maxScrollLeft) return;
+    
         if (element instanceof HTMLElement) {
             element.scrollLeft = newLeft;
         }
-    
-        const maxScrollLeft = element.scrollWidth - element.clientWidth;
-        if (element.scrollLeft >= maxScrollLeft) return;
-    
+
         const absoluteElements = document.querySelectorAll('.abs');
         absoluteElements.forEach((el: any) => {
             el.style.left = `${newLeft}px`;
@@ -90,10 +93,16 @@ export default function Timeline({ context }: ITimelineProps) {
     }, [])
 
     React.useEffect(() => {
+        console.log("loading: ", loading, timelineRef.current)
         if (timelineRef.current) animateLeft(0, getLeft(new Date(), filter.startDate) - timelineRef.current.clientWidth / 2, timelineRef.current, 1000);
     }, [loading])
 
+    React.useEffect(() => {
+        console.log("loading: ", loading)
+    }, [loading])
+
     const animateLeft = (start: number, end: number, element: HTMLElement, duration = 500) => {
+        console.log("animating")
         const startTime = performance.now();
         const distance = end - start;
     
@@ -113,6 +122,8 @@ export default function Timeline({ context }: ITimelineProps) {
     };
 
     const refresh = async () => {
+        console.log("refreshing", loading)
+        setLoading(true);
         let start = new Date("9999-12-31");
         let end = new Date("0000-01-01");
         if (DEBUG) {
@@ -258,29 +269,49 @@ export default function Timeline({ context }: ITimelineProps) {
         }
     }
 
-    if (loading) return <></>;
+    return loading ?
+            <></> :
+            <div className='w-full h-full relative flex items-start justify-center text-dynamics-text font-dynamics select-none m-4 rounded-[4px]'>
+                {/* Loading */}
+                { loading ? <div className='w-full h-1 bg-black'></div> : <></> }
 
-    return (
-        <div className='w-full h-full relative flex items-start justify-center text-dynamics-text font-dynamics select-none m-4 rounded-[4px]'>
-            <TimelineActions locale={LOCALE} items={items} refresh={refresh} isMouseDown={isMouseDown} onSave={(filter: FilterState) => { 
-                const filteredItems = items.map(i => {
-                    const show = 
-                        i.name.toLowerCase().includes(filter.search) &&
-                        filter.itemTypes[i.type] &&
-                        i.date !== null && filter.startDate <= i.date && i.date <= filter.endDate
-                    return { ...i, show: show }
-                });
-                setItems(filteredItems);
-            }} />
-            {/* <div className='max-h-full w-64 rounded-[4px] p-2 shadow-dynamics bg-white mr-2 flex flex-col self-start'>
-                <h1 className='font-semibold text-sm'>Timeless items</h1>
-                <p className='text-[9px] text-gray-500 mb-2'>These items have no due date set.</p>
-                {
-                    items.filter(i => i.date === null).length === 0 ?
-                    <p className='text-xs'>No items...</p>
-                    :
-                    <div className='flex flex-col overflow-y-scroll w-full'>
+                {/* Actions */}
+                <TimelineActions isPaneOpen={isPaneOpen} paneChange={() => setPaneOpen(!isPaneOpen)} locale={LOCALE} items={items} refresh={refresh} isMouseDown={isMouseDown} onSave={(filter: FilterState) => { 
+                    setFilter(filter);
+                    const filteredItems = items.map(i => {
+                        const show = 
+                            i.name.toLowerCase().includes(filter.search) &&
+                            filter.itemTypes[i.type] &&
+                            i.date !== null && filter.startDate <= i.date && i.date <= filter.endDate
+                        return { ...i, show: show }
+                    });
+                    setItems(filteredItems);
+                }} />
+
+                {/* Timeline */}
+                <div ref={timelineRef} className={`${isMouseDown ? "cursor-grabbing" : "cursor-grab"} w-full shadow-dynamics bg-slate-200 overflow-x-hidden relative inset-0 bg-[linear-gradient(45deg,#ffffff33_25%,transparent_25%,transparent_75%,#ffffff33_75%,#ffffff33),linear-gradient(45deg,#ffffff33_25%,transparent_25%,transparent_75%,#ffffff33_75%,#ffffff33)] bg-[position:0_0,10px_10px] bg-[size:20px_20px]`}
+                onMouseDown={(e) => mouseDown(e)} onMouseUp={mouseOut} onMouseLeave={mouseOut} onMouseMove={(e) => mouseMove(e)} 
+                onTouchStart={(e) => mouseDown(e, true)} onTouchEnd={mouseOut} onTouchMove={(e) => mouseMove(e, true)}>
+                    <div className="flex flex-col overflow-x-inherit pointer-events-none w-fit">
+                        {/* Current time marker */}
+                        <div className='w-px h-full bg-red-400 absolute' style={{ left: getLeft(new Date(), filter.startDate) }}>
+                            <span className='absolute w-[5px] h-[5px] rounded-full border bg-red-400 border-dynamics-text' style={{ bottom: ySize * 3 - 3, left: -2 }}></span>
+                        </div>
+                        {/* Data items */}
+                        <TimelineItems context={context} items={items.filter(i => i.date !== null)} mouseDown={isMouseDown} timeunits={TIMEUNITS} />
+                        {/* Bottom */}
+                        <TimelineData locale={LOCALE} rounding={ROUNDING} options={OPTIONS} units={TIMEUNITS} />
+                    </div>
+                </div>
+
+                {/* Pane */}
+                <div className={`h-full flex-grow ${isPaneOpen ? "w-64 opacity-100 ml-2" : "w-0 opacity-0"} rounded-[4px] p-2 shadow-dynamics bg-white flex flex-col items-start duration-300 transition-all`}>
+                    <h1 className='font-semibold text-sm'>{t("timeless_title")}</h1>
+                    <p className='text-[9px] text-gray-500 mb-2'>{t("timeless_description")}</p>
+                    <div className='flex flex-col overflow-y-scroll w-full h-full justify-center items-center'>
                     {
+                        items.filter(i => i.date === null).length === 0 ?
+                        <p className='text-xs'>{t("timeless_noitems")}</p> :
                         items.filter(i => i.date === null).map(i => {
                             return (
                                 <TimelessTimelineItemBlock key={i.id} context={context} item={i} />
@@ -288,23 +319,6 @@ export default function Timeline({ context }: ITimelineProps) {
                         })
                     }
                     </div>
-                }
-            </div> */}
-            <div ref={timelineRef} className={`${isMouseDown ? "cursor-grabbing" : "cursor-grab"} w-full shadow-dynamics bg-slate-200 overflow-x-hidden relative inset-0 bg-[linear-gradient(45deg,#ffffff33_25%,transparent_25%,transparent_75%,#ffffff33_75%,#ffffff33),linear-gradient(45deg,#ffffff33_25%,transparent_25%,transparent_75%,#ffffff33_75%,#ffffff33)] bg-[position:0_0,10px_10px] bg-[size:20px_20px]`}
-            onMouseDown={(e) => mouseDown(e)} onMouseUp={mouseOut} onMouseLeave={mouseOut} onMouseMove={(e) => mouseMove(e)} 
-            onTouchStart={(e) => mouseDown(e, true)} onTouchEnd={mouseOut} onTouchMove={(e) => mouseMove(e, true)}>
-                <div className='absolute w-full left-0'></div>                
-                <div className="flex flex-col overflow-x-inherit pointer-events-none w-fit">
-                    {/* Current time marker */}
-                    <div className='w-px h-full bg-red-400 absolute' style={{ left: getLeft(new Date(), filter.startDate) }}>
-                        <span className='absolute w-[5px] h-[5px] rounded-full border bg-red-400 border-dynamics-text' style={{ bottom: ySize * 3 - 3, left: -2 }}></span>
-                    </div>
-                    {/* Data items */}
-                    <TimelineItems context={context} items={items.filter(i => i.date !== null)} mouseDown={isMouseDown} timeunits={TIMEUNITS} />
-                    {/* Bottom */}
-                    <TimelineData locale={LOCALE} rounding={ROUNDING} options={OPTIONS} units={TIMEUNITS} />
                 </div>
             </div>
-        </div>
-    )
 }

@@ -16,7 +16,12 @@ i18n.use(initReactI18next).init({
                 filter_activitytypes: "Activity types",
                 filter_save: "Save",
                 filter_close: "Close",
-                filter_dates: "Date interval"
+                filter_dates: "Date interval",
+                filter_startdate: "Start date",
+                filter_enddate: "End date",
+                timeless_title: "Timeless items",
+                timeless_description: "Following items, have no due date set.",
+                timeless_noitems: "No items..."
             },
         },
         "da-DK": {

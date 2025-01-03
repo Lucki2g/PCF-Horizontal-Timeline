@@ -80,6 +80,7 @@ export default function TimelineItemBlock({ parentRef, context, item, rowIdx, ro
         if (DEBUG) {
             setTimeout(() => { hideDialog() }, 3000)
         } else {
+            // TODO - canvas app compatible
             const page = {
                 pageType: "entityrecord",
                 entityName: item.type,
