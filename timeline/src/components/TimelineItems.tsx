@@ -18,8 +18,8 @@ export default function TimelineItems({ context, items, mouseDown, timeunits }: 
     const containerRef = React.useRef<HTMLDivElement>(null);
 
     const areItemsOverlapping = (item1: TimelineItem, item2: TimelineItem): boolean => {
-        const left1 = getLeft(item1.date!, filter.startDate);
-        const left2 = getLeft(item2.date!, filter.startDate);
+        const left1 = getLeft(item1.date!, filter.startDate, context.parameters.xsize.raw ?? 32);
+        const left2 = getLeft(item2.date!, filter.startDate, context.parameters.xsize.raw ?? 32);
         const width1 = 5 * item1.name.length + 32; 
         const width2 = 5 * item2.name.length + 32;
         return !(left1 + width1 < left2 || left2 + width2 < left1);

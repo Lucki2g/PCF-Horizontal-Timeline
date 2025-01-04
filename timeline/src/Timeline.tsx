@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { IInputs } from '../generated/ManifestTypes'
 import { addDayToDate, getLeft, removeDayFromDate, TimeUnit, ySize } from './timeUtil';
-import {  TimelineData } from './components/TimelineData';
+import {  TimelineData, TimeOptions } from './components/TimelineData';
 import { TimelineItem } from './components/TimelineItem';
 import TimelineItems from './components/TimelineItems';
 import { ActivityType, ActivityTypeOptions } from './icons/Icon';
@@ -9,6 +9,7 @@ import TimelineActions from './components/TimelineActions';
 import { FilterState, useFilter } from '../contexts/filter-context';
 import TimelessTimelineItemBlock from './components/TimelessTimelineItem';
 import { useTranslation } from 'react-i18next';
+import { useGlobalLoaderContext } from '../contexts/loader-context';
 
 interface ITimelineProps {
     context: ComponentFramework.Context<IInputs>;
@@ -20,9 +21,26 @@ export default function Timeline({ context }: ITimelineProps) {
 
     // Settings
     const LOCALE = context.parameters.locale.raw ?? "en-US";
-    const OPTIONS = JSON.parse(context.parameters.timedata.raw ?? "{}");
+    const OPTIONS: TimeOptions = {
+        years: context.parameters.yearsformat.raw ?? "full",
+        quarterPrefix: context.parameters.quartersformat.raw ?? "",
+        months: context.parameters.monthsformat.raw ?? "long",
+        weeksPrefix: context.parameters.weeksformat.raw ?? "",
+        days: context.parameters.daysformat.raw ?? "numeric",
+        hours: context.parameters.hoursformat.raw ?? "numeric",
+        hourCycle: context.parameters.hourscycle.raw ?? "23h",
+        minutes: "2-digit",
+        seconds: "2-digit"
+    } as TimeOptions;
     const ROUNDING = (context.parameters.rounding.raw ?? "day") as any;
-    const TIMEUNITS = context.parameters.timeunits.raw?.trim().split(",").map(t => Number(t)) ?? [TimeUnit.Year, TimeUnit.Month, TimeUnit.Day];
+    const TIMEUNITSUNSORTED: { value: TimeUnit, sort: number }[] = [];
+    if (context.parameters.yearsenabled.raw) TIMEUNITSUNSORTED.push({ value: TimeUnit.Year, sort: context.parameters.yearspos.raw ?? 3 });
+    if (context.parameters.quartersenabled.raw) TIMEUNITSUNSORTED.push({ value: TimeUnit.Quarter, sort: context.parameters.quarterpos.raw ?? 5 });
+    if (context.parameters.monthsformat.raw) TIMEUNITSUNSORTED.push({ value: TimeUnit.Month, sort: context.parameters.monthspos.raw ?? 2 });
+    if (context.parameters.weeksenabled.raw) TIMEUNITSUNSORTED.push({ value: TimeUnit.Week, sort: context.parameters.weekspos.raw ?? 4 });
+    if (context.parameters.daysenabled.raw) TIMEUNITSUNSORTED.push({ value: TimeUnit.Day, sort: context.parameters.dayspos.raw ?? 1 });
+    if (context.parameters.hoursenabled.raw) TIMEUNITSUNSORTED.push({ value: TimeUnit.Hour, sort: context.parameters.hourspos.raw ?? 0 });
+    const TIMEUNITS = TIMEUNITSUNSORTED.sort((prev, curr) => prev.sort - curr.sort).map(i => i.value);
     
     // States
     const [isMouseDown, setMouseDown] = React.useState<boolean>(false);
@@ -30,7 +48,6 @@ export default function Timeline({ context }: ITimelineProps) {
     const [startX, setStartX] = React.useState<number>(0.0);
     const [left, setLeft] = React.useState<number>(0.0);
     const [items, setItems] = React.useState<TimelineItem[]>([]);
-    const [loading, setLoading] = React.useState<boolean>(true);
 
     // Refs
     const timelineRef = React.useRef<HTMLDivElement>(null);
@@ -38,6 +55,7 @@ export default function Timeline({ context }: ITimelineProps) {
     // Context
     const { filter, initialize, setFilter } = useFilter();
     const { t } = useTranslation();
+    const { loadingstate, setState } = useGlobalLoaderContext();
 
     // Events
     function mouseDown(e: any, mobile: boolean = false) {
@@ -89,20 +107,20 @@ export default function Timeline({ context }: ITimelineProps) {
 
     // Effects
     React.useEffect(() => {
-        refresh();
-    }, [])
-
-    React.useEffect(() => {
-        console.log("loading: ", loading, timelineRef.current)
-        if (timelineRef.current) animateLeft(0, getLeft(new Date(), filter.startDate) - timelineRef.current.clientWidth / 2, timelineRef.current, 1000);
-    }, [loading])
-
-    React.useEffect(() => {
-        console.log("loading: ", loading)
-    }, [loading])
+        if (loadingstate) refresh();
+        if (!loadingstate && timelineRef.current) 
+            animateLeft(
+                0, 
+                getLeft(
+                    new Date(), 
+                    filter.startDate, 
+                    context.parameters.xsize.raw ?? 32
+                ) - timelineRef.current.clientWidth / 2, 
+                timelineRef.current, 
+                1000);
+    }, [loadingstate])
 
     const animateLeft = (start: number, end: number, element: HTMLElement, duration = 500) => {
-        console.log("animating")
         const startTime = performance.now();
         const distance = end - start;
     
@@ -122,8 +140,6 @@ export default function Timeline({ context }: ITimelineProps) {
     };
 
     const refresh = async () => {
-        console.log("refreshing", loading)
-        setLoading(true);
         let start = new Date("9999-12-31");
         let end = new Date("0000-01-01");
         if (DEBUG) {
@@ -181,7 +197,7 @@ export default function Timeline({ context }: ITimelineProps) {
                     id: "7",
                     name: "Phone Call",
                     type: "phonecall",
-                    date: new Date("2025-01-01T23:59:59"),
+                    date: new Date("2025-02-02T23:59:59"),
                     show: true
                 }
             ];
@@ -206,7 +222,7 @@ export default function Timeline({ context }: ITimelineProps) {
                     endDate: addDayToDate(end)
                 }
             );
-            setLoading(false);
+            setState(false);
         } else {
             const activities = context.parameters.activities.sortedRecordIds.map((id: string): TimelineItem => {
                 const activity = context.parameters.activities.records[id];
@@ -265,18 +281,20 @@ export default function Timeline({ context }: ITimelineProps) {
                     endDate: addDayToDate(end)
                 }
             );
-            setLoading(false);
+            setState(false);
         }
     }
 
-    return loading ?
+    return loadingstate ?
             <></> :
             <div className='w-full h-full relative flex items-start justify-center text-dynamics-text font-dynamics select-none m-4 rounded-[4px]'>
                 {/* Loading */}
-                { loading ? <div className='w-full h-1 bg-black'></div> : <></> }
+                { loadingstate ? <div className='w-full h-1 bg-black'></div> : <></> }
 
                 {/* Actions */}
-                <TimelineActions isPaneOpen={isPaneOpen} paneChange={() => setPaneOpen(!isPaneOpen)} locale={LOCALE} items={items} refresh={refresh} isMouseDown={isMouseDown} onSave={(filter: FilterState) => { 
+                <TimelineActions isPaneOpen={isPaneOpen} paneChange={() => setPaneOpen(!isPaneOpen)} locale={LOCALE} items={items}  
+                isMouseDown={isMouseDown} 
+                onSave={(filter: FilterState) => { 
                     setFilter(filter);
                     const filteredItems = items.map(i => {
                         const show = 
@@ -294,13 +312,13 @@ export default function Timeline({ context }: ITimelineProps) {
                 onTouchStart={(e) => mouseDown(e, true)} onTouchEnd={mouseOut} onTouchMove={(e) => mouseMove(e, true)}>
                     <div className="flex flex-col overflow-x-inherit pointer-events-none w-fit">
                         {/* Current time marker */}
-                        <div className='w-px h-full bg-red-400 absolute' style={{ left: getLeft(new Date(), filter.startDate) }}>
+                        <div className='w-px h-full bg-red-400 absolute' style={{ left: getLeft(new Date(), filter.startDate, context.parameters.xsize.raw ?? 32) }}>
                             <span className='absolute w-[5px] h-[5px] rounded-full border bg-red-400 border-dynamics-text' style={{ bottom: ySize * 3 - 3, left: -2 }}></span>
                         </div>
                         {/* Data items */}
                         <TimelineItems context={context} items={items.filter(i => i.date !== null)} mouseDown={isMouseDown} timeunits={TIMEUNITS} />
                         {/* Bottom */}
-                        <TimelineData locale={LOCALE} rounding={ROUNDING} options={OPTIONS} units={TIMEUNITS} />
+                        <TimelineData context={context} locale={LOCALE} rounding={ROUNDING} options={OPTIONS} units={TIMEUNITS} />
                     </div>
                 </div>
 

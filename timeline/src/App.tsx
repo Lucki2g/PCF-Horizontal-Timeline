@@ -6,6 +6,7 @@ import { ActivityTypeOptions } from './icons/Icon'
 import { DialogProvider } from '../contexts/dialog-context'
 import Timeline from './Timeline'
 import { IInputs } from '../generated/ManifestTypes'
+import { LoaderProvider } from '../contexts/loader-context'
 
 interface IAppProps {
     context: ComponentFramework.Context<IInputs>;
@@ -14,11 +15,13 @@ interface IAppProps {
 export default function App({ context }: IAppProps) {
     return (
         <I18nextProvider i18n={i18n}>
-            <FilterProvider>
-                <DialogProvider>
-                    <Timeline context={context} />
-                </DialogProvider>
-            </FilterProvider>
+            <LoaderProvider>
+                <FilterProvider>
+                    <DialogProvider>
+                        <Timeline context={context} />
+                    </DialogProvider>
+                </FilterProvider>
+            </LoaderProvider>
         </I18nextProvider>
     )
 }

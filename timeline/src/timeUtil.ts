@@ -1,10 +1,10 @@
-import { RoundingType } from "./components/TimelineData";
+import { RoundingType, TimeOptions } from "./components/TimelineData";
 
 // Kaare Børsting - Software Ape - Lucki2g
 export interface DateInfo {
     year: number | undefined; // just used for weeks
     name: string;
-    days: number;
+    hours: number;
     key: string;
 }
 
@@ -13,7 +13,8 @@ export enum TimeUnit {
     Quarter = 1,
     Month = 2,
     Week = 3,
-    Day = 4
+    Day = 4,
+    Hour = 5
 }
 
 export const timeUnitInformation = (unit: TimeUnit) => {
@@ -28,6 +29,8 @@ export const timeUnitInformation = (unit: TimeUnit) => {
             return { i18ntranslation: "week", timeUnits: "weeks" }
         case TimeUnit.Day:
             return { i18ntranslation: "day", timeUnits: "days" }
+        case TimeUnit.Hour:
+            return { i18ntranslation: "hour", timeUnits: "hours" }
     }
 }
   
@@ -36,7 +39,6 @@ export interface TimeUnits { [idx: string]: DateInfo[] }
 const MILIS_IN_DAY = 1000 * 60 * 60 * 24;
 export const ITEM_PADDING: number = 12;
 export const fontSize: number = 10;
-export const xSize: number = 32;
 export const ySize: number = 24;
 export const defaultOptions: any = {
     years: "full",
@@ -72,16 +74,7 @@ export function getAvailableTimeUnits(
     startDate: Date,
     endDate: Date,
     units: TimeUnit[],
-    options?: {
-        years: "full" | "short";
-        quarterPrefix: string;
-        months: "numeric" | "2-digit" | "long" | "short" | "narrow";
-        weeksPrefix: string;
-        days: "numeric" | "long" | "short" | "narrow";
-        hours: "24h" | "12h";
-        minutes: "numeric" | "2-digit";
-        seconds: "numeric" | "2-digit";
-    },
+    options: TimeOptions,
     locale: string = "en-US",
     rounding: RoundingType = "none"
 ): TimeUnits {
@@ -169,6 +162,12 @@ export function getAvailableTimeUnits(
     if (units.includes(TimeUnit.Day)) {
         days = getListOfDays(roundedStart, roundedEnd);
     }
+    
+    // Days
+    let hours: DateInfo[] = [];
+    if (units.includes(TimeUnit.Hour)) {
+        hours = getListOfHours(roundedStart, roundedEnd);
+    }
 
     function getListOfYears(startDate: Date, endDate: Date): DateInfo[] {
         const years: DateInfo[] = [];
@@ -189,7 +188,7 @@ export function getAvailableTimeUnits(
                 key: `${key}`,
                 year: currentYear,
                 name: key,
-                days: daysInYear
+                hours: daysInYear * 24
             });
 
             currentYear++;
@@ -227,7 +226,7 @@ export function getAvailableTimeUnits(
             key: `${year}-q${key}`,
             year: year,
             name: key,
-            days: daysInQuarter // Round down to avoid partial days
+            hours: daysInQuarter * 24
         });
     }
 
@@ -274,7 +273,7 @@ export function getAvailableTimeUnits(
                 key: `${year}-m${key}`,
                 year: year,
                 name: key,
-                days: Math.round(daysInMonth)
+                hours: Math.round(daysInMonth) * 24
             });
 
             currentDate = nextMonth;
@@ -326,14 +325,14 @@ export function getAvailableTimeUnits(
                 key: `${year}-m${currentDate.getMonth()}-w${key}`,
                 year: year, 
                 name: key, 
-                days: Math.round(daysInWeek) 
+                hours: Math.round(daysInWeek) * 24
             });
 
             currentDate.setDate(currentDate.getDate() + daysInWeek);
         }
 
         const uniqueWeeks = weeks.filter((value, index, self) =>
-            index === self.findIndex((t) => t.name === value.name && t.year === value.year && t.days === value.days)
+            index === self.findIndex((t) => t.name === value.name && t.year === value.year && t.hours === value.hours)
         );
 
         return uniqueWeeks;
@@ -345,7 +344,7 @@ export function getAvailableTimeUnits(
     //                                              //
     //////////////////////////////////////////////////
     function getListOfDays(startDate: Date, endDate: Date): DateInfo[] {
-        const daysFormatter = new Intl.DateTimeFormat(locale, { day: "numeric" });
+        const daysFormatter = new Intl.DateTimeFormat(locale, options.days === "numeric" || options.days === "2-digit" ? { day: options.days } : { weekday: options.days });
         const days: DateInfo[] = [];
 
         const currentDate = new Date(startDate);
@@ -356,7 +355,7 @@ export function getAvailableTimeUnits(
                 key: `${year}-m${currentDate.getMonth()}-d${currentDate.getDate()}`, 
                 year: currentDate.getFullYear(), 
                 name: daysFormatter.format(currentDate), 
-                days: 1
+                hours: 24
             } as DateInfo)
             currentDate.setDate(currentDate.getDate() + 1)
         }
@@ -364,16 +363,46 @@ export function getAvailableTimeUnits(
         return days;
     }
 
+    //////////////////////////////////////////////////
+    //                                              //
+    //                  HOURS                       //
+    //                                              //
+    //////////////////////////////////////////////////
+    function getListOfHours(startDate: Date, endDate: Date): DateInfo[] {
+        const hourFormatter = new Intl.DateTimeFormat(locale, { hourCycle: options.hourCycle, hour: options.hours });
+        const hours: DateInfo[] = [];
+
+        const currentDate = new Date(startDate);
+
+        while (currentDate <= endDate) {
+            const year = currentDate.getFullYear();
+            [...Array(24).keys()].forEach(h => {
+                const date = new Date(currentDate);
+                date.setHours(h,0,0,0);
+                hours.push({ 
+                    key: `${year}-m${currentDate.getMonth()}-d${currentDate.getDate()}-h${h}`, 
+                    year: currentDate.getFullYear(), 
+                    name: hourFormatter.format(date), 
+                    hours: 1
+                } as DateInfo)
+            })
+            currentDate.setDate(currentDate.getDate() + 1)
+        }
+
+        return hours;
+    }
+
     return {
         years: years,
         quarters: quarters,
         months: months,
         weeks: weeks,
-        days: days
+        days: days,
+        hours: hours
     } as TimeUnits;
 }
 
-export const getLeft = (date: Date, start: Date) => {
+export const getLeft = (date: Date, start: Date, xSize: number) => {
     const diff = date.getTime() - start.getTime();
     const pxPerMs = xSize / MILIS_IN_DAY;
     return pxPerMs * diff;

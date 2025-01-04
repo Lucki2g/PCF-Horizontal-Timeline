@@ -49,22 +49,23 @@ export default function TimelineItemBlock({ parentRef, context, item, rowIdx, ro
 
         const itemLeftSide = itemBox.left - itemBox.width / 2;
         const itemRightSide = itemBox.right - itemBox.width / 2;
+        const middle = itemBox.width / 2;
 
         // is item within parent if centered?
         if (itemLeftSide > parentBox.left && itemRightSide < parentBox.right) {
-            return itemBox.width / 2;
+            return middle;
         }
 
         // is item overflowing on the left of the parent?
         if (itemLeftSide < parentBox.left) {
             const diff = parentBox.left - itemLeftSide;
-            return itemBox.width / 2 - diff;
+            return middle - diff + leftAlignment;
         }
 
         // is item overflowing on the right of the parent?
         if (itemRightSide > parentBox.right) {
             const diff = itemRightSide - parentBox.right;
-            return itemBox.width / 2 + diff;
+            return middle + diff - leftAlignment;
         }
 
         // error
@@ -110,7 +111,7 @@ export default function TimelineItemBlock({ parentRef, context, item, rowIdx, ro
     }, [itemRef, parentRef, filter.startDate, filter.endDate]);
 
     return (
-        <div className='absolute flex border-l border-dotted border-gray-500' style={{ left: item.date ? getLeft(item.date, filter.startDate) : 0, height: ITEM_PADDING + 2 + ((rowCount - rowIdx) * ySize), top: ITEM_PADDING + 10 }}>
+        <div className='absolute flex border-l border-dotted border-gray-500' style={{ left: item.date ? getLeft(item.date, filter.startDate, context.parameters.xsize.raw ?? 32) : 0, height: ITEM_PADDING + 2 + ((rowCount - rowIdx) * ySize), top: ITEM_PADDING + 10 }}>
             <span className='absolute w-[5px] h-[5px] rounded-full border border-solid border-dynamics-text bottom-[-2px]' style={{ left: -3, backgroundColor: styleInformation.color }}></span>
             {settings.showlines ? <span className='absolute border-l border-dotted -left-px' style={{ borderColor: styleInformation.color, height: ySize * timeunits.length, top: ITEM_PADDING + 2 + ((rowCount - rowIdx) * ySize) }}></span> : <></> }
             {

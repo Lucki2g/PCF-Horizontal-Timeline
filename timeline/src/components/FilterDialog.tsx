@@ -6,6 +6,7 @@ import { hexToRgb } from '../util';
 import { TimelineItem } from './TimelineItem';
 import { FilterState, useFilter } from '../../contexts/filter-context';
 import { DatePicker } from '@mantine/dates';
+import { AnimatePresence, motion } from 'framer-motion';
 
 interface IFilterDialogProps {
     items: TimelineItem[];
@@ -16,7 +17,7 @@ interface IFilterDialogProps {
 export default function FilterDialog({ locale, items, onSave }: IFilterDialogProps) {
 
     const { hideDialog } = useGlobalDialogContext();
-    const { initialState, filter, resetFilters } = useFilter();
+    const { initialState, filter } = useFilter();
     const { t } = useTranslation();
 
     const [currentFilter, setCurrentFilter] = React.useState<FilterState>(filter);
@@ -39,7 +40,7 @@ export default function FilterDialog({ locale, items, onSave }: IFilterDialogPro
                     <h1 className='font-semibold'>{t("filter_title")}</h1>
                     <p className='text-sm'>{t("filter_count").replace("{0}", "" + filteredActivities).replace("{1}", "" + items.length)}</p>
                 </div>
-                <button className='rounded-full transition-colors bg-sky-50 hover:bg-sky-200 mr-2 duration-300 p-2' onClick={resetFilters}>
+                <button className='rounded-full transition-colors bg-sky-50 hover:bg-sky-200 mr-2 duration-300 p-2' onClick={() => setCurrentFilter(initialState)}>
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2048 2048" className='w-4 h-4 m-1 fill-sky-600'>
                         <path d="M0 128h2048v219l-768 768v805H768v-805L0 347V128zm1920 165v-37H128v37l768 768v731h256v-731l768-768zm37 987l91 91-230 229 230 229-91 91-229-230-229 230-91-91 230-229-230-229 91-91 229 230 229-230z"></path>
                     </svg>
@@ -81,15 +82,31 @@ export default function FilterDialog({ locale, items, onSave }: IFilterDialogPro
                                     checked={!!currentFilter.itemTypes[type]}
                                     onChange={() => setCurrentFilter({ ...currentFilter, itemTypes: { ...currentFilter.itemTypes, [type]: !currentFilter.itemTypes[type] }})}
                                 />
-                                <div className={`flex items-center justify-center rounded-full mx-1 my-px px-2 py-0.5 transition-all duration-300 bg-opacity-20 hover:bg-opacity-40 cursor-pointer border-solid border select-none`} onClick={() => setCurrentFilter({ ...currentFilter, itemTypes: { ...currentFilter.itemTypes, [type]: !currentFilter.itemTypes[type] }})} 
+                                <div className={`flex items-center justify-center rounded-full mx-1 my-px px-2 py-0.5 bg-opacity-20 cursor-pointer border-solid border select-none
+                                peer-checked:shadow-dynamics hover:shadow-dynamics transition-all duration-300`} onClick={() => setCurrentFilter({ ...currentFilter, itemTypes: { ...currentFilter.itemTypes, [type]: !currentFilter.itemTypes[type] }})} 
                                     style={{
                                         borderColor: currentFilter.itemTypes[type] ? styleInformation.color : "#9ca3af",
                                         backgroundColor: currentFilter.itemTypes[type] ? `rgba(${hexToRgb(styleInformation.color)}, 0.2)` : `rgba(${hexToRgb("#9ca3af")}, 0.2)`,
                                     }}>
-                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2048 2048" className="w-3 h-3" style={{ fill: currentFilter.itemTypes[type] ? styleInformation.color : "#9ca3af" }}>
-                                        <path d="M640 1755L19 1133l90-90 531 530L1939 275l90 90L640 1755z"></path>
-                                    </svg>
-                                    <label htmlFor={type} className="pl-1 peer-checked:font-bold pointer-events-none" style={{ color: currentFilter.itemTypes[type] ? styleInformation.color : "#9ca3af" }}>
+                                    <AnimatePresence exitBeforeEnter>
+                                        {
+                                            !!currentFilter.itemTypes[type] ?
+                                            <motion.svg 
+                                                key={("svg-" + type)}
+                                                initial={{ width: 0 }}
+                                                animate={{ width: 12 }}
+                                                exit={{ width: 0 }}
+                                                transition={{ duration: 0.3 }}
+                                                xmlns="http://www.w3.org/2000/svg" 
+                                                viewBox="0 0 2048 2048" 
+                                                className="h-3 pointer-events-none mr-1" 
+                                                style={{ fill: currentFilter.itemTypes[type] ? styleInformation.color : "#9ca3af" }}>
+                                                <path d="M640 1755L19 1133l90-90 531 530L1939 275l90 90L640 1755z"></path>
+                                            </motion.svg> :
+                                            <></>
+                                        }
+                                    </AnimatePresence>
+                                    <label htmlFor={type} className="peer-checked:font-bold pointer-events-none" style={{ color: currentFilter.itemTypes[type] ? styleInformation.color : "#9ca3af" }}>
                                         {type}
                                     </label>
                                 </div>
@@ -110,7 +127,7 @@ export default function FilterDialog({ locale, items, onSave }: IFilterDialogPro
                 <div className='flex item-center flex-wrap'>
                     <div className='flex flex-col'>
                         <div className='flex w-full mb-2'>
-                            <p className='text-start text-xs font-semibold text-gray-500 tracking-wide pr-1'>{t("filter_startdate")}:</p>
+                            <p className='text-start text-xs text-gray-500 tracking-wide pr-1'>{t("filter_startdate")}:</p>
                             <p className='text-xs font-semibold'>{currentFilter.startDate.toLocaleString(locale, { year: "numeric", month: "2-digit", day: "2-digit" })}</p>
                         </div>
                         <DatePicker locale={locale} minDate={initialState.startDate} maxDate={initialState.endDate} size='xs' defaultLevel="decade" onChange={(val) => setCurrentFilter({ ...currentFilter, startDate: val ?? initialState.startDate })} value={currentFilter.startDate} />
@@ -118,7 +135,7 @@ export default function FilterDialog({ locale, items, onSave }: IFilterDialogPro
                         
                     <div className='flex flex-col'>
                         <div className='flex w-full mb-2'>
-                            <p className='text-start text-xs font-semibold text-gray-500 tracking-wide pr-1'>{t("filter_enddate")}:</p>
+                            <p className='text-start text-xs text-gray-500 tracking-wide pr-1'>{t("filter_enddate")}:</p>
                             <p className='text-xs font-semibold'>{currentFilter.endDate.toLocaleString(locale, { year: "numeric", month: "2-digit", day: "2-digit" })}</p>
                         </div>
                         <DatePicker locale={locale} minDate={initialState.startDate} maxDate={initialState.endDate} size='xs' defaultLevel="decade" onChange={(val) => setCurrentFilter({ ...currentFilter, endDate: val ?? initialState.endDate })} value={currentFilter.endDate} />
