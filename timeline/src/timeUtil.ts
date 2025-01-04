@@ -37,6 +37,7 @@ export const timeUnitInformation = (unit: TimeUnit) => {
 export interface TimeUnits { [idx: string]: DateInfo[] }
 
 const MILIS_IN_DAY = 1000 * 60 * 60 * 24;
+const MILIS_IN_HOUR = 1000 * 60 * 60;
 export const ITEM_PADDING: number = 12;
 export const fontSize: number = 10;
 export const ySize: number = 24;
@@ -404,6 +405,6 @@ export function getAvailableTimeUnits(
 
 export const getLeft = (date: Date, start: Date, xSize: number) => {
     const diff = date.getTime() - start.getTime();
-    const pxPerMs = xSize / MILIS_IN_DAY;
+    const pxPerMs = xSize / MILIS_IN_HOUR;
     return pxPerMs * diff;
 }
