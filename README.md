@@ -1,5 +1,6 @@
 ﻿### Tasks:
 [x] BUG: Text can be dragged further than the screen
+- PERFORMANCE: Rewrite HTML imperative obygning til Canvas og declarative 
 - FEATURE: Varying sizes of cells (xSize, ySize)
 - FEATURE: Show specific systemuser tasks
 [x] FEATURE: Timeless Timelines items
