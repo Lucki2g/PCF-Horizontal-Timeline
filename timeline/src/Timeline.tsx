@@ -48,6 +48,7 @@ export default function Timeline({ context }: ITimelineProps) {
     const [startX, setStartX] = React.useState<number>(0.0);
     const [left, setLeft] = React.useState<number>(0.0);
     const [items, setItems] = React.useState<TimelineItem[]>([]);
+    const [currentLeft, setCurrentLeft] = React.useState<number>(0.0);
 
     // Refs
     const timelineRef = React.useRef<HTMLDivElement>(null);
@@ -318,7 +319,7 @@ export default function Timeline({ context }: ITimelineProps) {
                         {/* Data items */}
                         <TimelineItems context={context} items={items.filter(i => i.date !== null)} mouseDown={isMouseDown} timeunits={TIMEUNITS} />
                         {/* Bottom */}
-                        <TimelineData context={context} locale={LOCALE} rounding={ROUNDING} options={OPTIONS} units={TIMEUNITS} />
+                        <TimelineData left={currentLeft} context={context} locale={LOCALE} rounding={ROUNDING} options={OPTIONS} units={TIMEUNITS} />
                     </div>
                 </div>
 
