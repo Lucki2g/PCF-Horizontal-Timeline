@@ -57,6 +57,8 @@ export default function Timeline({ context }: ITimelineProps) {
     const { t } = useTranslation();
     const { loadingstate, setState } = useGlobalLoaderContext();
 
+    context.mode.allocatedWidth = 720;
+
     // Events
     function mouseDown(e: any, mobile: boolean = false) {
         setMouseDown(true);
