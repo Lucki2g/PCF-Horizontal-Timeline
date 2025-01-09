@@ -10,6 +10,7 @@ import { FilterState, useFilter } from '../contexts/filter-context';
 import TimelessTimelineItemBlock from './components/TimelessTimelineItem';
 import { useTranslation } from 'react-i18next';
 import { useGlobalLoaderContext } from '../contexts/loader-context';
+import TimelineDataCanvas from './components/TimelineDataCanvas';
 
 interface ITimelineProps {
     context: ComponentFramework.Context<IInputs>;
@@ -320,7 +321,8 @@ export default function Timeline({ context }: ITimelineProps) {
                         {/* Data items */}
                         <TimelineItems context={context} items={items.filter(i => i.date !== null)} mouseDown={isMouseDown} timeunits={TIMEUNITS} />
                         {/* Bottom */}
-                        <TimelineData context={context} locale={LOCALE} rounding={ROUNDING} options={OPTIONS} units={TIMEUNITS} />
+                        {/* <TimelineData context={context} locale={LOCALE} rounding={ROUNDING} options={OPTIONS} units={TIMEUNITS} /> */}
+                        <TimelineDataCanvas context={context} locale={LOCALE} rounding={ROUNDING} options={OPTIONS} units={TIMEUNITS} />
                     </div>
                 </div>
 
