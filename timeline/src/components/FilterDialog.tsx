@@ -90,7 +90,7 @@ export default function FilterDialog({ locale, items, onSave }: IFilterDialogPro
                                     }}>
                                     <AnimatePresence exitBeforeEnter>
                                         {
-                                            !!currentFilter.itemTypes[type] ?
+                                            currentFilter.itemTypes[type] ?
                                             <motion.svg 
                                                 key={("svg-" + type)}
                                                 initial={{ width: 0 }}

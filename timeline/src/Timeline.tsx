@@ -15,7 +15,7 @@ interface ITimelineProps {
     context: ComponentFramework.Context<IInputs>;
 }
 
-export const DEBUG = true;
+export const DEBUG = false;
 
 export default function Timeline({ context }: ITimelineProps) {
 
@@ -57,8 +57,6 @@ export default function Timeline({ context }: ITimelineProps) {
     const { t } = useTranslation();
     const { loadingstate, setState } = useGlobalLoaderContext();
 
-    context.mode.allocatedWidth = 720;
-
     // Events
     function mouseDown(e: any, mobile: boolean = false) {
         setMouseDown(true);
@@ -89,22 +87,16 @@ export default function Timeline({ context }: ITimelineProps) {
       
         const walk = (x - startX) * 3;
         const newLeft = Math.max(0, left - walk);
+        const maxScrollLeft = e.target.scrollWidth - e.target.clientWidth;
+        const newValue = Math.min(maxScrollLeft, newLeft);
 
-        updateLeft(newLeft, e.target);
+        updateLeft(newValue, e.target);
     }
 
     const updateLeft = (newLeft: number, element: HTMLElement) => {
-        const maxScrollLeft = element.scrollWidth - element.clientWidth;
-        if (newLeft >= maxScrollLeft) return;
-    
         if (element instanceof HTMLElement) {
             element.scrollLeft = newLeft;
         }
-
-        const absoluteElements = document.querySelectorAll('.abs');
-        absoluteElements.forEach((el: any) => {
-            el.style.left = `${newLeft}px`;
-        });
     }
 
     // Effects
@@ -295,7 +287,6 @@ export default function Timeline({ context }: ITimelineProps) {
 
                 {/* Actions */}
                 <TimelineActions isPaneOpen={isPaneOpen} paneChange={() => setPaneOpen(!isPaneOpen)} locale={LOCALE} items={items}  
-                isMouseDown={isMouseDown} 
                 onSave={(filter: FilterState) => { 
                     setFilter(filter);
                     const filteredItems = items.map(i => {

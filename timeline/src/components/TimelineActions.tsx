@@ -10,13 +10,12 @@ import { useGlobalLoaderContext } from '../../contexts/loader-context';
 interface ITimelineActionsProps {
     locale: string,
     items: TimelineItem[];
-    isMouseDown: boolean;
     isPaneOpen: boolean;
     onSave: (filter: FilterState) => void;
     paneChange: () => void;
 }
 
-export default function TimelineActions({ locale, items, isMouseDown, isPaneOpen, onSave, paneChange }: ITimelineActionsProps) {
+export default function TimelineActions({ locale, items, isPaneOpen, onSave, paneChange }: ITimelineActionsProps) {
 
     const { resetFilters } = useFilter();
     const { showDialog } = useGlobalDialogContext();
@@ -24,7 +23,7 @@ export default function TimelineActions({ locale, items, isMouseDown, isPaneOpen
 
     return (
         <>
-            <div className={`absolute flex top-2 left-2 z-20 ${isMouseDown ? "pointer-events-none" : "pointer-events-auto"}`}>
+            <div className={`absolute flex top-2 left-2 z-20`}>
                 <div className='bg-white rounded-[4px] shadow-dynamics flex justify-center items-center mr-1'>
                     <button onClick={() => {resetFilters(); setState(true)}} className="relative flex justify-center items-center w-5 h-5 p-1 m-0.5 rounded-[4px] hover:bg-slate-100 duration-200 transition-colors">
                         <svg className='' xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2048 2048">

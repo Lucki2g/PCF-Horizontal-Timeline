@@ -56,9 +56,10 @@ export default function TimelineDataCanvas({ items, context, locale, options, ro
         // initial draw
         draw(canvasContext, 0);
         getContainerElement(canvas).addEventListener("scroll", () => {
-            const left = getContainerElement(canvas).scrollLeft;
+            const container = getContainerElement(canvas);
+            const left = Math.min(container.scrollLeft, totalWidth - width);
             canvas.style.left = `${left}px`;
-            draw(canvasContext, left)
+            draw(canvasContext, left);
         });
         return () => getContainerElement(canvas).removeEventListener('scroll', () => draw(canvasContext, getContainerElement(canvas).scrollLeft));
     }, [])
@@ -81,10 +82,6 @@ export default function TimelineDataCanvas({ items, context, locale, options, ro
             const info = timeUnitInformation(unit);
             const rectHeight = idx * ySize;
             let x = 0;
-
-            // Titles
-            renderer.fillStyle = "#9ca3af";
-            renderer.fillText(t(info.i18ntranslation), 3.5, rectHeight - 1 + ySize - fontSize);
             
             renderer.fillStyle = "#1f2937";
             // Items
@@ -132,11 +129,21 @@ export default function TimelineDataCanvas({ items, context, locale, options, ro
                     // no longer in rect
                     if (!(stickyX > rightSide)) renderer.fillText(timeunit.name, stickyX, rectHeight - 1 + ySize);
                 } else if (i % 6 === 0 && i % 24 !== 0) {
+                    renderer.fillStyle = "#fff";
+                    renderer.fillRect(x - fontSize / 2 - scrollOffsetX, rectHeight + fontSize + 4, fontSize, fontSize)
+                    renderer.fillStyle = "#1f2937";
                     renderer.fillText(timeunit.name, x - fontSize / 2 - scrollOffsetX, rectHeight - 1 + ySize);
                 }
 
                 x += currentRectWidth;
             }
+
+            // Titles
+            const i18title = t(info.i18ntranslation);
+            renderer.fillStyle = "#fff";
+            renderer.fillRect(3.5, rectHeight + 3.5, i18title.length * fontSize / 2, fontSize)
+            renderer.fillStyle = "#9ca3af";
+            renderer.fillText(i18title, 3.5, rectHeight - 1 + ySize - fontSize);
         }
     }
 
@@ -176,13 +183,22 @@ export default function TimelineDataCanvas({ items, context, locale, options, ro
     }, [items, filter.startDate, filter.endDate]);
 
     return (
-        <div className='flex flex-col overflow-x-inherit pointer-events-none w-fit relative'>
+        <div className='flex flex-col overflow-x-inherit pointer-events-none w-full relative' style={{
+            width: totalWidth, 
+            maxWidth: totalWidth
+        }}>
             {/* NOW */}
             <div className='w-px h-full bg-red-400 absolute z-10' style={{ left: getLeft(new Date(), filter.startDate, context.parameters.xsize.raw ?? 32) }}>
                 <span className='absolute w-[5px] h-[5px] rounded-full border bg-red-400 border-dynamics-text' style={{ bottom: height - 2, left: -2 }}></span>
             </div>
             {/* ACTIVITIES */}
-            <div ref={containerRef} className="w-full flex flex-col z-10" style={{ paddingTop: ITEM_PADDING, paddingBottom: ITEM_PADDING, width: totalWidth, height: ITEM_PADDING * 2 + rows.length * ySize + height }}>
+            <div ref={containerRef} className="w-full flex flex-col z-10" style={{ 
+                paddingTop: ITEM_PADDING, 
+                paddingBottom: ITEM_PADDING, 
+                width: totalWidth, 
+                maxWidth: totalWidth,
+                height: ITEM_PADDING * 2 + rows.length * ySize + height 
+            }}>
                 {
                     rows.map((rowItems, rowIndex) => (
                         <div key={"row-" + rowIndex} className="flex relative w-full" style={{ height: ySize }}>
@@ -202,7 +218,11 @@ export default function TimelineDataCanvas({ items, context, locale, options, ro
                 }
             </div>
             {/* DATE DATA */}
-            <canvas className='absolute bottom-0' ref={canvasRef} width={width} height={height} style={{ width: width, height: height }} />
+            <canvas className='absolute bottom-0' 
+            ref={canvasRef} 
+            width={width} 
+            height={height} 
+            style={{ width: width, height: height }} />
         </div>
     )
 }
