@@ -1,9 +1,8 @@
 import * as React from 'react'
 import { IInputs } from '../generated/ManifestTypes'
 import { addDayToDate, getLeft, removeDayFromDate, TimeUnit, ySize } from './timeUtil';
-import {  TimelineData, TimeOptions } from './components/TimelineData';
+import {  TimeOptions } from './components/TimelineData';
 import { TimelineItem } from './components/TimelineItem';
-import TimelineItems from './components/TimelineItems';
 import { ActivityType, ActivityTypeOptions } from './icons/Icon';
 import TimelineActions from './components/TimelineActions';
 import { FilterState, useFilter } from '../contexts/filter-context';
@@ -313,17 +312,7 @@ export default function Timeline({ context }: ITimelineProps) {
                 <div ref={timelineRef} className={`${isMouseDown ? "cursor-grabbing" : "cursor-grab"} w-full shadow-dynamics bg-slate-200 overflow-x-hidden relative inset-0 bg-[linear-gradient(45deg,#ffffff33_25%,transparent_25%,transparent_75%,#ffffff33_75%,#ffffff33),linear-gradient(45deg,#ffffff33_25%,transparent_25%,transparent_75%,#ffffff33_75%,#ffffff33)] bg-[position:0_0,10px_10px] bg-[size:20px_20px]`}
                 onMouseDown={(e) => mouseDown(e)} onMouseUp={mouseOut} onMouseLeave={mouseOut} onMouseMove={(e) => mouseMove(e)} 
                 onTouchStart={(e) => mouseDown(e, true)} onTouchEnd={mouseOut} onTouchMove={(e) => mouseMove(e, true)}>
-                    <div className="flex flex-col overflow-x-inherit pointer-events-none w-fit">
-                        {/* Current time marker */}
-                        <div className='w-px h-full bg-red-400 absolute' style={{ left: getLeft(new Date(), filter.startDate, context.parameters.xsize.raw ?? 32) }}>
-                            <span className='absolute w-[5px] h-[5px] rounded-full border bg-red-400 border-dynamics-text' style={{ bottom: ySize * 3 - 3, left: -2 }}></span>
-                        </div>
-                        {/* Data items */}
-                        <TimelineItems context={context} items={items.filter(i => i.date !== null)} mouseDown={isMouseDown} timeunits={TIMEUNITS} />
-                        {/* Bottom */}
-                        {/* <TimelineData context={context} locale={LOCALE} rounding={ROUNDING} options={OPTIONS} units={TIMEUNITS} /> */}
-                        <TimelineDataCanvas context={context} locale={LOCALE} rounding={ROUNDING} options={OPTIONS} units={TIMEUNITS} />
-                    </div>
+                    <TimelineDataCanvas items={items} context={context} locale={LOCALE} rounding={ROUNDING} options={OPTIONS} units={TIMEUNITS} />
                 </div>
 
                 {/* Pane */}

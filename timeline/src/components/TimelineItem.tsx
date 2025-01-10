@@ -19,13 +19,12 @@ interface ITimelineItemProps {
     item: TimelineItem;
     rowIdx: number;
     rowCount: number;
-    mouseDown: boolean;
     timeunits: TimeUnit[],
     context: ComponentFramework.Context<IInputs>;
     parentRef: React.RefObject<HTMLDivElement>
 }
 
-export default function TimelineItemBlock({ parentRef, context, item, rowIdx, rowCount, mouseDown, timeunits }: ITimelineItemProps) {
+export default function TimelineItemBlock({ parentRef, context, item, rowIdx, rowCount, timeunits }: ITimelineItemProps) {
 
     // canvas app bug mitigation
     if (!item?.type) return <></>;

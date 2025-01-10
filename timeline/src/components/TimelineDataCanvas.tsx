@@ -1,9 +1,15 @@
 ﻿import * as React from 'react'
 import { IInputs } from '../../generated/ManifestTypes';
-import { fontSize, getAvailableTimeUnits, TimeUnit, timeUnitInformation, TimeUnits, ySize } from '../timeUtil';
+import { fontSize, getAvailableTimeUnits, getLeft, ITEM_PADDING, TimeUnit, timeUnitInformation, TimeUnits, ySize } from '../timeUtil';
 import { useTranslation } from 'react-i18next';
 import { useFilter } from '../../contexts/filter-context';
 import { RoundingType, TimeOptions } from './TimelineData';
+import TimelineItemBlock, { TimelineItem } from './TimelineItem';
+
+// OBS: HTML Elements fill up the DOM extremely quickly causing lag and performance issues.
+// OBS: Lazy Loading would only work until elements were loaded.
+// OBS: Virtualization batches scroll events causing "blinking" when scrolling.
+// OBS: Browsers have limits for the canvas area, hence why there is a limit on visible dates. This limit is controlled by available system memory and other factors.
 
 interface TimelineDataCanvasProps {
     context: ComponentFramework.Context<IInputs>;
@@ -11,49 +17,77 @@ interface TimelineDataCanvasProps {
     options: TimeOptions;
     rounding: RoundingType;
     units: TimeUnit[];
+    items: TimelineItem[];
 }
 
-export default function TimelineDataCanvas({ context, locale, options, rounding, units }: TimelineDataCanvasProps) {
-    const canvasRef = React.useRef<HTMLCanvasElement>(null);
-    const xSize = context.parameters.xsize.raw ?? 32;
-
+export default function TimelineDataCanvas({ items, context, locale, options, rounding, units }: TimelineDataCanvasProps) {
+    // Context
     const { t } = useTranslation();
     const { filter } = useFilter();
-    
+
+    // Refs
+    const canvasRef = React.useRef<HTMLCanvasElement>(null);
+    const containerRef = React.useRef<HTMLDivElement>(null);
+
+    // Memo states
     const timeUnits = React.useMemo<TimeUnits>(() => {
         const unitData = getAvailableTimeUnits(filter.startDate, filter.endDate, units, options, locale, rounding);
         return unitData;
     }, [filter.startDate, filter.endDate]);
-
-    if (timeUnits === null) return <></>;
-
-    const width = timeUnits[Object.keys(timeUnits)[0]].reduce((acc, item) => acc + item.hours, 0) * xSize;
+    
+    // Variables
+    const xSize = context.parameters.xsize.raw ?? 32;
+    const totalWidth = timeUnits[Object.keys(timeUnits)[0]].reduce((acc, item) => acc + item.hours, 0) * xSize;
+    const width = context.mode.allocatedWidth;
     const height = units.length * ySize;
 
-    // OBS: HTML Elements fill up the DOM extremely quickly causing lag and performance issues.
-    // OBS: Lazy Loading would only work until elements were loaded.
-    // OBS: Virtualization batches scroll events causing "blinking" when scrolling.
-    // OBS: Browsers have limits for the canvas area, hence why there is a limit on visible dates. This limit is controlled by available system memory and other factors.
+    // Early return
+    if (timeUnits === null) return <></>;
+    const getContainerElement = (canvas: HTMLCanvasElement) => {
+        return canvas.parentElement!.parentElement!;
+    }
 
+    // Effects
+    React.useEffect(() => {
+        const canvas = canvasRef.current;
+        if (!canvas) return;
+        const canvasContext = canvas.getContext("2d");
+        if (!canvasContext) return;
+        // initial draw
+        draw(canvasContext, 0);
+        getContainerElement(canvas).addEventListener("scroll", () => {
+            const left = getContainerElement(canvas).scrollLeft;
+            canvas.style.left = `${left}px`;
+            draw(canvasContext, left)
+        });
+        return () => getContainerElement(canvas).removeEventListener('scroll', () => draw(canvasContext, getContainerElement(canvas).scrollLeft));
+    }, [])
+
+    // Functions
     const draw = (renderer: CanvasRenderingContext2D, scrollOffsetX: number) => {
-
-        console.log("drawing", width, xSize)
-
         // clear
         renderer.fillStyle = "#fff";
         renderer.fillRect(0, 0, width, height);
 
+        ///////////////////////////////////////////////////
+        //                  TIME ELEMENTS                //
+        ///////////////////////////////////////////////////
         // draw - OBS canvas calculates from the halfed pixel hence we add .5 many places
         renderer.lineWidth = 1;
         renderer.textBaseline = "bottom";
         renderer.textAlign = "left";
         renderer.font = `normal ${fontSize}px "Segoe UI",Roboto,Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue",Arial,sans-serif`
-        renderer.fillStyle = "#1f2937";
-
         for (const [idx, unit] of units.entries()) {
             const info = timeUnitInformation(unit);
             const rectHeight = idx * ySize;
             let x = 0;
+
+            // Titles
+            renderer.fillStyle = "#9ca3af";
+            renderer.fillText(t(info.i18ntranslation), 3.5, rectHeight - 1 + ySize - fontSize);
+            
+            renderer.fillStyle = "#1f2937";
+            // Items
             for (const [i, timeunit] of timeUnits[info.timeUnits].entries()) {
                 const currentRectWidth = (timeunit.hours * xSize);
 
@@ -62,15 +96,15 @@ export default function TimelineDataCanvas({ context, locale, options, rounding,
                 renderer.setLineDash([1, 2]);
                 if (i === 0) {
                     renderer.beginPath();
-                    renderer.moveTo(x + .5, rectHeight);
-                    renderer.lineTo(x + .5, rectHeight + ySize);
+                    renderer.moveTo(x + .5 - scrollOffsetX, rectHeight);
+                    renderer.lineTo(x + .5 - scrollOffsetX, rectHeight + ySize);
                     renderer.closePath();
                     renderer.stroke();
                 }
                 // right line
                 renderer.beginPath();
-                renderer.moveTo(x + currentRectWidth + .5, rectHeight);
-                renderer.lineTo(x + currentRectWidth + .5, rectHeight + ySize);
+                renderer.moveTo(x + currentRectWidth + .5 - scrollOffsetX, rectHeight);
+                renderer.lineTo(x + currentRectWidth + .5 - scrollOffsetX, rectHeight + ySize);
                 renderer.closePath();
                 renderer.stroke();
 
@@ -79,22 +113,26 @@ export default function TimelineDataCanvas({ context, locale, options, rounding,
                 renderer.setLineDash([0, 0]);
                 if (idx === 0) {
                     renderer.beginPath();
-                    renderer.moveTo(x, rectHeight + .5);
-                    renderer.lineTo(x + currentRectWidth, rectHeight + .5);
+                    renderer.moveTo(x - scrollOffsetX, rectHeight + .5);
+                    renderer.lineTo(x + currentRectWidth - scrollOffsetX, rectHeight + .5);
                     renderer.closePath();
                     renderer.stroke();
                 }
                 renderer.beginPath();
-                renderer.moveTo(x, rectHeight + .5 + ySize);
-                renderer.lineTo(x + currentRectWidth, rectHeight + .5 + ySize);
+                renderer.moveTo(x - scrollOffsetX, rectHeight + .5 + ySize);
+                renderer.lineTo(x + currentRectWidth - scrollOffsetX, rectHeight + .5 + ySize);
                 renderer.closePath();
                 renderer.stroke();
 
                 // text
                 if (unit !== TimeUnit.Hour) {
-                    const stickyX = Math.max(x, scrollOffsetX);
+                    const leftSide = x + fontSize - scrollOffsetX;
+                    const rightSide = x + currentRectWidth - 4 - timeunit.name.length * (fontSize / 2) - scrollOffsetX;
+                    const stickyX = Math.min(Math.max(leftSide, 3.5), rightSide);
                     // no longer in rect
-                    if (!(stickyX > x + currentRectWidth + .5 - 3.5)) renderer.fillText(timeunit.name, stickyX + 3.5, rectHeight - 1 + ySize);
+                    if (!(stickyX > rightSide)) renderer.fillText(timeunit.name, stickyX, rectHeight - 1 + ySize);
+                } else if (i % 6 === 0 && i % 24 !== 0) {
+                    renderer.fillText(timeunit.name, x - fontSize / 2 - scrollOffsetX, rectHeight - 1 + ySize);
                 }
 
                 x += currentRectWidth;
@@ -102,19 +140,69 @@ export default function TimelineDataCanvas({ context, locale, options, rounding,
         }
     }
 
-    React.useEffect(() => {
-        const canvas = canvasRef.current;
-        if (!canvas) return;
-        const canvasContext = canvas.getContext("2d");
-        if (!canvasContext) return;
+    const areItemsOverlapping = (item1: TimelineItem, item2: TimelineItem): boolean => {
+        const left1 = getLeft(item1.date!, filter.startDate, context.parameters.xsize.raw ?? 32);
+        const left2 = getLeft(item2.date!, filter.startDate, context.parameters.xsize.raw ?? 32);
+        const width1 = (fontSize / 2) * item1.name.length + 32; 
+        const width2 = (fontSize / 2) * item2.name.length + 32;
+        return !(left1 + width1 < left2 || left2 + width2 < left1);
+    };
 
-        // initial draw
-        draw(canvasContext, 0);
-        // canvas.parentElement!.parentElement!.addEventListener("scroll", () => draw(canvasContext, canvas.parentElement!.parentElement!.scrollLeft));
-        return () => canvas.parentElement!.parentElement!.removeEventListener('scroll', () => draw(canvasContext, canvas.parentElement!.parentElement!.scrollLeft));
-    }, [])
+    const arrangeItemsInRows = (): TimelineItem[][] => {
+        const newRows: TimelineItem[][] = [];
+
+        items.filter(i => i.show ?? false).forEach(item => {
+            let placed = false;
+
+            for (const row of newRows) {
+                const overlap = row.some(existingItem => areItemsOverlapping(existingItem, item));
+                if (!overlap) {
+                    row.push(item);
+                    placed = true;
+                    break;
+                }
+            }
+
+            if (!placed) {
+                newRows.push([item]);
+            }
+        });
+
+        return newRows.reverse();
+    };
+
+    const rows = React.useMemo(() => {
+        return arrangeItemsInRows();
+    }, [items, filter.startDate, filter.endDate]);
 
     return (
-        <canvas ref={canvasRef} width={width} height={height} />
+        <div className='flex flex-col overflow-x-inherit pointer-events-none w-fit relative'>
+            {/* NOW */}
+            <div className='w-px h-full bg-red-400 absolute z-10' style={{ left: getLeft(new Date(), filter.startDate, context.parameters.xsize.raw ?? 32) }}>
+                <span className='absolute w-[5px] h-[5px] rounded-full border bg-red-400 border-dynamics-text' style={{ bottom: height - 2, left: -2 }}></span>
+            </div>
+            {/* ACTIVITIES */}
+            <div ref={containerRef} className="w-full flex flex-col z-10" style={{ paddingTop: ITEM_PADDING, paddingBottom: ITEM_PADDING, width: totalWidth, height: ITEM_PADDING * 2 + rows.length * ySize + height }}>
+                {
+                    rows.map((rowItems, rowIndex) => (
+                        <div key={"row-" + rowIndex} className="flex relative w-full" style={{ height: ySize }}>
+                            {rowItems.map(item => (
+                                <TimelineItemBlock 
+                                    key={"item-" + item.id}
+                                    context={context}
+                                    item={item}
+                                    parentRef={containerRef}
+                                    rowIdx={rowIndex}
+                                    rowCount={rows.length - 1}
+                                    timeunits={units}
+                                />
+                            ))}
+                        </div>
+                    ))
+                }
+            </div>
+            {/* DATE DATA */}
+            <canvas className='absolute bottom-0' ref={canvasRef} width={width} height={height} style={{ width: width, height: height }} />
+        </div>
     )
 }

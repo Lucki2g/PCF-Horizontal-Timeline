@@ -7,7 +7,7 @@ interface IIconProps {
     name: ActivityType;
 }
 
-interface ActivityInformation {
+export interface ActivityInformation {
     color: string;
 }
 
