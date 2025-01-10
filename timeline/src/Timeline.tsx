@@ -18,6 +18,9 @@ interface ITimelineProps {
 export const DEBUG = false;
 
 export default function Timeline({ context }: ITimelineProps) {
+    const size = context.mode.allocatedWidth;
+    console.log(size)
+    if (size <= 0) return <></>;
 
     // Settings
     const LOCALE = context.parameters.locale.raw ?? "en-US";
