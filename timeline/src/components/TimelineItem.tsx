@@ -18,7 +18,6 @@ export interface TimelineItem {
     name: string;
     date: Date | null;
     type: ActivityType;
-    show: boolean;
     owned?: IEntityReference;
 }
 

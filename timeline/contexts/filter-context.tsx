@@ -1,5 +1,5 @@
 ﻿import * as React from "react";
-import { IEntityReference } from "../src/components/TimelineItem";
+import { IEntityReference, TimelineItem } from "../src/components/TimelineItem";
 
 export interface FilterState {
     search: string;
@@ -19,6 +19,7 @@ interface FilterContextProps {
     setEndDate: (date: Date) => void;
     resetFilters: () => void;
     setFilter: React.Dispatch<React.SetStateAction<FilterState>>;
+    filterItems: (filter: FilterState, items: TimelineItem[]) => TimelineItem[];
 }
 
 // Create the context
@@ -58,7 +59,15 @@ export const FilterProvider = ({
         setFilter(state);
     }
 
-    return (<FilterContext.Provider value={{ filter, initialState, initialize, setFilter, setStartDate, setEndDate, updateSearch, toggleItemType, resetFilters }}>
+    const filterItems = (filter: FilterState, items: TimelineItem[]) => {
+        return items.filter(i => 
+            i.name.toLowerCase().includes(filter.search) &&
+            filter.itemTypes[i.type] &&
+            i.date !== null && filter.startDate <= i.date && i.date <= filter.endDate &&
+            i.owned?.id === filter.owner?.id);
+    }
+
+    return (<FilterContext.Provider value={{ filter, initialState, filterItems, initialize, setFilter, setStartDate, setEndDate, updateSearch, toggleItemType, resetFilters }}>
             {children}
         </FilterContext.Provider>
     );

@@ -8,7 +8,7 @@ import { FilterState, useFilter } from '../contexts/filter-context';
 import TimelessTimelineItemBlock from './components/TimelessTimelineItem';
 import { useTranslation } from 'react-i18next';
 import { useGlobalLoaderContext } from '../contexts/loader-context';
-import TimelineDataCanvas from './components/TimelineDataCanvas';
+import { TimelineDataCanvas, TimelineDataCanvasHandle } from './components/TimelineDataCanvas';
 
 interface ITimelineProps {
     context: ComponentFramework.Context<IInputs>;
@@ -50,12 +50,14 @@ export default function Timeline({ context }: ITimelineProps) {
     const [left, setLeft] = React.useState<number>(0.0);
     const [items, setItems] = React.useState<TimelineItem[]>([]);
     const [height, setHeight] = React.useState<number>(0);
+    const [isAnimating, setIsAnimating] = React.useState<boolean>(false);
 
     // Refs
     const timelineRef = React.useRef<HTMLDivElement>(null);
+    const canvasRef = React.useRef<TimelineDataCanvasHandle>(null);
 
     // Context
-    const { filter, initialize, setFilter } = useFilter();
+    const { filter, initialize, setFilter, filterItems } = useFilter();
     const { t } = useTranslation();
     const { loadingstate, setState } = useGlobalLoaderContext();
 
@@ -76,7 +78,7 @@ export default function Timeline({ context }: ITimelineProps) {
     }
 
     function mouseMove(e: any, mobile = false) {
-        if (!isMouseDown) return;
+        if (!isMouseDown || isAnimating) return;
       
         let x = 0;
         if (!mobile) {
@@ -96,8 +98,13 @@ export default function Timeline({ context }: ITimelineProps) {
     }
 
     const updateLeft = (newLeft: number, element: HTMLElement) => {
-        if (element instanceof HTMLElement) {
-            element.scrollLeft = newLeft;
+        const canvas = document.getElementById("canvas") as HTMLCanvasElement;
+        if (element instanceof HTMLElement && canvas && canvasRef.current) {
+            const roundedLeft = Math.round(newLeft);
+
+            element.scrollLeft = roundedLeft;
+            canvas.style.left = roundedLeft + "px";
+            canvasRef.current.draw(canvas, roundedLeft);
         }
     }
 
@@ -116,11 +123,14 @@ export default function Timeline({ context }: ITimelineProps) {
                     filter.startDate, 
                     context.parameters.xsize.raw ?? 32
                 ) - timelineRef.current.clientWidth / 2, 
-                timelineRef.current, 
+                timelineRef.current,
                 1000);
     }, [loadingstate])
 
-    const animateLeft = (start: number, end: number, element: HTMLElement, duration = 500) => {
+    const animateLeft = (start: number, end: number, element: HTMLElement, duration: number) => {
+        if (isAnimating) return;
+        setIsAnimating(true);
+
         const startTime = performance.now();
         const distance = end - start;
     
@@ -137,6 +147,8 @@ export default function Timeline({ context }: ITimelineProps) {
         };
     
         requestAnimationFrame(step);
+
+        setTimeout(() => setIsAnimating(false), duration)
     };
 
     const refresh = async () => {
@@ -149,42 +161,36 @@ export default function Timeline({ context }: ITimelineProps) {
                     name: "Remember the chicken",
                     type: "task",
                     date: new Date("2024-10-18"),
-                    show: true
                 },
                 {
                     id: "2",
                     name: "Another reminder",
                     type: "task",
                     date: new Date("2024-11-21T16:00:00.000Z"),
-                    show: true
                 },
                 {
                     id: "3",
                     name: "What is this?",
                     type: "task",
                     date: new Date("2024-11-21T15:00:00.000Z"),
-                    show: true
                 },
                 {
                     id: "3S",
                     name: "Estimated Close",
                     type: "milestone",
                     date: new Date("2024-11-17"),
-                    show: true
                 },
                 {
                     id: "4",
                     name: "I am overlapping?",
                     type: "appointment",
                     date: new Date("2024-11-01T15:30:45"),
-                    show: true
                 },
                 {
                     id: "5",
                     name: "Email",
                     type: "email",
                     date: new Date("2024-11-20T15:30:45"),
-                    show: true,
                     owned: {
                         id: "",
                         name: "Kaare",
@@ -196,14 +202,12 @@ export default function Timeline({ context }: ITimelineProps) {
                     name: "Phone Call",
                     type: "phonecall",
                     date: new Date("2024-11-20T15:30:45"),
-                    show: true
                 },
                 {
                     id: "7",
                     name: "Phone Call",
                     type: "phonecall",
                     date: new Date("2025-02-02T23:59:59"),
-                    show: true
                 }
             ];
 
@@ -247,7 +251,6 @@ export default function Timeline({ context }: ITimelineProps) {
                     date: scheduledEnd,
                     type: activity.getValue("activitytypecode") as ActivityType,
                     owned: owner,
-                    show: true
                 }
             });
 
@@ -266,7 +269,6 @@ export default function Timeline({ context }: ITimelineProps) {
                     name: milestones[milestone],
                     type: "milestone",
                     date: date,
-                    show: true
                 });
             }
 
@@ -302,25 +304,18 @@ export default function Timeline({ context }: ITimelineProps) {
                 { loadingstate ? <div className='w-full h-1 bg-black'></div> : <></> }
 
                 {/* Actions */}
-                <TimelineActions isPaneOpen={isPaneOpen} paneChange={() => setPaneOpen(!isPaneOpen)} locale={LOCALE} items={items}  
+                <TimelineActions context={context} timelineRef={timelineRef} animate={animateLeft} isPaneOpen={isPaneOpen} paneChange={() => setPaneOpen(!isPaneOpen)} locale={LOCALE} items={items}  
                 onSave={(filter: FilterState) => { 
                     setFilter(filter);
-                    const filteredItems = items.map(i => {
-                        const show = 
-                            i.name.toLowerCase().includes(filter.search) &&
-                            filter.itemTypes[i.type] &&
-                            i.date !== null && filter.startDate <= i.date && i.date <= filter.endDate &&
-                            i.owned?.id === filter.owner?.id
-                        return { ...i, show: show }
-                    });
+                    const filteredItems = filterItems(filter, items)
                     setItems(filteredItems);
                 }} />
 
                 {/* Timeline */}
-                <div ref={timelineRef} className={`${isMouseDown ? "cursor-grabbing" : "cursor-grab"} border border-gray-700 rounded-lg w-full shadow-dynamics bg-slate-200 overflow-x-hidden relative inset-0 bg-[linear-gradient(45deg,#ffffff33_25%,transparent_25%,transparent_75%,#ffffff33_75%,#ffffff33),linear-gradient(45deg,#ffffff33_25%,transparent_25%,transparent_75%,#ffffff33_75%,#ffffff33)] bg-[position:0_0,10px_10px] bg-[size:20px_20px]`}
+                <div ref={timelineRef} className={`${isAnimating ? "cursor-wait" : isMouseDown ? "cursor-grabbing" : "cursor-grab"} border border-gray-700 rounded-lg w-full shadow-dynamics bg-slate-200 overflow-x-hidden relative inset-0 bg-[linear-gradient(45deg,#ffffff33_25%,transparent_25%,transparent_75%,#ffffff33_75%,#ffffff33),linear-gradient(45deg,#ffffff33_25%,transparent_25%,transparent_75%,#ffffff33_75%,#ffffff33)] bg-[position:0_0,10px_10px] bg-[size:20px_20px]`}
                 onMouseDown={(e) => mouseDown(e)} onMouseUp={mouseOut} onMouseLeave={mouseOut} onMouseMove={(e) => mouseMove(e)} 
                 onTouchStart={(e) => mouseDown(e, true)} onTouchEnd={mouseOut} onTouchMove={(e) => mouseMove(e, true)}>
-                    <TimelineDataCanvas setHeight={(height: number) => setHeight(height)} items={items} context={context} locale={LOCALE} rounding={ROUNDING} options={OPTIONS} units={TIMEUNITS} />
+                    <TimelineDataCanvas ref={canvasRef} setHeight={(height: number) => setHeight(height)} items={items} context={context} locale={LOCALE} rounding={ROUNDING} options={OPTIONS} units={TIMEUNITS} />
                 </div>
 
                 {/* Pane */}

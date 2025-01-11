@@ -34,7 +34,16 @@ interface TimelineDataCanvasProps {
     setHeight: (height: number) => void;
 }
 
-export default function TimelineDataCanvas({ setHeight, items, context, locale, options, rounding, units }: TimelineDataCanvasProps) {
+export interface TimelineDataCanvasHandle {
+    draw: (canvas: HTMLCanvasElement, scrollOffsetX: number) => void;
+}
+
+export const TimelineDataCanvas = React.forwardRef<TimelineDataCanvasHandle, TimelineDataCanvasProps>(({ setHeight, items, context, locale, options, rounding, units }: TimelineDataCanvasProps, ref) => {
+    
+    React.useImperativeHandle(ref, () => ({
+        draw
+    }));
+
     // Context
     const { t } = useTranslation();
     const { filter } = useFilter();
@@ -57,29 +66,18 @@ export default function TimelineDataCanvas({ setHeight, items, context, locale, 
 
     // Early return
     if (timeUnits === null) return <></>;
-    const getContainerElement = (canvas: HTMLCanvasElement) => {
-        return canvas.parentElement!.parentElement!;
-    }
 
     // Effects
     React.useEffect(() => {
+        // initial draw
         const canvas = canvasRef.current;
         if (!canvas) return;
-        const canvasContext = canvas.getContext("2d");
-        if (!canvasContext) return;
-        // initial draw
-        draw(canvasContext, 0);
-        getContainerElement(canvas).addEventListener("scroll", () => {
-            const container = getContainerElement(canvas);
-            const left = Math.min(container.scrollLeft, totalWidth - width);
-            canvas.style.left = `${left}px`;
-            draw(canvasContext, left);
-        });
-        return () => getContainerElement(canvas).removeEventListener('scroll', () => draw(canvasContext, getContainerElement(canvas).scrollLeft));
-    }, [])
+        draw(canvas, 0);
+    }, []);
 
     // Functions
-    const draw = (renderer: CanvasRenderingContext2D, scrollOffsetX: number) => {
+    const draw = (canvas: HTMLCanvasElement, scrollOffsetX: number) => {
+        const renderer = canvas.getContext("2d")!;
         // clear
         renderer.fillStyle = "#fff";
         renderer.fillRect(0, 0, width, height);
@@ -172,7 +170,7 @@ export default function TimelineDataCanvas({ setHeight, items, context, locale, 
     const arrangeItemsInRows = (): TimelineItem[][] => {
         const newRows: TimelineItem[][] = [];
 
-        items.filter(i => i.show ?? false).forEach(item => {
+        items.forEach(item => {
             let placed = false;
 
             for (const row of newRows) {
@@ -235,11 +233,11 @@ export default function TimelineDataCanvas({ setHeight, items, context, locale, 
                 }
             </div>
             {/* DATE DATA */}
-            <canvas className='absolute bottom-0' 
+            <canvas id='canvas' className='absolute bottom-0' 
             ref={canvasRef} 
             width={width} 
             height={height} 
             style={{ width: width, height: height }} />
         </div>
     )
-}
+})

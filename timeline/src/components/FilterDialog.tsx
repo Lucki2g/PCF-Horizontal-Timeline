@@ -18,19 +18,14 @@ interface IFilterDialogProps {
 export default function FilterDialog({ locale, items, onSave }: IFilterDialogProps) {
 
     const { hideDialog } = useGlobalDialogContext();
-    const { initialState, filter } = useFilter();
+    const { initialState, filter, filterItems } = useFilter();
     const { t } = useTranslation();
 
     const [currentFilter, setCurrentFilter] = React.useState<FilterState>(filter);
     const [filteredActivities, setFilteredActivities] = React.useState<number>();
 
     React.useEffect(() => {
-        setFilteredActivities(items.filter((i: TimelineItem) => 
-            i.name.toLowerCase().includes(currentFilter.search) &&
-            currentFilter.itemTypes[i.type] &&
-            i.date && currentFilter.startDate <= i.date && i.date <= currentFilter.endDate &&
-            (!currentFilter.owner || i.owned?.id === currentFilter.owner.id)
-        ).length);
+        setFilteredActivities(filterItems(currentFilter, items).length);
     }, [currentFilter]);
 
     return (
