@@ -5,7 +5,7 @@
     [x] xSize
     - ySize / fontSize
 [x] FEATURE: Show specific systemuser tasks
-- FEATURE: Goto next activity
+[x] FEATURE: Goto next activity
 - FEATURE: Count on Activity types
 [x] FEATURE: Timeless Timelines items
 - FEATURE: Fullscreen

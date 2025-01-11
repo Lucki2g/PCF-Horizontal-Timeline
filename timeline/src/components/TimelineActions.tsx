@@ -38,7 +38,6 @@ export default function TimelineActions({ context, animate, timelineRef, locale,
                 }
             })
             
-        console.log(activityLocations, centerOfCanvas)
         const nextActivityLocation = activityLocations
             .sort((a, b) => a.left - b.left)
             .find(item => item.left > centerOfCanvas);
@@ -58,7 +57,6 @@ export default function TimelineActions({ context, animate, timelineRef, locale,
             }
         })
         
-        console.log(activityLocations, centerOfCanvas)
         const nextActivityLocation = activityLocations
             .sort((a, b) => a.left - b.left)
             .reverse()

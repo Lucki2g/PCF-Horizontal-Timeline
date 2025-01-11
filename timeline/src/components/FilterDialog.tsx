@@ -55,7 +55,7 @@ export default function FilterDialog({ locale, items, onSave }: IFilterDialogPro
                     onChange={(e) => setCurrentFilter({ ...currentFilter, search: e.target.value })} 
                     type='text' 
                     tabIndex={1}
-                    className='w-full box-border bg-neutral-100 focus:outline-none peer p-1 rounded-[4px]'></input>
+                    className='w-full box-border border-solid bg-neutral-100 focus:outline-none peer p-1 rounded-[4px]'></input>
                     <div className="absolute bottom-0 left-1/2 h-0.5 w-0 bg-sky-600 transition-all duration-300 transform -translate-x-1/2 peer-focus:w-full peer-focus:transform-origin-center rounded-b-[4px]"></div>
                 </div>
             </div>

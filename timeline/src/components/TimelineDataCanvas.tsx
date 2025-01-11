@@ -204,7 +204,7 @@ export const TimelineDataCanvas = React.forwardRef<TimelineDataCanvasHandle, Tim
         }}>
             {/* NOW */}
             <div className='w-px h-full bg-red-400 absolute z-10' style={{ left: getLeft(new Date(), filter.startDate, context.parameters.xsize.raw ?? 32) }}>
-                <span className='absolute w-[5px] h-[5px] rounded-full border bg-red-400 border-dynamics-text' style={{ bottom: height - 2, left: -2 }}></span>
+                <span className='absolute w-[5px] h-[5px] rounded-full border border-solid bg-red-400 border-dynamics-text' style={{ bottom: height - 2, left: -2 }}></span>
             </div>
             {/* ACTIVITIES */}
             <div ref={containerRef} className="w-full flex flex-col z-10" style={{ 

@@ -14,7 +14,7 @@ interface ITimelineProps {
     context: ComponentFramework.Context<IInputs>;
 }
 
-export const DEBUG = true;
+export const DEBUG = false;
 
 export default function Timeline({ context }: ITimelineProps) {
     const size = context.mode.allocatedWidth;
@@ -312,7 +312,7 @@ export default function Timeline({ context }: ITimelineProps) {
                 }} />
 
                 {/* Timeline */}
-                <div ref={timelineRef} className={`${isAnimating ? "cursor-wait" : isMouseDown ? "cursor-grabbing" : "cursor-grab"} border border-gray-700 rounded-lg w-full shadow-dynamics bg-slate-200 overflow-x-hidden relative inset-0 bg-[linear-gradient(45deg,#ffffff33_25%,transparent_25%,transparent_75%,#ffffff33_75%,#ffffff33),linear-gradient(45deg,#ffffff33_25%,transparent_25%,transparent_75%,#ffffff33_75%,#ffffff33)] bg-[position:0_0,10px_10px] bg-[size:20px_20px]`}
+                <div ref={timelineRef} className={`${isAnimating ? "cursor-wait" : isMouseDown ? "cursor-grabbing" : "cursor-grab"} border border-solid border-gray-700 rounded-lg w-full shadow-dynamics bg-slate-200 overflow-x-hidden relative inset-0 bg-[linear-gradient(45deg,#ffffff33_25%,transparent_25%,transparent_75%,#ffffff33_75%,#ffffff33),linear-gradient(45deg,#ffffff33_25%,transparent_25%,transparent_75%,#ffffff33_75%,#ffffff33)] bg-[position:0_0,10px_10px] bg-[size:20px_20px]`}
                 onMouseDown={(e) => mouseDown(e)} onMouseUp={mouseOut} onMouseLeave={mouseOut} onMouseMove={(e) => mouseMove(e)} 
                 onTouchStart={(e) => mouseDown(e, true)} onTouchEnd={mouseOut} onTouchMove={(e) => mouseMove(e, true)}>
                     <TimelineDataCanvas ref={canvasRef} setHeight={(height: number) => setHeight(height)} items={items} context={context} locale={LOCALE} rounding={ROUNDING} options={OPTIONS} units={TIMEUNITS} />
