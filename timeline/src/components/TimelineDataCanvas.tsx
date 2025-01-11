@@ -3,13 +3,26 @@ import { IInputs } from '../../generated/ManifestTypes';
 import { fontSize, getAvailableTimeUnits, getLeft, ITEM_PADDING, TimeUnit, timeUnitInformation, TimeUnits, ySize } from '../timeUtil';
 import { useTranslation } from 'react-i18next';
 import { useFilter } from '../../contexts/filter-context';
-import { RoundingType, TimeOptions } from './TimelineData';
 import TimelineItemBlock, { TimelineItem } from './TimelineItem';
 
 // OBS: HTML Elements fill up the DOM extremely quickly causing lag and performance issues.
 // OBS: Lazy Loading would only work until elements were loaded.
 // OBS: Virtualization batches scroll events causing "blinking" when scrolling.
 // OBS: Browsers have limits for the canvas area, hence why there is a limit on visible dates. This limit is controlled by available system memory and other factors.
+
+export type RoundingType = "year" | "quarter" | "month" | "day" | "none";
+
+export interface TimeOptions {
+  years: "full" | "short";
+  quarterPrefix: string;
+  months: "numeric" | "2-digit" | "long" | "short" | "narrow";
+  weeksPrefix: string;
+  days: "numeric" | "2-digit" | "long" | "short" | "narrow";
+  hourCycle: "h11" | "h12" | "h23" | "h24";
+  hours: "numeric" | "2-digit";
+  minutes: "numeric" | "2-digit";
+  seconds: "numeric" | "2-digit";
+}
 
 interface TimelineDataCanvasProps {
     context: ComponentFramework.Context<IInputs>;
@@ -18,9 +31,10 @@ interface TimelineDataCanvasProps {
     rounding: RoundingType;
     units: TimeUnit[];
     items: TimelineItem[];
+    setHeight: (height: number) => void;
 }
 
-export default function TimelineDataCanvas({ items, context, locale, options, rounding, units }: TimelineDataCanvasProps) {
+export default function TimelineDataCanvas({ setHeight, items, context, locale, options, rounding, units }: TimelineDataCanvasProps) {
     // Context
     const { t } = useTranslation();
     const { filter } = useFilter();
@@ -181,6 +195,9 @@ export default function TimelineDataCanvas({ items, context, locale, options, ro
     const rows = React.useMemo(() => {
         return arrangeItemsInRows();
     }, [items, filter.startDate, filter.endDate]);
+
+    // not optimal as it changes state on the parent rendering element
+    setHeight(height + ITEM_PADDING * 2 + rows.length * ySize + 2);
 
     return (
         <div className='flex flex-col overflow-x-inherit pointer-events-none w-full relative' style={{

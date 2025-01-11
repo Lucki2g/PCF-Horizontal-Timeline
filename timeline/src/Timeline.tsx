@@ -1,8 +1,7 @@
 import * as React from 'react'
 import { IInputs } from '../generated/ManifestTypes'
-import { addDayToDate, getLeft, removeDayFromDate, TimeUnit, ySize } from './timeUtil';
-import {  TimeOptions } from './components/TimelineData';
-import { TimelineItem } from './components/TimelineItem';
+import { addDayToDate, getLeft, removeDayFromDate, TimeOptions, TimeUnit, ySize } from './timeUtil';
+import { IEntityReference, TimelineItem } from './components/TimelineItem';
 import { ActivityType, ActivityTypeOptions } from './icons/Icon';
 import TimelineActions from './components/TimelineActions';
 import { FilterState, useFilter } from '../contexts/filter-context';
@@ -15,11 +14,10 @@ interface ITimelineProps {
     context: ComponentFramework.Context<IInputs>;
 }
 
-export const DEBUG = false;
+export const DEBUG = true;
 
 export default function Timeline({ context }: ITimelineProps) {
     const size = context.mode.allocatedWidth;
-    console.log(size)
     if (size <= 0) return <></>;
 
     // Settings
@@ -51,6 +49,7 @@ export default function Timeline({ context }: ITimelineProps) {
     const [startX, setStartX] = React.useState<number>(0.0);
     const [left, setLeft] = React.useState<number>(0.0);
     const [items, setItems] = React.useState<TimelineItem[]>([]);
+    const [height, setHeight] = React.useState<number>(0);
 
     // Refs
     const timelineRef = React.useRef<HTMLDivElement>(null);
@@ -103,6 +102,10 @@ export default function Timeline({ context }: ITimelineProps) {
     }
 
     // Effects
+    React.useEffect(() => {
+        setState(true);
+    }, [])
+
     React.useEffect(() => {
         if (loadingstate) refresh();
         if (!loadingstate && timelineRef.current) 
@@ -181,7 +184,12 @@ export default function Timeline({ context }: ITimelineProps) {
                     name: "Email",
                     type: "email",
                     date: new Date("2024-11-20T15:30:45"),
-                    show: true
+                    show: true,
+                    owned: {
+                        id: "",
+                        name: "Kaare",
+                        entitytype: "systemuser"
+                    }
                 },
                 {
                     id: "6",
@@ -216,7 +224,8 @@ export default function Timeline({ context }: ITimelineProps) {
                         {}
                     ),
                     startDate: removeDayFromDate(start),
-                    endDate: addDayToDate(end)
+                    endDate: addDayToDate(end),
+                    owner: null
                 }
             );
             setState(false);
@@ -226,11 +235,18 @@ export default function Timeline({ context }: ITimelineProps) {
 
                 const scheduledEnd = activity.getValue("scheduledend") === null ? null : new Date(activity.getValue("scheduledend") as string);
 
+                const owner = {
+                    id: activity.getValue("_ownerid_value"),
+                    name: activity.getValue("_ownerid_value@OData.Community.Display.V1.FormattedValue"),
+                    entitytype: activity.getValue("_ownerid_value@Microsoft.Dynamics.CRM.lookuplogicalname")
+                } as IEntityReference;
+
                 return {
                     id: id,
                     name: activity.getValue("name") as string,
                     date: scheduledEnd,
                     type: activity.getValue("activitytypecode") as ActivityType,
+                    owned: owner,
                     show: true
                 }
             });
@@ -242,13 +258,9 @@ export default function Timeline({ context }: ITimelineProps) {
             const milestonesdate = context.parameters.milestonedata.raw ?? "{}";
             const milestones = JSON.parse(milestonesdate);
             for (const milestone of Object.keys(milestones)) {
-                if (result[milestone] === null) continue;
-                let date;
-                try {
-                    date = new Date(result[milestone]);
-                } catch(e) {
-                    continue;
-                }
+                if (!result[milestone] || result[milestone] === null || result[milestone] === undefined) continue;
+                const date = new Date(result[milestone]);
+                console.log(milestones[milestone], date);
                 activities.push({
                     id: milestone,
                     name: milestones[milestone],
@@ -275,7 +287,8 @@ export default function Timeline({ context }: ITimelineProps) {
                         {}
                     ),
                     startDate: removeDayFromDate(start),
-                    endDate: addDayToDate(end)
+                    endDate: addDayToDate(end),
+                    owner: null
                 }
             );
             setState(false);
@@ -284,7 +297,7 @@ export default function Timeline({ context }: ITimelineProps) {
 
     return loadingstate ?
             <></> :
-            <div className='w-full h-full relative flex items-start justify-center text-dynamics-text font-dynamics select-none m-4 rounded-[4px]'>
+            <div className='w-full h-full relative flex items-start justify-center text-dynamics-text font-dynamics select-none'>
                 {/* Loading */}
                 { loadingstate ? <div className='w-full h-1 bg-black'></div> : <></> }
 
@@ -296,21 +309,22 @@ export default function Timeline({ context }: ITimelineProps) {
                         const show = 
                             i.name.toLowerCase().includes(filter.search) &&
                             filter.itemTypes[i.type] &&
-                            i.date !== null && filter.startDate <= i.date && i.date <= filter.endDate
+                            i.date !== null && filter.startDate <= i.date && i.date <= filter.endDate &&
+                            i.owned?.id === filter.owner?.id
                         return { ...i, show: show }
                     });
                     setItems(filteredItems);
                 }} />
 
                 {/* Timeline */}
-                <div ref={timelineRef} className={`${isMouseDown ? "cursor-grabbing" : "cursor-grab"} w-full shadow-dynamics bg-slate-200 overflow-x-hidden relative inset-0 bg-[linear-gradient(45deg,#ffffff33_25%,transparent_25%,transparent_75%,#ffffff33_75%,#ffffff33),linear-gradient(45deg,#ffffff33_25%,transparent_25%,transparent_75%,#ffffff33_75%,#ffffff33)] bg-[position:0_0,10px_10px] bg-[size:20px_20px]`}
+                <div ref={timelineRef} className={`${isMouseDown ? "cursor-grabbing" : "cursor-grab"} border border-gray-700 rounded-lg w-full shadow-dynamics bg-slate-200 overflow-x-hidden relative inset-0 bg-[linear-gradient(45deg,#ffffff33_25%,transparent_25%,transparent_75%,#ffffff33_75%,#ffffff33),linear-gradient(45deg,#ffffff33_25%,transparent_25%,transparent_75%,#ffffff33_75%,#ffffff33)] bg-[position:0_0,10px_10px] bg-[size:20px_20px]`}
                 onMouseDown={(e) => mouseDown(e)} onMouseUp={mouseOut} onMouseLeave={mouseOut} onMouseMove={(e) => mouseMove(e)} 
                 onTouchStart={(e) => mouseDown(e, true)} onTouchEnd={mouseOut} onTouchMove={(e) => mouseMove(e, true)}>
-                    <TimelineDataCanvas items={items} context={context} locale={LOCALE} rounding={ROUNDING} options={OPTIONS} units={TIMEUNITS} />
+                    <TimelineDataCanvas setHeight={(height: number) => setHeight(height)} items={items} context={context} locale={LOCALE} rounding={ROUNDING} options={OPTIONS} units={TIMEUNITS} />
                 </div>
 
                 {/* Pane */}
-                <div className={`h-full flex-grow ${isPaneOpen ? "w-64 opacity-100 ml-2" : "w-0 opacity-0"} rounded-[4px] p-2 shadow-dynamics bg-white flex flex-col items-start duration-300 transition-all`}>
+                <div className={`flex-grow ${isPaneOpen ? "w-64 opacity-100 ml-2 p-2 border" : "w-0 opacity-0 p-0"} border-gray-700 rounded-lg bg-white flex flex-col items-start duration-300 transition-all`} style={{ height: height }}>
                     <h1 className='font-semibold text-sm'>{t("timeless_title")}</h1>
                     <p className='text-[9px] text-gray-500 mb-2'>{t("timeless_description")}</p>
                     <div className='flex flex-col overflow-y-scroll w-full h-full justify-center items-center'>

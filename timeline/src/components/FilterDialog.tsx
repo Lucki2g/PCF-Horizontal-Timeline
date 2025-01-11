@@ -2,11 +2,12 @@ import * as React from 'react'
 import { ActivityTypeOptions, getActivityInformation } from '../icons/Icon';
 import { useGlobalDialogContext } from '../../contexts/dialog-context';
 import { useTranslation } from 'react-i18next';
-import { hexToRgb } from '../util';
-import { TimelineItem } from './TimelineItem';
+import { getIcon, hexToRgb } from '../util';
+import { IEntityReference, TimelineItem } from './TimelineItem';
 import { FilterState, useFilter } from '../../contexts/filter-context';
 import { DatePicker } from '@mantine/dates';
 import { AnimatePresence, motion } from 'framer-motion';
+import Lookup from './controls/Lookup';
 
 interface IFilterDialogProps {
     items: TimelineItem[];
@@ -27,7 +28,8 @@ export default function FilterDialog({ locale, items, onSave }: IFilterDialogPro
         setFilteredActivities(items.filter((i: TimelineItem) => 
             i.name.toLowerCase().includes(currentFilter.search) &&
             currentFilter.itemTypes[i.type] &&
-            i.date && currentFilter.startDate <= i.date && i.date <= currentFilter.endDate
+            i.date && currentFilter.startDate <= i.date && i.date <= currentFilter.endDate &&
+            (!currentFilter.owner || i.owned?.id === currentFilter.owner.id)
         ).length);
     }, [currentFilter]);
 
@@ -142,6 +144,18 @@ export default function FilterDialog({ locale, items, onSave }: IFilterDialogPro
                     </div>
                 </div>
             </div>
+
+            <div className='h-px w-full bg-gray-800 my-1 bg-opacity-10' />
+
+            {/* OWNER */}
+            <Lookup 
+                label={t("filter_owner")} 
+                handleChange={
+                    (newValue: IEntityReference | null) => 
+                    setCurrentFilter({ ...currentFilter, owner: newValue })
+                } 
+                currentValue={currentFilter.owner} 
+                options={items.filter(i => i.owned).map(i => i.owned!)} />
 
             <div className='h-px w-full bg-gray-800 my-1 bg-opacity-10' />
 

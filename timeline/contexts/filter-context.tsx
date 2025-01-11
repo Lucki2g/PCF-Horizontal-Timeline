@@ -1,10 +1,12 @@
 ﻿import * as React from "react";
+import { IEntityReference } from "../src/components/TimelineItem";
 
 export interface FilterState {
     search: string;
     itemTypes: Record<string, boolean>;
     startDate: Date;
     endDate: Date;
+    owner: IEntityReference | null;
 }
 
 interface FilterContextProps {

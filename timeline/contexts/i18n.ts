@@ -19,6 +19,7 @@ i18n.use(initReactI18next).init({
                 filter_dates: "Date interval",
                 filter_startdate: "Start date",
                 filter_enddate: "End date",
+                filter_owner: "Owner",
                 timeless_title: "Timeless items",
                 timeless_description: "Following items, have no due date set.",
                 timeless_noitems: "No items..."

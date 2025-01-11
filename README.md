@@ -14,3 +14,5 @@
 - FEATURE: New Activity button
 - FEATURE: Process support (status change dates etc.)
 - PERFORMANCE: Fix filter dialog lag.
+- FEATURE: Attendies and activityparties
+- AVAILABILITY: Translate schemanames for activitytypes

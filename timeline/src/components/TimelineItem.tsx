@@ -7,12 +7,19 @@ import { useGlobalDialogContext } from '../../contexts/dialog-context';
 import { useSettings } from '../../hooks/SettingsState';
 import { useFilter } from '../../contexts/filter-context';
 
+export interface IEntityReference {
+    id: string,
+    name: string,
+    entitytype: string,
+}
+
 export interface TimelineItem {
     id: string;
     name: string;
     date: Date | null;
     type: ActivityType;
     show: boolean;
+    owned?: IEntityReference;
 }
 
 interface ITimelineItemProps {

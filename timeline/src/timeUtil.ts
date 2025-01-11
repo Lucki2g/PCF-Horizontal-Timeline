@@ -1,5 +1,3 @@
-import { RoundingType, TimeOptions } from "./components/TimelineData";
-
 // Kaare Børsting - Software Ape - Lucki2g
 export interface DateInfo {
     year: number | undefined; // just used for weeks
@@ -15,6 +13,20 @@ export enum TimeUnit {
     Week = 3,
     Day = 4,
     Hour = 5
+}
+
+export type RoundingType = "year" | "quarter" | "month" | "day" | "none";
+
+export interface TimeOptions {
+  years: "full" | "short";
+  quarterPrefix: string;
+  months: "numeric" | "2-digit" | "long" | "short" | "narrow";
+  weeksPrefix: string;
+  days: "numeric" | "2-digit" | "long" | "short" | "narrow";
+  hourCycle: "h11" | "h12" | "h23" | "h24";
+  hours: "numeric" | "2-digit";
+  minutes: "numeric" | "2-digit";
+  seconds: "numeric" | "2-digit";
 }
 
 export const timeUnitInformation = (unit: TimeUnit) => {
@@ -79,6 +91,9 @@ export function getAvailableTimeUnits(
     locale: string = "en-US",
     rounding: RoundingType = "none"
 ): TimeUnits {
+
+    if (!startDate || !endDate) return { };
+
     const startYear = startDate.getFullYear();
     const endYear = endDate.getFullYear();
     const startQuarter = Math.floor(startDate.getMonth() / 3) + 1;
