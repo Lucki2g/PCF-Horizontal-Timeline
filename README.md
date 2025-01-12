@@ -10,11 +10,20 @@
 [x] FEATURE: Timeless Timelines items
 - FEATURE: Fullscreen
 - FEATURE: Tooltips on actions
-- FEATURE: Smallest unit changed to hours
+[x] FEATURE: Smallest unit changed to hours
 - FEATURE: Priority visualization
 - FEATURE: Grey out finished activities
 - FEATURE: New Activity button
-- FEATURE: Process support (status change dates etc.)
+[-] FEATURE: Process support (status change dates etc.)
+    [x] Entity input
+    - BPF Support
 - PERFORMANCE: Fix filter dialog lag.
 - FEATURE: Attendies and activityparties
 - AVAILABILITY: Translate schemanames for activitytypes
+[x] BUG: Crash on lookup focus
+- BUG: Support multiple timelines on one form
+- FEATURE: Open Activities in custom modal instead of standard
+- BUG: Infinite Activity Loading
+- FEATURE: Spinner på refresh
+[x] AVAILABILITY: hour translation
+[x] BUG: Total in filter no longer correct

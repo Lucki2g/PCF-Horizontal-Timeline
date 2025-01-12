@@ -64,7 +64,7 @@ export const FilterProvider = ({
             i.name.toLowerCase().includes(filter.search) &&
             filter.itemTypes[i.type] &&
             i.date !== null && filter.startDate <= i.date && i.date <= filter.endDate &&
-            i.owned?.id === filter.owner?.id);
+            (filter.owner ? i.owned?.id === filter.owner?.id : true));
     }
 
     return (<FilterContext.Provider value={{ filter, initialState, filterItems, initialize, setFilter, setStartDate, setEndDate, updateSearch, toggleItemType, resetFilters }}>

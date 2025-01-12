@@ -31,11 +31,9 @@ export default function Lookup({ options, label, currentValue, handleChange }: I
     }
 
     const filter = (options: IEntityReference[]) => {
-        return options
-        .filter((option: IEntityReference) => {
+        return options.filter((option: IEntityReference) => {
             return option.name.toLowerCase().includes(query.toLowerCase())
-        })
-        .reduce((acc: IEntityReference[], option: IEntityReference) => {
+        }).reduce((acc: IEntityReference[], option: IEntityReference) => {
             const exists = acc.some(o => o.id === option.id);
             return exists ? acc : [...acc, option];
         }, [])
@@ -70,12 +68,12 @@ export default function Lookup({ options, label, currentValue, handleChange }: I
                     </svg>
                 </span>
                 {/* DROP DOWN */}
-                <div className={`${isOpen ? "max-h-32 h-auto p-2 shadow-dynamics" : "h-0 p-0"} flex flex-col w-full absolute top-9 z-50 rounded-[4px] bg-white transition-all duration-150`}>
+                <div className={`${isOpen ? "max-h-32 h-auto p-2 shadow-dynamics overflow-y-auto" : "h-0 p-0"} flex flex-col w-full absolute top-9 z-50 rounded-[4px] bg-white transition-all duration-150`}>
                     {
                         isOpen ? filter(options)
                         .map((user) => {
                             return (
-                                <button key={"filter-" + user.id} className='w-full flex items-center rounded-[4px] p-1 hover:bg-gray-50 transition-all duration-150'
+                                <button key={`filter-${user.id}`} className='w-full flex items-center rounded-[4px] p-1 hover:bg-gray-50 transition-all duration-150'
                                     onClick={() => selectOption(user)}>
                                     <span className='w-4 h-4 mr-2'>
                                         {getIcon(user.entitytype)}

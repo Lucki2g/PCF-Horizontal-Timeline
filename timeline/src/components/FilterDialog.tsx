@@ -104,7 +104,7 @@ export default function FilterDialog({ locale, items, onSave }: IFilterDialogPro
                                         }
                                     </AnimatePresence>
                                     <label htmlFor={type} className="peer-checked:font-bold pointer-events-none" style={{ color: currentFilter.itemTypes[type] ? styleInformation.color : "#9ca3af" }}>
-                                        {type}
+                                        {t(type)}
                                     </label>
                                 </div>
                             </div>
@@ -150,7 +150,7 @@ export default function FilterDialog({ locale, items, onSave }: IFilterDialogPro
                     setCurrentFilter({ ...currentFilter, owner: newValue })
                 } 
                 currentValue={currentFilter.owner} 
-                options={items.filter(i => i.owned).map(i => i.owned!)} />
+                options={items.filter(i => i.owned && i.owned !== null).map(i => i.owned!)} />
 
             <div className='h-px w-full bg-gray-800 my-1 bg-opacity-10' />
 

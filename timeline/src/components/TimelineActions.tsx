@@ -28,7 +28,7 @@ export default function TimelineActions({ context, animate, timelineRef, locale,
 
     const animateNext = () => {
         if (!timelineRef.current) return;
-        const centerOfCanvas = (timelineRef.current.scrollLeft + timelineRef.current.clientWidth / 2); 
+        const centerOfCanvas = Math.round((timelineRef.current.scrollLeft + timelineRef.current.clientWidth / 2)); 
         const activityLocations = items
             .filter(item => item.date !== null)
             .map(item => {
@@ -42,18 +42,19 @@ export default function TimelineActions({ context, animate, timelineRef, locale,
             .sort((a, b) => a.left - b.left)
             .find(item => item.left > centerOfCanvas);
         if (!nextActivityLocation) return;
-        animate(timelineRef.current.scrollLeft, nextActivityLocation.left - timelineRef.current.clientWidth / 2, timelineRef.current, 1000)
+        const flooredActivityLocation = Math.floor(nextActivityLocation.left - timelineRef.current.clientWidth / 2);
+        animate(timelineRef.current.scrollLeft, flooredActivityLocation, timelineRef.current, 1000)
     }
 
     const animatePrevious = () => {
         if (!timelineRef.current) return;
-        const centerOfCanvas = (timelineRef.current.scrollLeft + timelineRef.current.clientWidth / 2); 
+        const centerOfCanvas = Math.round((timelineRef.current.scrollLeft + timelineRef.current.clientWidth / 2)); 
         const activityLocations = items
         .filter(item => item.date !== null)
         .map(item => {
             return {
                 item: item,
-                left: Math.floor(getLeft(item.date!, filter.startDate, context.parameters.xsize.raw ?? 32))
+                left: Math.ceil(getLeft(item.date!, filter.startDate, context.parameters.xsize.raw ?? 32))
             }
         })
         

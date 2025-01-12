@@ -9,6 +9,8 @@ import TimelessTimelineItemBlock from './components/TimelessTimelineItem';
 import { useTranslation } from 'react-i18next';
 import { useGlobalLoaderContext } from '../contexts/loader-context';
 import { TimelineDataCanvas, TimelineDataCanvasHandle } from './components/TimelineDataCanvas';
+import { uuidv4 } from './util';
+import i18n from '../contexts/i18n';
 
 interface ITimelineProps {
     context: ComponentFramework.Context<IInputs>;
@@ -19,6 +21,10 @@ export const DEBUG = false;
 export default function Timeline({ context }: ITimelineProps) {
     const size = context.mode.allocatedWidth;
     if (size <= 0) return <></>;
+
+    const randomID = React.useMemo(() => {
+        return uuidv4();
+    }, []);
 
     // Settings
     const LOCALE = context.parameters.locale.raw ?? "en-US";
@@ -90,27 +96,28 @@ export default function Timeline({ context }: ITimelineProps) {
         }
       
         const walk = (x - startX) * 3;
-        const newLeft = Math.max(0, left - walk);
-        const maxScrollLeft = e.target.scrollWidth - e.target.clientWidth;
-        const newValue = Math.min(maxScrollLeft, newLeft);
-
-        updateLeft(newValue, e.target);
+        const newLeftRounded = Math.max(0, left - walk);
+        
+        updateLeft(newLeftRounded, e.target)
     }
 
-    const updateLeft = (newLeft: number, element: HTMLElement) => {
-        const canvas = document.getElementById("canvas") as HTMLCanvasElement;
-        if (element instanceof HTMLElement && canvas && canvasRef.current) {
-            const roundedLeft = Math.round(newLeft);
+    const updateLeft = (location: number, timeline: HTMLElement) => {
+        const canvas = document.getElementById(`canvas-${randomID}`) as HTMLCanvasElement;
+        if (timeline instanceof HTMLElement && canvas && canvasRef.current) {
 
-            element.scrollLeft = roundedLeft;
-            canvas.style.left = roundedLeft + "px";
-            canvasRef.current.draw(canvas, roundedLeft);
+            const maxScrollLeft = canvasRef.current.getMaxSize();
+            const newValue = Math.max(0, Math.min(maxScrollLeft, location));
+
+            timeline.scrollLeft = newValue;
+            canvas.style.left = newValue + "px";
+            canvasRef.current.draw(canvas, newValue);
         }
     }
 
     // Effects
     React.useEffect(() => {
         setState(true);
+        i18n.changeLanguage(LOCALE);
     }, [])
 
     React.useEffect(() => {
@@ -185,6 +192,11 @@ export default function Timeline({ context }: ITimelineProps) {
                     name: "I am overlapping?",
                     type: "appointment",
                     date: new Date("2024-11-01T15:30:45"),
+                    owned: {
+                        id: "1",
+                        name: "SME",
+                        entitytype: "team"
+                    }
                 },
                 {
                     id: "5",
@@ -192,7 +204,7 @@ export default function Timeline({ context }: ITimelineProps) {
                     type: "email",
                     date: new Date("2024-11-20T15:30:45"),
                     owned: {
-                        id: "",
+                        id: "2",
                         name: "Kaare",
                         entitytype: "systemuser"
                     }
@@ -202,12 +214,22 @@ export default function Timeline({ context }: ITimelineProps) {
                     name: "Phone Call",
                     type: "phonecall",
                     date: new Date("2024-11-20T15:30:45"),
+                    owned: {
+                        id: "3",
+                        name: "Børsting",
+                        entitytype: "systemuser"
+                    }
                 },
                 {
                     id: "7",
                     name: "Phone Call",
                     type: "phonecall",
                     date: new Date("2025-02-02T23:59:59"),
+                    owned: {
+                        id: "4",
+                        name: "Hello",
+                        entitytype: "systemuser"
+                    }
                 }
             ];
 
@@ -236,13 +258,12 @@ export default function Timeline({ context }: ITimelineProps) {
         } else {
             const activities = context.parameters.activities.sortedRecordIds.map((id: string): TimelineItem => {
                 const activity = context.parameters.activities.records[id];
-
                 const scheduledEnd = activity.getValue("scheduledend") === null ? null : new Date(activity.getValue("scheduledend") as string);
 
                 const owner = {
-                    id: activity.getValue("_ownerid_value"),
-                    name: activity.getValue("_ownerid_value@OData.Community.Display.V1.FormattedValue"),
-                    entitytype: activity.getValue("_ownerid_value@Microsoft.Dynamics.CRM.lookuplogicalname")
+                    id: (activity.getValue("ownerid") as any).id.guid,
+                    name: (activity.getValue("ownerid") as any).name,
+                    entitytype: (activity.getValue("ownerid") as any).etn
                 } as IEntityReference;
 
                 return {
@@ -263,7 +284,6 @@ export default function Timeline({ context }: ITimelineProps) {
             for (const milestone of Object.keys(milestones)) {
                 if (!result[milestone] || result[milestone] === null || result[milestone] === undefined) continue;
                 const date = new Date(result[milestone]);
-                console.log(milestones[milestone], date);
                 activities.push({
                     id: milestone,
                     name: milestones[milestone],
@@ -307,19 +327,17 @@ export default function Timeline({ context }: ITimelineProps) {
                 <TimelineActions context={context} timelineRef={timelineRef} animate={animateLeft} isPaneOpen={isPaneOpen} paneChange={() => setPaneOpen(!isPaneOpen)} locale={LOCALE} items={items}  
                 onSave={(filter: FilterState) => { 
                     setFilter(filter);
-                    const filteredItems = filterItems(filter, items)
-                    setItems(filteredItems);
                 }} />
 
                 {/* Timeline */}
                 <div ref={timelineRef} className={`${isAnimating ? "cursor-wait" : isMouseDown ? "cursor-grabbing" : "cursor-grab"} border border-solid border-gray-700 rounded-lg w-full shadow-dynamics bg-slate-200 overflow-x-hidden relative inset-0 bg-[linear-gradient(45deg,#ffffff33_25%,transparent_25%,transparent_75%,#ffffff33_75%,#ffffff33),linear-gradient(45deg,#ffffff33_25%,transparent_25%,transparent_75%,#ffffff33_75%,#ffffff33)] bg-[position:0_0,10px_10px] bg-[size:20px_20px]`}
                 onMouseDown={(e) => mouseDown(e)} onMouseUp={mouseOut} onMouseLeave={mouseOut} onMouseMove={(e) => mouseMove(e)} 
                 onTouchStart={(e) => mouseDown(e, true)} onTouchEnd={mouseOut} onTouchMove={(e) => mouseMove(e, true)}>
-                    <TimelineDataCanvas ref={canvasRef} setHeight={(height: number) => setHeight(height)} items={items} context={context} locale={LOCALE} rounding={ROUNDING} options={OPTIONS} units={TIMEUNITS} />
+                    <TimelineDataCanvas uuid={randomID} ref={canvasRef} setHeight={(height: number) => setHeight(height)} items={items} context={context} locale={LOCALE} rounding={ROUNDING} options={OPTIONS} units={TIMEUNITS} />
                 </div>
 
                 {/* Pane */}
-                <div className={`flex-grow ${isPaneOpen ? "w-64 opacity-100 ml-2 p-2 border" : "w-0 opacity-0 p-0"} border-gray-700 rounded-lg bg-white flex flex-col items-start duration-300 transition-all`} style={{ height: height }}>
+                <div className={`flex-grow ${isPaneOpen ? "w-64 opacity-100 ml-2 p-2 border" : "w-0 opacity-0 p-0"} border-solid border-gray-700 rounded-lg bg-white flex flex-col items-start duration-300 transition-all`} style={{ height: height }}>
                     <h1 className='font-semibold text-sm'>{t("timeless_title")}</h1>
                     <p className='text-[9px] text-gray-500 mb-2'>{t("timeless_description")}</p>
                     <div className='flex flex-col overflow-y-scroll w-full h-full justify-center items-center'>

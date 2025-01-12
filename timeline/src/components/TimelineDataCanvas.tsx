@@ -31,22 +31,24 @@ interface TimelineDataCanvasProps {
     rounding: RoundingType;
     units: TimeUnit[];
     items: TimelineItem[];
+    uuid: string;
     setHeight: (height: number) => void;
 }
 
 export interface TimelineDataCanvasHandle {
     draw: (canvas: HTMLCanvasElement, scrollOffsetX: number) => void;
+    getMaxSize: () => number;
 }
 
-export const TimelineDataCanvas = React.forwardRef<TimelineDataCanvasHandle, TimelineDataCanvasProps>(({ setHeight, items, context, locale, options, rounding, units }: TimelineDataCanvasProps, ref) => {
+export const TimelineDataCanvas = React.forwardRef<TimelineDataCanvasHandle, TimelineDataCanvasProps>(({ setHeight, items, context, locale, options, rounding, units, uuid }: TimelineDataCanvasProps, ref) => {
     
     React.useImperativeHandle(ref, () => ({
-        draw
+        draw, getMaxSize
     }));
 
     // Context
     const { t } = useTranslation();
-    const { filter } = useFilter();
+    const { filter, filterItems } = useFilter();
 
     // Refs
     const canvasRef = React.useRef<HTMLCanvasElement>(null);
@@ -76,6 +78,8 @@ export const TimelineDataCanvas = React.forwardRef<TimelineDataCanvasHandle, Tim
     }, []);
 
     // Functions
+    const getMaxSize = (): number => totalWidth - width;
+    
     const draw = (canvas: HTMLCanvasElement, scrollOffsetX: number) => {
         const renderer = canvas.getContext("2d")!;
         // clear
@@ -217,7 +221,7 @@ export const TimelineDataCanvas = React.forwardRef<TimelineDataCanvasHandle, Tim
                 {
                     rows.map((rowItems, rowIndex) => (
                         <div key={"row-" + rowIndex} className="flex relative w-full" style={{ height: ySize }}>
-                            {rowItems.map(item => (
+                            {filterItems(filter, rowItems).map(item => (
                                 <TimelineItemBlock 
                                     key={"item-" + item.id}
                                     context={context}
@@ -233,7 +237,7 @@ export const TimelineDataCanvas = React.forwardRef<TimelineDataCanvasHandle, Tim
                 }
             </div>
             {/* DATE DATA */}
-            <canvas id='canvas' className='absolute bottom-0' 
+            <canvas id={`canvas-${uuid}`} className='absolute bottom-0' 
             ref={canvasRef} 
             width={width} 
             height={height} 
