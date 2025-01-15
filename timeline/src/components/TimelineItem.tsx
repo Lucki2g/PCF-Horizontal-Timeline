@@ -6,6 +6,7 @@ import { DEBUG } from '../Timeline';
 import { useGlobalDialogContext } from '../../contexts/dialog-context';
 import { useSettings } from '../../hooks/SettingsState';
 import { useFilter } from '../../contexts/filter-context';
+import { getHref, getIcon } from '../util';
 
 export interface IEntityReference {
     id: string,
@@ -78,36 +79,23 @@ export default function TimelineItemBlock({ parentRef, context, item, rowIdx, ro
     }
 
     const openActivity = (): void => {
-        showDialog(<div className='flex flex-col items-center justify-center'>
-            <p className='font-semibold text-md pb-4'>Loading activity...</p>
-            <span className="loader"></span>
-        </div>);
+        const url = getHref(context, item.type, item.id);
 
-        if (DEBUG) {
-            setTimeout(() => { hideDialog() }, 3000)
-        } else {
-            // TODO - canvas app compatible
-            const page = {
-                pageType: "entityrecord",
-                entityName: item.type,
-                entityId: item.id
-            };
-
-            const options = {
-                target: 2, // dialog
-                position: 1, // center
-                width: { value: 80, unit: "%" },
-                height: { value: 80, unit: "%" },
-                title: item.name
-            };
-
-            (context.navigation as any).navigateTo(page, options)
-            .then((result: any) => hideDialog())
-            .catch((error: any) => {
-                hideDialog()
-                console.error("Navigation error:", error)
-            });
-        }
+        showDialog(
+            <div className='flex flex-col'>
+                <div className='flex justify-between m-1 p-2 rounded-[4px] shadow-dynamics'>
+                    <div className='flex'></div>
+                    <div className='flex'>
+                        <button onClick={hideDialog} className='hover:bg-slate-100 duration-150 transition-colors bg-white rounded-md p-1'>
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2048 2048" className='h-3.5 w-3.5'>
+                                <path d="M1169 1024l879 879-145 145-879-879-879 879L0 1903l879-879L0 145 145 0l879 879L1903 0l145 145-879 879z"></path>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+                <iframe src={url} className='flex-grow w-full min-h-[540px]' />
+            </div>, "w-11/12"
+        );
     }
 
     React.useEffect(() => {

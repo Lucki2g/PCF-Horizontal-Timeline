@@ -90,7 +90,7 @@ export default function TimelineActions({ context, animate, timelineRef, locale,
                     </button>
                     <div className='w-px h-full bg-gray-500 mx-0.5' />
                     {/* Filter */}
-                    <button onClick={() => showDialog(<FilterDialog locale={locale} items={items} onSave={onSave} />)} className="relative flex justify-center items-center w-5 h-5 p-1 m-0.5 rounded-[4px] hover:bg-slate-100 duration-200 transition-colors">
+                    <button onClick={() => showDialog(<FilterDialog locale={locale} items={items} onSave={onSave} />, null)} className="relative flex justify-center items-center w-5 h-5 p-1 m-0.5 rounded-[4px] hover:bg-slate-100 duration-200 transition-colors">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2048 2048">
                             <path d="M2048 128v219l-768 768v805H768v-805L0 347V128h2048zm-128 128H128v37l768 768v731h256v-731l768-768v-37z"></path>
                         </svg>

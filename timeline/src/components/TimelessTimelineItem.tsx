@@ -5,6 +5,7 @@ import { IInputs } from '../../generated/ManifestTypes';
 import { DEBUG } from '../Timeline';
 import { TimelineItem } from './TimelineItem';
 import { useGlobalDialogContext } from '../../contexts/dialog-context';
+import { getHref } from '../util';
 
 export interface TimelessTimelineItemBlock {
     id: string;
@@ -24,40 +25,29 @@ export default function TimelessTimelineItemBlock({ context, item }: ITimelessTi
 
     const { showDialog, hideDialog } = useGlobalDialogContext();
 
+
     const openActivity = (): void => {
-        showDialog(<div className='flex flex-col items-center'>
-            <p className='font-semibold text-md pb-4'>Loading activity...</p>
-            <span className="loader"></span>
-        </div>);
+        const url = getHref(context, item.type, item.id);
 
-        if (DEBUG) {
-            setTimeout(() => { hideDialog() }, 3000)
-        } else {
-            const page = {
-                pageType: "entityrecord",
-                entityName: item.type,
-                entityId: item.id
-            };
-
-            const options = {
-                target: 2, // dialog
-                position: 1, // center
-                width: { value: 80, unit: "%" },
-                height: { value: 80, unit: "%" },
-                title: item.name
-            };
-
-            (context.navigation as any).navigateTo(page, options)
-            .then((result: any) => hideDialog())
-            .catch((error: any) => {
-                hideDialog()
-                console.error("Navigation error:", error)
-            });
-        }
+        showDialog(
+            <div className='flex flex-col'>
+                <div className='flex justify-between m-1 p-2 rounded-[4px] shadow-dynamics'>
+                    <div className='flex'></div>
+                    <div className='flex'>
+                        <button onClick={hideDialog} className='hover:bg-slate-100 duration-150 transition-colors bg-white rounded-md p-1'>
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2048 2048" className='h-3.5 w-3.5'>
+                                <path d="M1169 1024l879 879-145 145-879-879-879 879L0 1903l879-879L0 145 145 0l879 879L1903 0l145 145-879 879z"></path>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+                <iframe src={url} className='flex-grow w-full min-h-[540px]' />
+            </div>, "w-11/12"
+        );
     }
 
     return (
-        <button onClick={() => openActivity()} className={`group relative pointer-events-auto hover:cursor-pointer my-1 bg-white flex items-center shadow-dynamics border border-solid border-gray-300 overflow-hidden bottom-full justify-center rounded-[4px] px-1 py-[2px] origin-center`}>
+        <button onClick={openActivity} className={`group relative pointer-events-auto hover:cursor-pointer my-1 bg-white flex items-center shadow-dynamics border border-solid border-gray-300 overflow-hidden bottom-full justify-center rounded-[4px] px-1 py-[2px] origin-center`}>
             <span className='absolute left-0 w-1 h-full group-hover:w-full duration-300 transition-all' style={{ backgroundColor: styleInformation.color }}></span>
             <p className='whitespace-nowrap z-10 mx-1 text-xs group-hover:text-white transition-colors duration-300'>{item.name}</p>
             { item.type ? <Icon name={item.type} /> : <></> }

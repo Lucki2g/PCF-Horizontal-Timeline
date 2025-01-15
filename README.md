@@ -19,11 +19,12 @@
     - BPF Support
 - PERFORMANCE: Fix filter dialog lag.
 - FEATURE: Attendies and activityparties
-- AVAILABILITY: Translate schemanames for activitytypes
+[x] AVAILABILITY: Translate schemanames for activitytypes
+AVAILABILITY: Translation of custom schemanames
 [x] BUG: Crash on lookup focus
 - BUG: Support multiple timelines on one form
 - FEATURE: Open Activities in custom modal instead of standard
-- BUG: Infinite Activity Loading
+[x] BUG: Infinite Activity Loading
 - FEATURE: Spinner på refresh
 [x] AVAILABILITY: hour translation
 [x] BUG: Total in filter no longer correct

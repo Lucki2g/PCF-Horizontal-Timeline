@@ -317,6 +317,7 @@ export default function Timeline({ context }: ITimelineProps) {
         }
     }
 
+
     return loadingstate ?
             <></> :
             <div className='w-full h-full relative flex items-start justify-center text-dynamics-text font-dynamics select-none'>
