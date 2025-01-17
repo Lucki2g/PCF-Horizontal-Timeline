@@ -28,3 +28,8 @@ AVAILABILITY: Translation of custom schemanames
 - FEATURE: Spinner på refresh
 [x] AVAILABILITY: hour translation
 [x] BUG: Total in filter no longer correct
+- FEATURE: Icon upload for custom tables
+[-] BEAUTIFY/REFACTOR:
+    - Lookup
+    - Searchbox
+    - Chip
