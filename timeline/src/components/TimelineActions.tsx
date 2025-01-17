@@ -22,14 +22,14 @@ interface ITimelineActionsProps {
 
 export default function TimelineActions({ context, animate, timelineRef, locale, items, isPaneOpen, onSave, paneChange }: ITimelineActionsProps) {
 
-    const { resetFilters, filter } = useFilter();
+    const { resetFilters, filterItems, filter } = useFilter();
     const { showDialog } = useGlobalDialogContext();
     const { setState } = useGlobalLoaderContext();
 
     const animateNext = () => {
         if (!timelineRef.current) return;
         const centerOfCanvas = Math.round((timelineRef.current.scrollLeft + timelineRef.current.clientWidth / 2)); 
-        const activityLocations = items
+        const activityLocations = filterItems(filter, items)
             .filter(item => item.date !== null)
             .map(item => {
                 return {
@@ -49,7 +49,7 @@ export default function TimelineActions({ context, animate, timelineRef, locale,
     const animatePrevious = () => {
         if (!timelineRef.current) return;
         const centerOfCanvas = Math.round((timelineRef.current.scrollLeft + timelineRef.current.clientWidth / 2)); 
-        const activityLocations = items
+        const activityLocations = filterItems(filter, items)
         .filter(item => item.date !== null)
         .map(item => {
             return {
