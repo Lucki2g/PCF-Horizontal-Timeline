@@ -2,7 +2,6 @@ import * as React from 'react'
 import { IInputs } from '../generated/ManifestTypes'
 import { addDayToDate, getLeft, removeDayFromDate, TimeOptions, TimeUnit, ySize } from './timeUtil';
 import { IEntityReference, TimelineItem } from './components/TimelineItem';
-import { ActivityType, ActivityTypeOptions } from './icons/Icon';
 import TimelineActions from './components/TimelineActions';
 import { FilterState, useFilter } from '../contexts/filter-context';
 import TimelessTimelineItemBlock from './components/TimelessTimelineItem';
@@ -10,24 +9,27 @@ import { useTranslation } from 'react-i18next';
 import { useGlobalLoaderContext } from '../contexts/loader-context';
 import { TimelineDataCanvas, TimelineDataCanvasHandle } from './components/TimelineDataCanvas';
 import { uuidv4 } from './util';
-import i18n from '../contexts/i18n';
+import { ActivityInformation } from './icons/Icon';
+import { useGlobalGlobalContext } from '../contexts/global-context';
 
 interface ITimelineProps {
     context: ComponentFramework.Context<IInputs>;
 }
 
-export const DEBUG = true;
+export const DEBUG = false;
 
 export default function Timeline({ context }: ITimelineProps) {
     const size = context.mode.allocatedWidth;
     if (size <= 0) return <></>;
+
+    // Global context
+    const { setLocale, setActivityInfo, setXSize, setClientUrl } = useGlobalGlobalContext();
 
     const randomID = React.useMemo(() => {
         return uuidv4();
     }, []);
 
     // Settings
-    const LOCALE = context.parameters.locale.raw ?? "en-US";
     const OPTIONS: TimeOptions = {
         years: context.parameters.yearsformat.raw ?? "full",
         quarterPrefix: context.parameters.quartersformat.raw ?? "",
@@ -48,7 +50,8 @@ export default function Timeline({ context }: ITimelineProps) {
     if (context.parameters.daysenabled.raw) TIMEUNITSUNSORTED.push({ value: TimeUnit.Day, sort: context.parameters.dayspos.raw ?? 1 });
     if (context.parameters.hoursenabled.raw) TIMEUNITSUNSORTED.push({ value: TimeUnit.Hour, sort: context.parameters.hourspos.raw ?? 0 });
     const TIMEUNITS = TIMEUNITSUNSORTED.sort((prev, curr) => prev.sort - curr.sort).map(i => i.value);
-    
+    const ACTIVITYINFO = JSON.parse(context.parameters.activitydata.raw ?? '{"task":{"color":"#eab308"},"appointment":{"color":"#7e22ce"},"milestone":{"color":"#e11d48"},"email":{"color":"#16a34a"},"phonecall":{"color":"#fb7185"}}') as { [schemaname: string]: ActivityInformation };
+
     // States
     const [isMouseDown, setMouseDown] = React.useState<boolean>(false);
     const [isPaneOpen, setPaneOpen] = React.useState<boolean>(false);
@@ -98,17 +101,17 @@ export default function Timeline({ context }: ITimelineProps) {
         const walk = (x - startX) * 3;
         const newLeftRounded = Math.max(0, left - walk);
         
-        updateLeft(newLeftRounded, e.target)
+        updateLeft(newLeftRounded)
     }
 
-    const updateLeft = (location: number, timeline: HTMLElement) => {
+    const updateLeft = (location: number) => {
         const canvas = document.getElementById(`canvas-${randomID}`) as HTMLCanvasElement;
-        if (timeline instanceof HTMLElement && canvas && canvasRef.current) {
+        if (timelineRef && timelineRef.current && canvas && canvasRef.current) {
 
             const maxScrollLeft = canvasRef.current.getMaxSize();
             const newValue = Math.max(0, Math.min(maxScrollLeft, location));
 
-            timeline.scrollLeft = newValue;
+            timelineRef.current.scrollLeft = newValue;
             canvas.style.left = newValue + "px";
             canvasRef.current.draw(canvas, newValue);
         }
@@ -116,8 +119,11 @@ export default function Timeline({ context }: ITimelineProps) {
 
     // Effects
     React.useEffect(() => {
+        setLocale(context.parameters.locale.raw ?? "en-US")
+        setActivityInfo(ACTIVITYINFO)
+        setXSize(context.parameters.xsize.raw ?? 32)
+        setClientUrl(DEBUG ? "" : (context as any).page.getClientUrl());
         setState(true);
-        i18n.changeLanguage(LOCALE);
     }, [])
 
     React.useEffect(() => {
@@ -132,7 +138,7 @@ export default function Timeline({ context }: ITimelineProps) {
                 ) - timelineRef.current.clientWidth / 2, 
                 timelineRef.current,
                 1000);
-    }, [loadingstate])
+    }, [loadingstate, timelineRef])
 
     const animateLeft = (start: number, end: number, element: HTMLElement, duration: number) => {
         if (isAnimating) return;
@@ -146,7 +152,7 @@ export default function Timeline({ context }: ITimelineProps) {
             const progress = Math.min(elapsedTime / duration, 1);
             const newLeft = start + distance * progress;
     
-            updateLeft(newLeft, element);
+            updateLeft(newLeft);
     
             if (progress < 1) {
                 requestAnimationFrame(step);
@@ -256,10 +262,7 @@ export default function Timeline({ context }: ITimelineProps) {
             initialize(
                 {
                     search: "",
-                    itemTypes: ActivityTypeOptions.reduce(
-                        (acc, type) => ({ ...acc, [type]: true }),
-                        {}
-                    ),
+                    itemTypes: Object.keys(ACTIVITYINFO).reduce((acc, item) => ({ ...acc, [item]: true }), {}),
                     startDate: removeDayFromDate(start),
                     endDate: addDayToDate(end),
                     owner: null
@@ -281,7 +284,7 @@ export default function Timeline({ context }: ITimelineProps) {
                     id: id,
                     name: activity.getValue("name") as string,
                     date: scheduledEnd,
-                    type: activity.getValue("activitytypecode") as ActivityType,
+                    type: activity.getValue("activitytypecode") as string,
                     owned: owner,
                 }
             });
@@ -315,10 +318,7 @@ export default function Timeline({ context }: ITimelineProps) {
             initialize(
                 {
                     search: "",
-                    itemTypes: ActivityTypeOptions.reduce(
-                        (acc, type) => ({ ...acc, [type]: true }),
-                        {}
-                    ),
+                    itemTypes: Object.keys(ACTIVITYINFO).reduce((acc, item) => ({ ...acc, [item]: true }), {}),
                     startDate: removeDayFromDate(start),
                     endDate: addDayToDate(end),
                     owner: null
@@ -336,7 +336,7 @@ export default function Timeline({ context }: ITimelineProps) {
                 { loadingstate ? <div className='w-full h-1 bg-black'></div> : <></> }
 
                 {/* Actions */}
-                <TimelineActions context={context} timelineRef={timelineRef} animate={animateLeft} isPaneOpen={isPaneOpen} paneChange={() => setPaneOpen(!isPaneOpen)} locale={LOCALE} items={items}  
+                <TimelineActions timelineRef={timelineRef} animate={animateLeft} isPaneOpen={isPaneOpen} paneChange={() => setPaneOpen(!isPaneOpen)} items={items}
                 onSave={(filter: FilterState) => { 
                     setFilter(filter);
                 }} />
@@ -345,7 +345,7 @@ export default function Timeline({ context }: ITimelineProps) {
                 <div ref={timelineRef} className={`${isAnimating ? "cursor-wait" : isMouseDown ? "cursor-grabbing" : "cursor-grab"} border border-solid border-gray-700 rounded-lg w-full shadow-dynamics bg-slate-200 overflow-x-hidden relative inset-0 bg-[linear-gradient(45deg,#ffffff33_25%,transparent_25%,transparent_75%,#ffffff33_75%,#ffffff33),linear-gradient(45deg,#ffffff33_25%,transparent_25%,transparent_75%,#ffffff33_75%,#ffffff33)] bg-[position:0_0,10px_10px] bg-[size:20px_20px]`}
                 onMouseDown={(e) => mouseDown(e)} onMouseUp={mouseOut} onMouseLeave={mouseOut} onMouseMove={(e) => mouseMove(e)} 
                 onTouchStart={(e) => mouseDown(e, true)} onTouchEnd={mouseOut} onTouchMove={(e) => mouseMove(e, true)}>
-                    <TimelineDataCanvas uuid={randomID} ref={canvasRef} setHeight={(height: number) => setHeight(height)} items={items.filter(i => i.date !== null)} context={context} locale={LOCALE} rounding={ROUNDING} options={OPTIONS} units={TIMEUNITS} />
+                    <TimelineDataCanvas width={context.mode.allocatedWidth} uuid={randomID} ref={canvasRef} setHeight={(height: number) => setHeight(height)} items={items.filter(i => i.date !== null)} rounding={ROUNDING} options={OPTIONS} units={TIMEUNITS} />
                 </div>
 
                 {/* Pane */}
@@ -358,7 +358,7 @@ export default function Timeline({ context }: ITimelineProps) {
                         <p className='text-xs'>{t("timeless_noitems")}</p> :
                         items.filter(i => i.date === null).map(i => {
                             return (
-                                <TimelessTimelineItemBlock key={i.id} context={context} item={i} />
+                                <TimelessTimelineItemBlock key={i.id} item={i} />
                             );
                         })
                     }

@@ -1,6 +1,6 @@
 import * as React from 'react'
-import { ActivityTypeOptions, getActivityInformation } from '../../icons/Icon';
 import { hexToRgb } from '../../util';
+import { useGlobalGlobalContext } from '../../../contexts/global-context';
 
 interface IChipsProps {
     label: string;
@@ -9,13 +9,15 @@ interface IChipsProps {
 }
 
 export default function Chips({ label, states, onChange }: IChipsProps) {
+
+    const { activityInfo } = useGlobalGlobalContext();
+
     return (
         <div className='my-1 w-full flex flex-col text-xs'>
             <div className='flex flex-wrap justify-start bg-neutral-100 pt-5 p-2 rounded-[4px] relative'>
                 {
-                    ActivityTypeOptions.map((type) => {
-                        const styleInformation = getActivityInformation(type);
-                        return <Chip label={type} color={styleInformation.color} active={states[type]} onClicked={(state: boolean) => onChange(type, state)} />
+                    Object.keys(states).map((type) => {
+                        return <Chip key={type} label={type} color={activityInfo[type].color} active={states[type]} onClicked={(state: boolean) => onChange(type, state)} />
                     })
                 }
                 <p className='text-start text-xs absolute left-2 top-0.5 font-semibold text-gray-500 tracking-wide'>{label}</p>

@@ -3,13 +3,12 @@ import { DEBUG } from "./Timeline";
 import { IInputs } from "../generated/ManifestTypes";
 
 
-export const getHref = (context: ComponentFramework.Context<IInputs>, locicalname: string, id: string) => {
+export const getHref = (clientUrl: string, locicalname: string, id: string) => {
     if (DEBUG) return "";
-    const clienUrl = (context as any).page.getClientUrl();
     const url = window.location.href;
     const appId = new URL(url).searchParams.get("appid");
 
-    return clienUrl + "/main.aspx?"
+    return clientUrl + "/main.aspx?"
         + "appid=" + appId
         + "&pagetype=entityrecord"
         + `&etn=${locicalname}`

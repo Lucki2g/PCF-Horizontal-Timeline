@@ -1,17 +1,13 @@
 ﻿import * as React from 'react'
-import { ActivityType, ActivityTypeOptions, getActivityInformation } from '../icons/Icon';
-import { motion } from 'framer-motion';
 import { useGlobalDialogContext } from '../../contexts/dialog-context';
 import FilterDialog from './FilterDialog';
 import { TimelineItem } from './TimelineItem';
 import { FilterState, useFilter } from '../../contexts/filter-context';
 import { useGlobalLoaderContext } from '../../contexts/loader-context';
 import { getLeft } from '../timeUtil';
-import { IInputs } from '../../generated/ManifestTypes';
+import { useGlobalGlobalContext } from '../../contexts/global-context';
 
 interface ITimelineActionsProps {
-    context: ComponentFramework.Context<IInputs>;
-    locale: string,
     items: TimelineItem[];
     isPaneOpen: boolean;
     onSave: (filter: FilterState) => void;
@@ -20,11 +16,12 @@ interface ITimelineActionsProps {
     timelineRef: React.RefObject<HTMLDivElement>;
 }
 
-export default function TimelineActions({ context, animate, timelineRef, locale, items, isPaneOpen, onSave, paneChange }: ITimelineActionsProps) {
+export default function TimelineActions({ animate, timelineRef, items, isPaneOpen, onSave, paneChange }: ITimelineActionsProps) {
 
     const { resetFilters, filterItems, filter } = useFilter();
     const { showDialog } = useGlobalDialogContext();
     const { setState } = useGlobalLoaderContext();
+    const { xSize } = useGlobalGlobalContext();
 
     const animateNext = () => {
         if (!timelineRef.current) return;
@@ -34,7 +31,7 @@ export default function TimelineActions({ context, animate, timelineRef, locale,
             .map(item => {
                 return {
                     item: item,
-                    left: Math.floor(getLeft(item.date!, filter.startDate, context.parameters.xsize.raw ?? 32))
+                    left: Math.floor(getLeft(item.date!, filter.startDate, xSize))
                 }
             })
             
@@ -54,7 +51,7 @@ export default function TimelineActions({ context, animate, timelineRef, locale,
         .map(item => {
             return {
                 item: item,
-                left: Math.ceil(getLeft(item.date!, filter.startDate, context.parameters.xsize.raw ?? 32))
+                left: Math.ceil(getLeft(item.date!, filter.startDate, xSize))
             }
         })
         
@@ -90,7 +87,7 @@ export default function TimelineActions({ context, animate, timelineRef, locale,
                     </button>
                     <div className='w-px h-full bg-gray-500 mx-0.5' />
                     {/* Filter */}
-                    <button onClick={() => showDialog(<FilterDialog locale={locale} items={items} onSave={onSave} />, "w-[540px]")} className="relative flex justify-center items-center w-5 h-5 p-1 m-0.5 rounded-[4px] hover:bg-slate-100 duration-200 transition-colors">
+                    <button onClick={() => showDialog(<FilterDialog items={items} onSave={onSave} />, "w-[540px]")} className="relative flex justify-center items-center w-5 h-5 p-1 m-0.5 rounded-[4px] hover:bg-slate-100 duration-200 transition-colors">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2048 2048">
                             <path d="M2048 128v219l-768 768v805H768v-805L0 347V128h2048zm-128 128H128v37l768 768v731h256v-731l768-768v-37z"></path>
                         </svg>

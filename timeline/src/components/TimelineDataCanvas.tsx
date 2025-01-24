@@ -1,9 +1,9 @@
 ﻿import * as React from 'react'
-import { IInputs } from '../../generated/ManifestTypes';
 import { fontSize, getAvailableTimeUnits, getLeft, ITEM_PADDING, TimeUnit, timeUnitInformation, TimeUnits, ySize } from '../timeUtil';
 import { useTranslation } from 'react-i18next';
 import { useFilter } from '../../contexts/filter-context';
 import TimelineItemBlock, { TimelineItem } from './TimelineItem';
+import { useGlobalGlobalContext } from '../../contexts/global-context';
 
 // OBS: HTML Elements fill up the DOM extremely quickly causing lag and performance issues.
 // OBS: Lazy Loading would only work until elements were loaded.
@@ -25,13 +25,12 @@ export interface TimeOptions {
 }
 
 interface TimelineDataCanvasProps {
-    context: ComponentFramework.Context<IInputs>;
-    locale: string;
     options: TimeOptions;
     rounding: RoundingType;
     units: TimeUnit[];
     items: TimelineItem[];
     uuid: string;
+    width: number;
     setHeight: (height: number) => void;
 }
 
@@ -40,7 +39,7 @@ export interface TimelineDataCanvasHandle {
     getMaxSize: () => number;
 }
 
-export const TimelineDataCanvas = React.forwardRef<TimelineDataCanvasHandle, TimelineDataCanvasProps>(({ setHeight, items, context, locale, options, rounding, units, uuid }: TimelineDataCanvasProps, ref) => {
+export const TimelineDataCanvas = React.forwardRef<TimelineDataCanvasHandle, TimelineDataCanvasProps>(({ setHeight, items, options, rounding, units, uuid, width }: TimelineDataCanvasProps, ref) => {
     
     React.useImperativeHandle(ref, () => ({
         draw, getMaxSize
@@ -49,6 +48,7 @@ export const TimelineDataCanvas = React.forwardRef<TimelineDataCanvasHandle, Tim
     // Context
     const { t } = useTranslation();
     const { filter, filterItems } = useFilter();
+    const { locale, xSize } = useGlobalGlobalContext();
 
     // Refs
     const canvasRef = React.useRef<HTMLCanvasElement>(null);
@@ -61,9 +61,7 @@ export const TimelineDataCanvas = React.forwardRef<TimelineDataCanvasHandle, Tim
     }, [filter.startDate, filter.endDate]);
     
     // Variables
-    const xSize = context.parameters.xsize.raw ?? 32;
     const totalWidth = timeUnits[Object.keys(timeUnits)[0]].reduce((acc, item) => acc + item.hours, 0) * xSize;
-    const width = context.mode.allocatedWidth;
     const height = units.length * ySize;
 
     // Early return
@@ -71,11 +69,11 @@ export const TimelineDataCanvas = React.forwardRef<TimelineDataCanvasHandle, Tim
 
     // Effects
     React.useEffect(() => {
-        // initial draw
         const canvas = canvasRef.current;
-        if (!canvas) return;
-        draw(canvas, 0);
-    }, []);
+        if (canvas) {
+            draw(canvas, 0);
+        }
+    }, [canvasRef]);
 
     // Functions
     const getMaxSize = (): number => totalWidth - width;
@@ -164,8 +162,8 @@ export const TimelineDataCanvas = React.forwardRef<TimelineDataCanvasHandle, Tim
     }
 
     const areItemsOverlapping = (item1: TimelineItem, item2: TimelineItem): boolean => {
-        const left1 = getLeft(item1.date!, filter.startDate, context.parameters.xsize.raw ?? 32);
-        const left2 = getLeft(item2.date!, filter.startDate, context.parameters.xsize.raw ?? 32);
+        const left1 = getLeft(item1.date!, filter.startDate, xSize);
+        const left2 = getLeft(item2.date!, filter.startDate, xSize);
         const width1 = (fontSize / 2) * item1.name.length + 32; 
         const width2 = (fontSize / 2) * item2.name.length + 32;
         return !(left1 + width1 < left2 || left2 + width2 < left1);
@@ -207,7 +205,7 @@ export const TimelineDataCanvas = React.forwardRef<TimelineDataCanvasHandle, Tim
             maxWidth: totalWidth
         }}>
             {/* NOW */}
-            <div className='w-px h-full bg-red-400 absolute z-10' style={{ left: getLeft(new Date(), filter.startDate, context.parameters.xsize.raw ?? 32) }}>
+            <div className='w-px h-full bg-red-400 absolute z-10' style={{ left: getLeft(new Date(), filter.startDate, xSize) }}>
                 <span className='absolute w-[5px] h-[5px] rounded-full border border-solid bg-red-400 border-dynamics-text' style={{ bottom: height - 2, left: -2 }}></span>
             </div>
             {/* ACTIVITIES */}
@@ -224,7 +222,6 @@ export const TimelineDataCanvas = React.forwardRef<TimelineDataCanvasHandle, Tim
                             {filterItems(filter, rowItems).map(item => (
                                 <TimelineItemBlock 
                                     key={"item-" + item.id}
-                                    context={context}
                                     item={item}
                                     parentRef={containerRef}
                                     rowIdx={rowIndex}

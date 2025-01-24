@@ -1,33 +1,28 @@
 import * as React from 'react'
-import { fontSize, getLeft, ITEM_PADDING, ySize } from '../timeUtil';
-import Icon, { ActivityType, getActivityInformation } from '../icons/Icon';
-import { IInputs } from '../../generated/ManifestTypes';
-import { DEBUG } from '../Timeline';
+import Icon from '../icons/Icon';
 import { TimelineItem } from './TimelineItem';
 import { useGlobalDialogContext } from '../../contexts/dialog-context';
 import { getHref } from '../util';
+import { useGlobalGlobalContext } from '../../contexts/global-context';
 
 export interface TimelessTimelineItemBlock {
     id: string;
     name: string;
     date: Date | null;
-    type: ActivityType;
+    type: string;
 }
 
 interface ITimelessTimelineItemProps {
     item: TimelineItem;
-    context: ComponentFramework.Context<IInputs>;
 }
 
-export default function TimelessTimelineItemBlock({ context, item }: ITimelessTimelineItemProps) {
-
-    const styleInformation = getActivityInformation(item.type);
+export default function TimelessTimelineItemBlock({ item }: ITimelessTimelineItemProps) {
 
     const { showDialog, hideDialog } = useGlobalDialogContext();
-
+    const { clientUrl, activityInfo } = useGlobalGlobalContext();
 
     const openActivity = (): void => {
-        const url = getHref(context, item.type, item.id);
+        const url = getHref(clientUrl, item.type, item.id);
 
         showDialog(
             <div className='flex flex-col'>
@@ -48,7 +43,7 @@ export default function TimelessTimelineItemBlock({ context, item }: ITimelessTi
 
     return (
         <button onClick={openActivity} className={`group relative pointer-events-auto hover:cursor-pointer my-1 bg-white flex items-center shadow-dynamics border border-solid border-gray-300 overflow-hidden bottom-full justify-center rounded-[4px] px-1 py-[2px] origin-center`}>
-            <span className='absolute left-0 w-1 h-full group-hover:w-full duration-300 transition-all' style={{ backgroundColor: styleInformation.color }}></span>
+            <span className='absolute left-0 w-1 h-full group-hover:w-full duration-300 transition-all' style={{ backgroundColor: activityInfo[item.type].color }}></span>
             <p className='whitespace-nowrap z-10 mx-1 text-xs group-hover:text-white transition-colors duration-300'>{item.name}</p>
             { item.type ? <Icon name={item.type} /> : <></> }
         </button>

@@ -1,27 +1,25 @@
 import * as React from 'react'
-import { ActivityTypeOptions, getActivityInformation } from '../icons/Icon';
 import { useGlobalDialogContext } from '../../contexts/dialog-context';
 import { useTranslation } from 'react-i18next';
-import { getIcon, hexToRgb } from '../util';
 import { IEntityReference, TimelineItem } from './TimelineItem';
 import { FilterState, useFilter } from '../../contexts/filter-context';
 import { DatePicker } from '@mantine/dates';
-import { AnimatePresence, motion } from 'framer-motion';
 import Lookup from './controls/Lookup';
 import Search from './controls/Search';
 import Chips from './controls/Chips';
+import { useGlobalGlobalContext } from '../../contexts/global-context';
 
 interface IFilterDialogProps {
     items: TimelineItem[];
-    locale: string;
     onSave: (filter: FilterState) => void;
 }
 
-export default function FilterDialog({ locale, items, onSave }: IFilterDialogProps) {
+export default function FilterDialog({ items, onSave }: IFilterDialogProps) {
 
     const { hideDialog } = useGlobalDialogContext();
     const { initialState, filter, filterItems } = useFilter();
     const { t } = useTranslation();
+    const { locale, activityInfo } = useGlobalGlobalContext();
 
     const [currentFilter, setCurrentFilter] = React.useState<FilterState>(filter);
     const [filteredActivities, setFilteredActivities] = React.useState<number>();

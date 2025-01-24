@@ -33,3 +33,5 @@ AVAILABILITY: Translation of custom schemanames
     - Lookup
     - Searchbox
     - Chip
+- BUG: Resize does not rerender canvas
+[x] BUG: Tab swap does not rerender canvas

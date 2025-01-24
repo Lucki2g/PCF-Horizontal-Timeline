@@ -1,46 +1,10 @@
 import * as React from 'react'
 
-export const ActivityTypeOptions: ActivityType[] = ["task", "appointment", "milestone", "email", "phonecall"];
-export type ActivityType = "task" | "appointment" | "milestone" | "email" | "phonecall";
-
-interface IIconProps {
-    name: ActivityType;
-}
-
 export interface ActivityInformation {
     color: string;
 }
 
-export const getActivityInformation = (type: ActivityType): ActivityInformation => {
-    switch (type) {
-        case 'task':
-            return {
-                color: "#eab308"
-            }
-        case 'appointment':
-            return {
-                color: "#7e22ce"
-            }
-        case 'milestone':
-            return {
-                color: "#e11d48"
-            }
-        case 'email':
-            return {
-                color: "#16a34a"
-            }
-        case 'phonecall':
-            return {
-                color: "#fb7185"
-            }
-        default:
-            return {
-                color: "#fff"
-            }
-    }
-}
-
-export default function Icon({ name }: IIconProps) {
+export default function Icon({ name }: { name: string }) {
 
     let svgElement;
 
