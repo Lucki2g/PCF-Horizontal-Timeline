@@ -25,6 +25,7 @@ export class timeline implements ComponentFramework.ReactControl<IInputs, IOutpu
         notifyOutputChanged: () => void,
         state: ComponentFramework.Dictionary
     ): void {
+        context.mode.trackContainerResize(true);
         this.notifyOutputChanged = notifyOutputChanged;
     }
 

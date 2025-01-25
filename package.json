@@ -14,10 +14,10 @@
     "style": "npx tailwindcss -i ./timeline/css/main.css -o ./timeline/css/styles.css --watch"
   },
   "dependencies": {
-    "@fluentui/react": "8.29.0",
     "@mantine/dates": "^6.0.22",
     "framer-motion": "^6.5.1",
     "i18next": "^23.5.1",
+    "i18next-browser-languagedetector": "^8.0.2",
     "react": "16.8.6",
     "react-dom": "16.8.6",
     "react-i18next": "^15.2.0"
