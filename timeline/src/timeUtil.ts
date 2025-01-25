@@ -64,13 +64,17 @@ export const defaultOptions: any = {
     seconds: "2-digit",
 };
 
-export const addDayToDate = (date: Date) => {
-    const newTime = date.getTime() + MILIS_IN_DAY;
+export const addDayToDateAndRound = (date: Date) => {
+    const roundedDate = new Date(date);
+    roundedDate.setHours(0,0,0,0)
+    const newTime = roundedDate.getTime() + MILIS_IN_DAY;
     return new Date(newTime);
 }
 
-export const removeDayFromDate = (date: Date) => {
-    const newTime = date.getTime() - MILIS_IN_DAY;
+export const removeDayFromDateAndRound = (date: Date) => {
+    const roundedDate = new Date(date);
+    roundedDate.setHours(0,0,0,0)
+    const newTime = roundedDate.getTime() - MILIS_IN_DAY;
     return new Date(newTime);
 }
 
@@ -100,45 +104,48 @@ export function getAvailableTimeUnits(
     const endQuarter = Math.floor(endDate.getMonth() / 3) + 1;
     // do rounding before starting to add strings
 
-    const doRounding = (rounding: RoundingType, start: Date, end: Date): { start: Date, end: Date } => {
+    // const doRounding = (rounding: RoundingType, start: Date, end: Date): { start: Date, end: Date } => {
 
-        const roundedStart = new Date(start);
-        const roundedEnd = new Date(end);
+    //     const roundedStart = new Date(start);
+    //     const roundedEnd = new Date(end);
 
-        switch (rounding) {
-            case "year":
-            roundedStart.setMonth(0);
-            roundedStart.setDate(1);
-            roundedStart.setHours(0, 0, 0, 0);
-            roundedEnd.setMonth(11);
-            roundedEnd.setDate(new Date(end.getFullYear(), end.getMonth(), 0).getDate());
-            roundedEnd.setHours(0, 0, 0, 0);
-            break;
-            case "quarter":
-            // figure out the start & end quarter
-            roundedStart.setMonth(startQuarter * 3);
-            roundedStart.setDate(1);
-            roundedStart.setHours(0, 0, 0, 0);
-            roundedEnd.setMonth(endQuarter * 3);
-            roundedEnd.setDate(new Date(end.getFullYear(), end.getMonth(), 0).getDate());
-            roundedEnd.setHours(0, 0, 0, 0);
-            break;
-            case "month":
-            roundedStart.setDate(1);
-            roundedStart.setHours(0, 0, 0, 0);
-            roundedEnd.setDate(new Date(end.getFullYear(), end.getMonth(), 0).getDate());
-            roundedEnd.setHours(0, 0, 0, 0);
-            break;
-            case "day":
-            roundedStart.setHours(0, 0, 0, 0);
-            roundedEnd.setHours(0, 0, 0, 0);
-            break;
-        }
+    //     switch (rounding) {
+    //         case "year":
+    //         roundedStart.setMonth(0);
+    //         roundedStart.setDate(1);
+    //         roundedStart.setHours(0, 0, 0, 0);
+    //         roundedEnd.setMonth(11);
+    //         roundedEnd.setDate(new Date(end.getFullYear(), end.getMonth(), 0).getDate());
+    //         roundedEnd.setHours(0, 0, 0, 0);
+    //         break;
+    //         case "quarter":
+    //         // figure out the start & end quarter
+    //         roundedStart.setMonth(startQuarter * 3);
+    //         roundedStart.setDate(1);
+    //         roundedStart.setHours(0, 0, 0, 0);
+    //         roundedEnd.setMonth(endQuarter * 3);
+    //         roundedEnd.setDate(new Date(end.getFullYear(), end.getMonth(), 0).getDate());
+    //         roundedEnd.setHours(0, 0, 0, 0);
+    //         break;
+    //         case "month":
+    //         roundedStart.setDate(1);
+    //         roundedStart.setHours(0, 0, 0, 0);
+    //         roundedEnd.setDate(new Date(end.getFullYear(), end.getMonth(), 0).getDate());
+    //         roundedEnd.setHours(0, 0, 0, 0);
+    //         break;
+    //         case "day":
+    //         roundedStart.setHours(0, 0, 0, 0);
+    //         roundedEnd.setHours(0, 0, 0, 0);
+    //         break;
+    //     }
 
-        return { start: roundedStart, end: roundedEnd };
-    }
+    //     return { start: roundedStart, end: roundedEnd };
+    // }
 
-    const { start: roundedStart, end: roundedEnd } = doRounding(rounding, startDate, endDate);
+    // const { start: roundedStart, end: roundedEnd } = doRounding(rounding, startDate, endDate);
+
+    const roundedStart = startDate;
+    const roundedEnd = endDate;
 
     //////////////////////////////////////////////////
     //                                              //
@@ -260,7 +267,9 @@ export function getAvailableTimeUnits(
         const months: DateInfo[] = [];
         let currentDate = new Date(startDate);
 
-        const { start, end } = doRounding(rounding, currentDate, endDate);
+        const start = currentDate;
+        const end = endDate;
+        // const { start, end } = doRounding(rounding, currentDate, endDate);
 
         while (currentDate <= end) {
             const monthStart = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);

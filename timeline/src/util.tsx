@@ -1,7 +1,5 @@
 import * as React from "react";
 import { DEBUG } from "./Timeline";
-import { IInputs } from "../generated/ManifestTypes";
-
 
 export const getHref = (clientUrl: string, locicalname: string, id: string) => {
     if (DEBUG) return "";

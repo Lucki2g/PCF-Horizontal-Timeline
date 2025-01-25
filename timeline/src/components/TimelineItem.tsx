@@ -1,6 +1,5 @@
 import * as React from 'react'
 import { getLeft, ITEM_PADDING, TimeUnit, ySize } from '../timeUtil';
-import { IInputs } from '../../generated/ManifestTypes';
 import { useGlobalDialogContext } from '../../contexts/dialog-context';
 import { useSettings } from '../../hooks/SettingsState';
 import { useFilter } from '../../contexts/filter-context';
@@ -99,8 +98,6 @@ export default function TimelineItemBlock({ parentRef, item, rowIdx, rowCount, t
     React.useEffect(() => {
         const alignment = getLeftAlignment();
         setLeftAlignment(alignment); 
-
-        console.log(item.date, alignment)
     }, [itemRef, parentRef, filter.startDate, filter.endDate]);
 
     return (

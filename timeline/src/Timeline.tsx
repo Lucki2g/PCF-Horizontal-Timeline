@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { IInputs } from '../generated/ManifestTypes'
-import { addDayToDate, getLeft, removeDayFromDate, TimeOptions, TimeUnit, ySize } from './timeUtil';
+import { addDayToDateAndRound, getLeft, removeDayFromDateAndRound, TimeOptions, TimeUnit, ySize } from './timeUtil';
 import { IEntityReference, TimelineItem } from './components/TimelineItem';
 import TimelineActions from './components/TimelineActions';
 import { FilterState, useFilter } from '../contexts/filter-context';
@@ -138,7 +138,7 @@ export default function Timeline({ context }: ITimelineProps) {
                 ) - timelineRef.current.clientWidth / 2, 
                 timelineRef.current,
                 1000);
-    }, [loadingstate, timelineRef])
+    }, [loadingstate, timelineRef, context.mode.allocatedWidth])
 
     const animateLeft = (start: number, end: number, element: HTMLElement, duration: number) => {
         if (isAnimating) return;
@@ -170,6 +170,12 @@ export default function Timeline({ context }: ITimelineProps) {
         if (DEBUG) {
             const items: TimelineItem[] = [
                 {
+                    id: "-1",
+                    name: "Remember this",
+                    type: "task",
+                    date: new Date("2024-05-16T08:00:00.000Z"),
+                },
+                {
                     id: "1",
                     name: "Remember the chicken",
                     type: "task",
@@ -197,7 +203,7 @@ export default function Timeline({ context }: ITimelineProps) {
                     id: "4",
                     name: "I am overlapping?",
                     type: "appointment",
-                    date: new Date("2024-11-01T15:30:45"),
+                    date: new Date("2024-11-01T15:30:45Z"),
                     owned: {
                         id: "1",
                         name: "SME",
@@ -208,7 +214,7 @@ export default function Timeline({ context }: ITimelineProps) {
                     id: "5",
                     name: "Email",
                     type: "email",
-                    date: new Date("2024-11-20T15:30:45"),
+                    date: new Date("2024-11-20T15:30:45Z"),
                     owned: {
                         id: "2",
                         name: "Kaare",
@@ -219,7 +225,7 @@ export default function Timeline({ context }: ITimelineProps) {
                     id: "6",
                     name: "Phone Call",
                     type: "phonecall",
-                    date: new Date("2024-11-20T15:30:45"),
+                    date: new Date("2024-11-20T15:30:45Z"),
                     owned: {
                         id: "3",
                         name: "Børsting",
@@ -230,7 +236,7 @@ export default function Timeline({ context }: ITimelineProps) {
                     id: "7",
                     name: "Phone Call",
                     type: "phonecall",
-                    date: new Date("2025-02-02T23:59:59"),
+                    date: new Date("2025-02-02T23:59:59Z"),
                     owned: {
                         id: "4",
                         name: "Hello",
@@ -263,8 +269,8 @@ export default function Timeline({ context }: ITimelineProps) {
                 {
                     search: "",
                     itemTypes: Object.keys(ACTIVITYINFO).reduce((acc, item) => ({ ...acc, [item]: true }), {}),
-                    startDate: removeDayFromDate(start),
-                    endDate: addDayToDate(end),
+                    startDate: removeDayFromDateAndRound(start),
+                    endDate: addDayToDateAndRound(end),
                     owner: null
                 }
             );
@@ -319,8 +325,8 @@ export default function Timeline({ context }: ITimelineProps) {
                 {
                     search: "",
                     itemTypes: Object.keys(ACTIVITYINFO).reduce((acc, item) => ({ ...acc, [item]: true }), {}),
-                    startDate: removeDayFromDate(start),
-                    endDate: addDayToDate(end),
+                    startDate: removeDayFromDateAndRound(start),
+                    endDate: addDayToDateAndRound(end),
                     owner: null
                 }
             );
