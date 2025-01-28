@@ -2,6 +2,9 @@
 import * as React from "react";
 import { ActivityInformation } from "../src/icons/Icon";
 import { useTranslation } from "react-i18next";
+import { LoaderProvider } from "./loader-context";
+import { FilterProvider } from "./filter-context";
+import { DialogProvider } from "./dialog-context";
 
 type GlobalContextProps = {
   locale: string;
@@ -45,8 +48,14 @@ export const GlobalProvider = ({ children }: { children: ReactNode }) => {
   }, [locale])
 
   return (
-    <GlobalContext.Provider value={{ locale, setLocale, activityInfo, setActivityInfo, xSize, setXSize, clientUrl, setClientUrl }}>
-      {children}
+    <GlobalContext.Provider value={{ locale, setLocale, activityInfo, setActivityInfo, xSize, setXSize, clientUrl, setClientUrl }}> 
+      <LoaderProvider>
+        <FilterProvider>
+          <DialogProvider>
+            {children}
+          </DialogProvider>
+        </FilterProvider>
+      </LoaderProvider>
     </GlobalContext.Provider>
   );
 };

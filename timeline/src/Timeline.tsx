@@ -8,7 +8,7 @@ import TimelessTimelineItemBlock from './components/TimelessTimelineItem';
 import { useTranslation } from 'react-i18next';
 import { useGlobalLoaderContext } from '../contexts/loader-context';
 import { TimelineDataCanvas, TimelineDataCanvasHandle } from './components/TimelineDataCanvas';
-import { uuidv4 } from './util';
+import { castToLocaleSource, lcidToBCP47Table, uuidv4 } from './util';
 import { ActivityInformation } from './icons/Icon';
 import { useGlobalGlobalContext } from '../contexts/global-context';
 
@@ -119,7 +119,21 @@ export default function Timeline({ context }: ITimelineProps) {
 
     // Effects
     React.useEffect(() => {
-        setLocale(context.parameters.locale.raw ?? "en-US")
+        // set correct langauge
+        const localeSource = castToLocaleSource(context.parameters.localesource.raw ?? "", "systemuser");
+        let locale: string = "";
+        switch (localeSource) {
+            case 'override':
+                locale = lcidToBCP47Table[context.parameters.locale.raw ?? 1033];
+                break;
+            case 'systemuser':
+                locale = lcidToBCP47Table[context.userSettings.languageId ?? 1033];
+                break;
+            case 'browser':
+                locale = navigator.language;
+                break;
+        }
+        setLocale(locale)
         setActivityInfo(ACTIVITYINFO)
         setXSize(context.parameters.xsize.raw ?? 32)
         setClientUrl(DEBUG ? "" : (context as any).page.getClientUrl());

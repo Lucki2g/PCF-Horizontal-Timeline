@@ -50,3 +50,27 @@ export const getIcon = (entitytype: string) => {
         )
     }
 }
+
+type LocaleSource = "override" | "systemuser" | "browser"; 
+export const castToLocaleSource = (value: string | undefined, defaultValue: LocaleSource = "override"): LocaleSource => {
+    const validValues: LocaleSource[] = ["override", "systemuser", "browser"];
+    return validValues.includes(value as LocaleSource) ? (value as LocaleSource) : defaultValue;
+}
+
+// Extend with future languages
+export const lcidToBCP47Table: { [key: number]: string } = {
+    1033: "en-US",
+    1030: "da-DK",
+    1036: "fr-FR",
+    1034: "es-ES",
+    1031: "de-DE",
+    2052: "zh-CN",
+    1041: "ja-JP",
+    1025: "ar-SA",
+    1046: "pt-BR",
+    1040: "it-IT",
+    1081: "hi-IN",
+    1043: "nl-NL",
+    1053: "sv-SE",
+    1035: "fi-FI"
+}

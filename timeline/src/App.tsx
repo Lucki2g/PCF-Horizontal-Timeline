@@ -16,13 +16,7 @@ export default function App({ context }: IAppProps) {
     return (
         <I18nextProvider i18n={i18n}>
             <GlobalProvider>
-                <LoaderProvider>
-                    <FilterProvider>
-                        <DialogProvider>
-                            <Timeline context={context} />
-                        </DialogProvider>
-                    </FilterProvider>
-                </LoaderProvider>
+                <Timeline context={context} />
             </GlobalProvider>
         </I18nextProvider>
     )
