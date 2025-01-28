@@ -8,7 +8,7 @@ import TimelessTimelineItemBlock from './components/TimelessTimelineItem';
 import { useTranslation } from 'react-i18next';
 import { useGlobalLoaderContext } from '../contexts/loader-context';
 import { TimelineDataCanvas, TimelineDataCanvasHandle } from './components/TimelineDataCanvas';
-import { castToLocaleSource, lcidToBCP47Table, uuidv4 } from './util';
+import { castToLocaleSource, castToTimeZoneSource, lcidToBCP47Table, uuidv4 } from './util';
 import { ActivityInformation } from './icons/Icon';
 import { useGlobalGlobalContext } from '../contexts/global-context';
 
@@ -23,7 +23,7 @@ export default function Timeline({ context }: ITimelineProps) {
     if (size <= 0) return <></>;
 
     // Global context
-    const { setLocale, setActivityInfo, setXSize, setClientUrl } = useGlobalGlobalContext();
+    const { setLocale, setTimeZone, setActivityInfo, setXSize, setClientUrl } = useGlobalGlobalContext();
 
     const randomID = React.useMemo(() => {
         return uuidv4();
@@ -134,6 +134,19 @@ export default function Timeline({ context }: ITimelineProps) {
                 break;
         }
         setLocale(locale)
+
+        const timezoneSource = castToTimeZoneSource(context.parameters.timezonesource.raw ?? "", "browser");
+        let timezone: string = "";
+        switch (timezoneSource) {
+            case 'override':
+                timezone = context.parameters.timezone.raw ?? "UTC";
+                break;
+            case 'browser':
+                timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+                break;
+        }
+        setTimeZone(timezone)
+
         setActivityInfo(ACTIVITYINFO)
         setXSize(context.parameters.xsize.raw ?? 32)
         setClientUrl(DEBUG ? "" : (context as any).page.getClientUrl());
