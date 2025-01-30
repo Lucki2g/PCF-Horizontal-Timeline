@@ -63,6 +63,12 @@ export const castToTimeZoneSource = (value: string | undefined, defaultValue: Ti
     return validValues.includes(value as TimeZoneSource) ? (value as TimeZoneSource) : defaultValue;
 }
 
+type GridStyle = "grid" | "none" | "override" | "dots" | "stripes" | "topography"; 
+export const castToGridStyle = (value: string | undefined, defaultValue: GridStyle = "grid"): GridStyle => {
+    const validValues: GridStyle[] = ["grid", "none", "override", "dots", "stripes", "topography"];
+    return validValues.includes(value as GridStyle) ? (value as GridStyle) : defaultValue;
+}
+
 // Extend with future languages
 export const lcidToBCP47Table: { [key: number]: string } = {
     1025: "ar-SA", // Arabic (Saudi Arabia)

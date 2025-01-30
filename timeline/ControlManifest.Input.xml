@@ -35,6 +35,11 @@
     <!-- SIZING -->
     <property default-value='4' description-key="Size of an hour in pixels" display-name-key="Size x" name="xsize" usage="input" of-type="Whole.None" />
 
+    <!-- STYLING -->
+    <property default-value="grid" description-key="The background style" display-name-key="Background Style" name="bgstyle" usage="input" of-type="SingleLine.Text" />
+    <property default-value="#fff" description-key="The background color" display-name-key="Background Color" name="bgcolor" usage="input" of-type="SingleLine.Text" />
+    <property default-value="#e2e8f0" description-key="The pattern color accent" display-name-key="Pattern Color" name="bgpattern" usage="input" of-type="SingleLine.Text" />
+
     <!-- YEARS -->
     <property default-value='true' description-key="Enable Years" display-name-key="Enable Years" name="yearsenabled" usage="input" of-type="TwoOptions" />
     <property default-value='full' description-key="Years format" display-name-key="Years Format" name="yearsformat" usage="input" of-type="SingleLine.Text" />
