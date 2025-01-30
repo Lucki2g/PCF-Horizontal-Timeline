@@ -11,19 +11,20 @@ import { TimelineDataCanvas, TimelineDataCanvasHandle } from './components/Timel
 import { castToLocaleSource, castToTimeZoneSource, lcidToBCP47Table, uuidv4 } from './util';
 import { ActivityInformation } from './icons/Icon';
 import { useGlobalGlobalContext } from '../contexts/global-context';
+import { loadData } from './services/dataLoader';
 
 interface ITimelineProps {
     context: ComponentFramework.Context<IInputs>;
 }
 
-export const DEBUG = false;
+export const DEBUG = true;
 
 export default function Timeline({ context }: ITimelineProps) {
     const size = context.mode.allocatedWidth;
     if (size <= 0) return <></>;
 
     // Global context
-    const { setLocale, setTimeZone, setActivityInfo, setXSize, setClientUrl } = useGlobalGlobalContext();
+    const { setLocale, setTimeZone, setActivityInfo, setXSize, setClientUrl, timezone, locale, clientUrl, activityInfo } = useGlobalGlobalContext();
 
     const randomID = React.useMemo(() => {
         return uuidv4();
@@ -66,9 +67,69 @@ export default function Timeline({ context }: ITimelineProps) {
     const canvasRef = React.useRef<TimelineDataCanvasHandle>(null);
 
     // Context
-    const { filter, initialize, setFilter } = useFilter();
+    const { filter, initialize: initializeFilter, setFilter } = useFilter();
     const { t } = useTranslation();
     const { loadingstate, setState } = useGlobalLoaderContext();
+    
+    // Effects
+    React.useEffect(() => {
+        const initialize = async () => {
+            const localeSource = castToLocaleSource(context.parameters.localesource.raw ?? "", "systemuser");
+            let locale: string = "";
+            switch (localeSource) {
+                case 'override':
+                    locale = lcidToBCP47Table[context.parameters.locale.raw ?? 1033];
+                    break;
+                case 'systemuser':
+                    locale = lcidToBCP47Table[context.userSettings.languageId ?? 1033];
+                    break;
+                case 'browser':
+                    locale = navigator.language;
+                    break;
+            }
+            setLocale(locale)
+    
+            const timezoneSource = castToTimeZoneSource(context.parameters.timezonesource.raw ?? "", "browser");
+            let timezone: string = "";
+            switch (timezoneSource) {
+                case 'override':
+                    timezone = context.parameters.timezone.raw ?? "UTC";
+                    break;
+                case 'browser':
+                    timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+                    break;
+            }
+            setTimeZone(timezone)
+    
+            setActivityInfo(ACTIVITYINFO)
+            setXSize(context.parameters.xsize.raw ?? 32)
+            setClientUrl(DEBUG ? "" : (context as any).page.getClientUrl());
+
+            // initial data load
+            await dataRefresh(timezone);
+        }
+        
+        initialize();
+    }, [])
+
+    React.useEffect(() => {
+        const refresh = async () => {
+            if (loadingstate) {
+                if (timezone && timezone !== null) await dataRefresh(timezone);
+                return;
+            }
+            if (!timelineRef.current) return;
+
+            animateLeft(
+                0, 
+                getLeft(new Date(), filter.startDate, context.parameters.xsize.raw ?? 32) - 
+                timelineRef.current.clientWidth / 2, 
+                timelineRef.current,
+                1000
+            );
+        }
+        refresh();
+    }, [loadingstate]);
 
     // Events
     function mouseDown(e: any, mobile: boolean = false) {
@@ -101,71 +162,21 @@ export default function Timeline({ context }: ITimelineProps) {
         const walk = (x - startX) * 3;
         const newLeftRounded = Math.max(0, left - walk);
         
-        updateLeft(newLeftRounded)
+        updateLeft(newLeftRounded, timelineRef, canvasRef)
     }
 
-    const updateLeft = (location: number) => {
+    const updateLeft = (location: number, ref: React.RefObject<HTMLElement>, canvasRef: React.RefObject<TimelineDataCanvasHandle>) => {
         const canvas = document.getElementById(`canvas-${randomID}`) as HTMLCanvasElement;
-        if (timelineRef && timelineRef.current && canvas && canvasRef.current) {
+        if (ref && ref.current && canvas && canvasRef.current) {
 
             const maxScrollLeft = canvasRef.current.getMaxSize();
             const newValue = Math.max(0, Math.min(maxScrollLeft, location));
 
-            timelineRef.current.scrollLeft = newValue;
+            ref.current.scrollLeft = newValue;
             canvas.style.left = newValue + "px";
             canvasRef.current.draw(canvas, newValue);
         }
     }
-
-    // Effects
-    React.useEffect(() => {
-        // set correct langauge
-        const localeSource = castToLocaleSource(context.parameters.localesource.raw ?? "", "systemuser");
-        let locale: string = "";
-        switch (localeSource) {
-            case 'override':
-                locale = lcidToBCP47Table[context.parameters.locale.raw ?? 1033];
-                break;
-            case 'systemuser':
-                locale = lcidToBCP47Table[context.userSettings.languageId ?? 1033];
-                break;
-            case 'browser':
-                locale = navigator.language;
-                break;
-        }
-        setLocale(locale)
-
-        const timezoneSource = castToTimeZoneSource(context.parameters.timezonesource.raw ?? "", "browser");
-        let timezone: string = "";
-        switch (timezoneSource) {
-            case 'override':
-                timezone = context.parameters.timezone.raw ?? "UTC";
-                break;
-            case 'browser':
-                timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-                break;
-        }
-        setTimeZone(timezone)
-
-        setActivityInfo(ACTIVITYINFO)
-        setXSize(context.parameters.xsize.raw ?? 32)
-        setClientUrl(DEBUG ? "" : (context as any).page.getClientUrl());
-        setState(true);
-    }, [])
-
-    React.useEffect(() => {
-        if (loadingstate) refresh();
-        if (!loadingstate && timelineRef.current) 
-            animateLeft(
-                0, 
-                getLeft(
-                    new Date(), 
-                    filter.startDate, 
-                    context.parameters.xsize.raw ?? 32
-                ) - timelineRef.current.clientWidth / 2, 
-                timelineRef.current,
-                1000);
-    }, [loadingstate, timelineRef, context.mode.allocatedWidth])
 
     const animateLeft = (start: number, end: number, element: HTMLElement, duration: number) => {
         if (isAnimating) return;
@@ -179,7 +190,7 @@ export default function Timeline({ context }: ITimelineProps) {
             const progress = Math.min(elapsedTime / duration, 1);
             const newLeft = start + distance * progress;
     
-            updateLeft(newLeft);
+            updateLeft(newLeft, timelineRef, canvasRef);
     
             if (progress < 1) {
                 requestAnimationFrame(step);
@@ -191,176 +202,29 @@ export default function Timeline({ context }: ITimelineProps) {
         setTimeout(() => setIsAnimating(false), duration)
     };
 
-    const refresh = async () => {
+    const dataRefresh = async (timezone: string) => {
         let start = new Date("9999-12-31");
         let end = new Date("0000-01-01");
-        if (DEBUG) {
-            const items: TimelineItem[] = [
-                {
-                    id: "-1",
-                    name: "Remember this",
-                    type: "task",
-                    date: new Date("2024-05-16T08:00:00.000Z"),
-                },
-                {
-                    id: "1",
-                    name: "Remember the chicken",
-                    type: "task",
-                    date: new Date("2024-10-18"),
-                },
-                {
-                    id: "2",
-                    name: "Another reminder",
-                    type: "task",
-                    date: new Date("2024-11-21T16:00:00.000Z"),
-                },
-                {
-                    id: "3",
-                    name: "What is this?",
-                    type: "task",
-                    date: new Date("2024-11-21T15:00:00.000Z"),
-                },
-                {
-                    id: "3S",
-                    name: "Estimated Close",
-                    type: "milestone",
-                    date: new Date("2024-11-17"),
-                },
-                {
-                    id: "4",
-                    name: "I am overlapping?",
-                    type: "appointment",
-                    date: new Date("2024-11-01T15:30:45Z"),
-                    owned: {
-                        id: "1",
-                        name: "SME",
-                        entitytype: "team"
-                    }
-                },
-                {
-                    id: "5",
-                    name: "Email",
-                    type: "email",
-                    date: new Date("2024-11-20T15:30:45Z"),
-                    owned: {
-                        id: "2",
-                        name: "Kaare",
-                        entitytype: "systemuser"
-                    }
-                },
-                {
-                    id: "6",
-                    name: "Phone Call",
-                    type: "phonecall",
-                    date: new Date("2024-11-20T15:30:45Z"),
-                    owned: {
-                        id: "3",
-                        name: "Børsting",
-                        entitytype: "systemuser"
-                    }
-                },
-                {
-                    id: "7",
-                    name: "Phone Call",
-                    type: "phonecall",
-                    date: new Date("2025-02-02T23:59:59Z"),
-                    owned: {
-                        id: "4",
-                        name: "Hello",
-                        entitytype: "systemuser"
-                    }
-                },
-                {
-                    id: "8",
-                    name: "Phone Call",
-                    type: "phonecall",
-                    date: null,
-                    owned: {
-                        id: "4",
-                        name: "Hello",
-                        entitytype: "systemuser"
-                    }
-                }
-            ];
-
-            for (const item of items) {
-                if (!item.date) continue;
-                if (item.date < start) start = item.date;
-                if (item.date > end) end = item.date;
-            }
-
-            if (new Date() > end) end = new Date();
-
-            setItems(items);
-            initialize(
-                {
-                    search: "",
-                    itemTypes: Object.keys(ACTIVITYINFO).reduce((acc, item) => ({ ...acc, [item]: true }), {}),
-                    startDate: removeDayFromDateAndRound(start),
-                    endDate: addDayToDateAndRound(end),
-                    owner: null
-                }
-            );
-            setState(false);
-        } else {
-            const activities = context.parameters.activities.sortedRecordIds.map((id: string): TimelineItem => {
-                const activity = context.parameters.activities.records[id];
-                const scheduledEnd = activity.getValue("scheduledend") === null ? null : new Date(activity.getValue("scheduledend") as string);
-
-                const owner = {
-                    id: (activity.getValue("ownerid") as any).id.guid,
-                    name: (activity.getValue("ownerid") as any).name,
-                    entitytype: (activity.getValue("ownerid") as any).etn
-                } as IEntityReference;
-
-                return {
-                    id: id,
-                    name: activity.getValue("name") as string,
-                    date: scheduledEnd,
-                    type: activity.getValue("activitytypecode") as string,
-                    owned: owner,
-                }
-            });
-
-            // get the different event milestones
-            const result = await context.webAPI.retrieveRecord(
-                (context.mode as any).contextInfo.entityTypeName, 
-                (context.mode as any).contextInfo.entityId);
-            const milestonesdate = context.parameters.milestonedata.raw ?? "{}";
-            const milestones = JSON.parse(milestonesdate);
-            for (const milestone of Object.keys(milestones)) {
-                if (!result[milestone] || result[milestone] === null || result[milestone] === undefined) continue;
-                const date = new Date(result[milestone]);
-                activities.push({
-                    id: milestone,
-                    name: milestones[milestone],
-                    type: "milestone",
-                    date: date,
-                });
-            }
-
-            for (const item of activities) {
-                if (!item.date) continue;
-                if (item.date < start) start = item.date;
-                if (item.date > end) end = item.date;
-            }
-
-            if (new Date() > end) end = new Date();
-
-            setItems(activities);
-            initialize(
-                {
-                    search: "",
-                    itemTypes: Object.keys(ACTIVITYINFO).reduce((acc, item) => ({ ...acc, [item]: true }), {}),
-                    startDate: removeDayFromDateAndRound(start),
-                    endDate: addDayToDateAndRound(end),
-                    owner: null
-                }
-            );
-            setState(false);
+        const items = await loadData(context);
+        for (const item of items) {
+            if (!item.date) continue;
+            if (item.date < start) start = item.date;
+            if (item.date > end) end = item.date;
         }
-    }
 
+        if (new Date() > end) end = new Date();
+        setItems(items);
+        initializeFilter(
+            {
+                search: "",
+                itemTypes: Object.keys(ACTIVITYINFO).reduce((acc, item) => ({ ...acc, [item]: true }), {}),
+                startDate: removeDayFromDateAndRound(start, timezone),
+                endDate: addDayToDateAndRound(end, timezone),
+                owner: null
+            }
+        );
+        setState(false);
+    }
 
     return loadingstate ?
             <></> :

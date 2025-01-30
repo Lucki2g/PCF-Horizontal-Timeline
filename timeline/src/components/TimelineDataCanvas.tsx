@@ -1,5 +1,5 @@
 ﻿import * as React from 'react'
-import { fontSize, getAvailableTimeUnits, getLeft, ITEM_PADDING, TimeUnit, timeUnitInformation, TimeUnits, ySize } from '../timeUtil';
+import { fontSize, getAvailableTimeUnits, getAvailableTimeUnitsV2, getLeft, ITEM_PADDING, TimeUnit, timeUnitInformation, TimeUnits, ySize } from '../timeUtil';
 import { useTranslation } from 'react-i18next';
 import { useFilter } from '../../contexts/filter-context';
 import TimelineItemBlock, { TimelineItem } from './TimelineItem';
@@ -48,7 +48,7 @@ export const TimelineDataCanvas = React.forwardRef<TimelineDataCanvasHandle, Tim
     // Context
     const { t } = useTranslation();
     const { filter, filterItems } = useFilter();
-    const { locale, xSize } = useGlobalGlobalContext();
+    const { locale, xSize, timezone } = useGlobalGlobalContext();
 
     // Refs
     const canvasRef = React.useRef<HTMLCanvasElement>(null);
@@ -56,7 +56,7 @@ export const TimelineDataCanvas = React.forwardRef<TimelineDataCanvasHandle, Tim
 
     // Memo states
     const timeUnits = React.useMemo<TimeUnits>(() => {
-        const unitData = getAvailableTimeUnits(filter.startDate, filter.endDate, units, options, locale, rounding);
+        const unitData = getAvailableTimeUnitsV2(filter.startDate, filter.endDate, units, options, locale, timezone, rounding);
         return unitData;
     }, [filter.startDate, filter.endDate]);
     
@@ -142,7 +142,7 @@ export const TimelineDataCanvas = React.forwardRef<TimelineDataCanvasHandle, Tim
                     const stickyX = Math.min(Math.max(leftSide, 3.5), rightSide);
                     // no longer in rect
                     if (!(stickyX > rightSide)) renderer.fillText(timeunit.name, stickyX, rectHeight - 1 + ySize);
-                } else if (i % 6 === 0 && i % 24 !== 0) {
+                } else {
                     renderer.fillStyle = "#fff";
                     renderer.fillRect(x - fontSize / 2 - scrollOffsetX, rectHeight + fontSize + 4, fontSize, fontSize)
                     renderer.fillStyle = "#1f2937";

@@ -48,7 +48,6 @@ export const timeUnitInformation = (unit: TimeUnit) => {
   
 export interface TimeUnits { [idx: string]: DateInfo[] }
 
-const MILIS_IN_DAY = 1000 * 60 * 60 * 24;
 const MILIS_IN_HOUR = 1000 * 60 * 60;
 export const ITEM_PADDING: number = 12;
 export const fontSize: number = 10;
@@ -64,18 +63,44 @@ export const defaultOptions: any = {
     seconds: "2-digit",
 };
 
-export const addDayToDateAndRound = (date: Date) => {
-    const roundedDate = new Date(date);
-    roundedDate.setHours(0,0,0,0)
-    const newTime = roundedDate.getTime() + MILIS_IN_DAY;
-    return new Date(newTime);
+export const addDayToDateAndRound = (date: Date, timezone: string) => {
+    const newDate = new Date(date);
+    newDate.setDate(newDate.getDate() + 1);
+
+    // Ensure we preserve the correct timezone when resetting the time
+    const formatter = new Intl.DateTimeFormat("en-US", {
+        timeZone: timezone,
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+        hourCycle: "h23",
+    });
+
+    const formattedDate = formatter.format(newDate);
+    return new Date(formattedDate);
 }
 
-export const removeDayFromDateAndRound = (date: Date) => {
-    const roundedDate = new Date(date);
-    roundedDate.setHours(0,0,0,0)
-    const newTime = roundedDate.getTime() - MILIS_IN_DAY;
-    return new Date(newTime);
+export const removeDayFromDateAndRound = (date: Date, timezone: string) => {
+    const newDate = new Date(date);
+    newDate.setDate(newDate.getDate() - 1);
+
+    // Ensure we preserve the correct timezone when resetting the time
+    const formatter = new Intl.DateTimeFormat("en-US", {
+        timeZone: timezone,
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+        hourCycle: "h23",
+    });
+
+    const formattedDate = formatter.format(newDate);
+    return new Date(formattedDate);
 }
 
 /**
@@ -93,6 +118,7 @@ export function getAvailableTimeUnits(
     units: TimeUnit[],
     options: TimeOptions,
     locale: string = "en-US",
+    timezone: string = "UTC",
     rounding: RoundingType = "none"
 ): TimeUnits {
 
@@ -204,14 +230,13 @@ export function getAvailableTimeUnits(
             if (yearStartDate < startDate) yearStartDate = new Date(startDate);
             if (yearEndDate > endDate) yearEndDate = new Date(endDate);
 
-            const daysInYear = Math.round((yearEndDate.getTime() - yearStartDate.getTime()) / MILIS_IN_DAY + 1);
             const key = options?.years === "full" ? currentYear.toString() : currentYear.toString().slice(-2);
 
             years.push({
                 key: `${key}`,
                 year: currentYear,
                 name: key,
-                hours: daysInYear * 24
+                hours: getTotalHoursBetweenDates(yearStartDate, yearEndDate)
             });
 
             currentYear++;
@@ -241,15 +266,12 @@ export function getAvailableTimeUnits(
         if (quarterStartDate < start) quarterStartDate = new Date(start);
         if (quarterEndDate > end) quarterEndDate = new Date(end);
 
-        // add one day due to 30-17 = 13 but has day 13 as well
-        const daysInQuarter = Math.round((quarterEndDate.getTime() - quarterStartDate.getTime()) / MILIS_IN_DAY + 1);
-
         const key = `${options?.quarterPrefix}${quarter}`;
         quarters.push({
             key: `${year}-q${key}`,
             year: year,
             name: key,
-            hours: daysInQuarter * 24
+            hours: getTotalHoursBetweenDates(quarterStartDate, quarterEndDate)
         });
     }
 
@@ -277,28 +299,13 @@ export function getAvailableTimeUnits(
             const monthEnd = new Date(nextMonth.getTime() - 1);
             monthEnd.setHours(0, 0, 0, 0);
 
-            let daysInMonth = 0;
-            if (start > monthStart && end < nextMonth) {
-                // If both start and end dates are within the same month
-                daysInMonth = (end.getTime() - start.getTime()) / MILIS_IN_DAY + 1;
-            } else if (currentDate.getMonth() === start.getMonth() && currentDate.getFullYear() === start.getFullYear()) {
-                // If the month is the start month
-                daysInMonth = (monthEnd.getTime() - start.getTime()) / MILIS_IN_DAY + 1;
-            } else if (currentDate.getMonth() === end.getMonth() && currentDate.getFullYear() === end.getFullYear()) {
-                // If the month is the end month
-                daysInMonth = (end.getTime() - monthStart.getTime()) / MILIS_IN_DAY + 1;
-            } else {
-                // Full month
-                daysInMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0).getDate();
-            }
-
             const year = currentDate.getFullYear();
             const key = monthFormatter.format(currentDate);
             months.push({
                 key: `${year}-m${key}`,
                 year: year,
                 name: key,
-                hours: Math.round(daysInMonth) * 24
+                hours: getTotalHoursBetweenDates(monthStart, monthEnd)
             });
 
             currentDate = nextMonth;
@@ -317,13 +324,15 @@ export function getAvailableTimeUnits(
 
         function getISOWeekNumber(d: Date): { weekNumber: number, weekStart: Date } {
             const date = new Date(d.getTime());
+        
+            // Adjust for ISO week starting on Monday
             date.setDate(date.getDate() + 3 - (date.getDay() + 6) % 7);
             const week1 = new Date(date.getFullYear(), 0, 4);
             const weekNumber = 1 + Math.round(((date.getTime() - week1.getTime()) / 86400000 - 3 + (week1.getDay() + 6) % 7) / 7);
 
             // Calculate start date of the week
             const weekStart = new Date(date);
-            weekStart.setDate(date.getDate() - date.getDay() + (date.getDay() === 0 ? -6 : 1)); // Adjust for ISO week starting on Monday
+            weekStart.setDate(date.getDate() - ((date.getDay() === 0 ? 7 : date.getDay()) - 1));
 
             return { weekNumber, weekStart };
         }
@@ -335,14 +344,14 @@ export function getAvailableTimeUnits(
             const weekEnd = new Date(weekStart);
             weekEnd.setDate(weekEnd.getDate() + 6); // End of the week
 
-            // Calculate days in week within the range
-            let daysInWeek = 7;
+            // Adjust week boundaries within the date range
             if (weekStart < start) {
-                daysInWeek -= (start.getTime() - weekStart.getTime()) / MILIS_IN_DAY;
+                weekStart.setTime(start.getTime());
             }
             if (weekEnd > end) {
-                daysInWeek -= (weekEnd.getTime() - end.getTime()) / MILIS_IN_DAY;
+                weekEnd.setTime(end.getTime());
             }
+            const totalHours = getTotalHoursBetweenDates(weekStart, weekEnd);
 
             const year = currentDate.getFullYear();
             const key = `${options?.weeksPrefix}${weekNumber}`;
@@ -350,10 +359,10 @@ export function getAvailableTimeUnits(
                 key: `${year}-m${currentDate.getMonth()}-w${key}`,
                 year: year, 
                 name: key, 
-                hours: Math.round(daysInWeek) * 24
+                hours: totalHours
             });
 
-            currentDate.setDate(currentDate.getDate() + daysInWeek);
+            currentDate.setDate(weekEnd.getTime() + MILIS_IN_HOUR);
         }
 
         const uniqueWeeks = weeks.filter((value, index, self) =>
@@ -369,20 +378,43 @@ export function getAvailableTimeUnits(
     //                                              //
     //////////////////////////////////////////////////
     function getListOfDays(startDate: Date, endDate: Date): DateInfo[] {
-        const daysFormatter = new Intl.DateTimeFormat(locale, options.days === "numeric" || options.days === "2-digit" ? { day: options.days } : { weekday: options.days });
+        const daysFormatter = new Intl.DateTimeFormat(
+            locale, 
+            (options.days === "numeric" || options.days === "2-digit") ? 
+            { day: options.days, timeZone: timezone } : 
+            { weekday: options.days, timeZone: timezone });
         const days: DateInfo[] = [];
+        let currentDate = new Date(startDate);
 
-        const currentDate = new Date(startDate);
+        endDate.setHours(0, 0, 0, 0);
 
         while (currentDate <= endDate) {
             const year = currentDate.getFullYear();
+            const month = currentDate.getMonth();
+            const day = currentDate.getDate();
+
+            const nextDay = new Date(currentDate);
+            nextDay.setDate(day + 1); // TODO maybe here?
+            nextDay.setHours(0, 0, 0, 0);
+
+            const startOfDay = new Date(currentDate);
+            if (currentDate.getTime() !== startDate.getTime()) {
+                startOfDay.setHours(0, 0, 0, 0);
+            }
+
+            const endOfDay = nextDay > endDate ? endDate : nextDay;
+            const dayName = daysFormatter.format(currentDate);
+            const hours = getTotalHoursBetweenDates(startOfDay, endOfDay);
+
+            console.log(day, timezone, dayName, hours)
+
             days.push({ 
-                key: `${year}-m${currentDate.getMonth()}-d${currentDate.getDate()}`, 
-                year: currentDate.getFullYear(), 
-                name: daysFormatter.format(currentDate), 
-                hours: 24
+                key: `${year}-m${month}-d${day}`,
+                year, 
+                name: dayName, 
+                hours: hours
             } as DateInfo)
-            currentDate.setDate(currentDate.getDate() + 1)
+            currentDate = new Date(nextDay);
         }
 
         return days;
@@ -394,24 +426,26 @@ export function getAvailableTimeUnits(
     //                                              //
     //////////////////////////////////////////////////
     function getListOfHours(startDate: Date, endDate: Date): DateInfo[] {
-        const hourFormatter = new Intl.DateTimeFormat(locale, { hourCycle: options.hourCycle, hour: options.hours });
+        const hourFormatter = new Intl.DateTimeFormat(locale, { hourCycle: options.hourCycle, hour: options.hours, timeZone: timezone });
         const hours: DateInfo[] = [];
 
-        const currentDate = new Date(startDate);
+        let currentDate = new Date(startDate);
 
         while (currentDate <= endDate) {
-            const year = currentDate.getFullYear();
-            [...Array(24).keys()].forEach(h => {
-                const date = new Date(currentDate);
-                date.setHours(h,0,0,0);
-                hours.push({ 
-                    key: `${year}-m${currentDate.getMonth()}-d${currentDate.getDate()}-h${h}`, 
-                    year: currentDate.getFullYear(), 
-                    name: hourFormatter.format(date), 
-                    hours: 1
-                } as DateInfo)
-            })
-            currentDate.setDate(currentDate.getDate() + 1)
+            const date = new Date(currentDate);
+            const year = date.getFullYear();
+            const month = date.getMonth();
+            const day = date.getDate();
+            const hour = date.getHours();
+            hours.push({ 
+                key: `${year}-m${month}-d${day}-h${hour}`,
+                year: year,
+                name: hourFormatter.format(date),
+                hours: 1
+            } as DateInfo);
+    
+            // Use getTime + 1 hour in ms to prevent timezone/DST shifts (sommertid)
+            currentDate = new Date(currentDate.getTime() + MILIS_IN_HOUR);
         }
 
         return hours;
@@ -431,4 +465,228 @@ export const getLeft = (date: Date, start: Date, xSize: number) => {
     const diff = date.getTime() - start.getTime();
     const pxPerMs = xSize / MILIS_IN_HOUR;
     return pxPerMs * diff;
+}
+
+function getTotalHoursBetweenDates(startDate: Date, endDate: Date): number {
+    let totalHours = 0;
+    let currentDate = new Date(startDate);
+
+    while (currentDate < endDate) {
+        const nextHour = new Date(currentDate.getTime() + MILIS_IN_HOUR);
+        totalHours++;
+
+        // Move to the next hour
+        currentDate = nextHour;
+    }
+
+    return totalHours;
+}
+
+export function getAvailableTimeUnitsV2(
+    startDate: Date,
+    endDate: Date,
+    units: TimeUnit[],
+    options: TimeOptions,
+    locale: string,
+    timezone: string,
+    rounding: RoundingType = "none"
+): TimeUnits {
+
+    const years: DateInfo[] = [];
+    const quarters: DateInfo[] = [];
+    const months: DateInfo[] = [];
+    const weeks: DateInfo[] = [];
+    const days: DateInfo[] = [];
+    const hours: DateInfo[] = [];
+
+    function getISOWeekNumber(d: Date): number {
+        const date = new Date(d.getTime());
+    
+        // Adjust for ISO week starting on Monday
+        date.setDate(date.getDate() + 3 - (date.getDay() + 6) % 7);
+        const week1 = new Date(date.getFullYear(), 0, 4);
+        const weekNumber = 1 + Math.round(((date.getTime() - week1.getTime()) / 86400000 - 3 + (week1.getDay() + 6) % 7) / 7);
+
+        return weekNumber;
+    }
+
+    const hourFormatter = new Intl.DateTimeFormat(
+        locale, { 
+            hourCycle: options.hourCycle, 
+            hour: options.hours, 
+            timeZone: timezone,
+        }
+    );
+    const daysFormatter = new Intl.DateTimeFormat(
+        locale, 
+        (options.days === "numeric" || options.days === "2-digit") ? 
+        { day: options.days, timeZone: timezone } : 
+        { weekday: options.days, timeZone: timezone }
+    );
+    const monthFormatter = new Intl.DateTimeFormat(
+        locale, { 
+            month: options?.months, 
+            timeZone: timezone
+        }
+    );
+
+    let currentDate = new Date(startDate.toISOString());
+    let hoursInDay = 0;
+    let hoursInWeek = 0;
+    let hoursInMonth = 0;
+    let hoursInQuarter = 0;
+    let hoursInYear = 0;
+    let weekNumber = getISOWeekNumber(currentDate);
+    while (currentDate <= endDate) {
+        hoursInDay++;
+        hoursInWeek++;
+        hoursInMonth++;
+        hoursInQuarter++;
+        hoursInYear++;
+
+        const date = new Date(currentDate);
+        const year = date.getFullYear();
+        const month = date.getMonth();
+        const day = date.getDate();
+        const hour = date.getHours();
+        hours.push({ 
+            key: `${year}-m${month}-d${day}-h${hour}`,
+            year,
+            name: hourFormatter.format(currentDate),
+            hours: 1
+        } as DateInfo);
+
+        // Use getTime + 1 hour in ms to prevent timezone/DST shifts (sommertid)
+        const nextHour = new Date(currentDate.getTime() + MILIS_IN_HOUR);
+        // DAY
+        if (daysFormatter.format(currentDate) !== daysFormatter.format(nextHour)) {
+            days.push({ 
+                key: `${year}-m${month}-d${day}`,
+                year, 
+                name: daysFormatter.format(currentDate), 
+                hours: hoursInDay
+            } as DateInfo);
+
+            // WEEK
+            const nextWeekNumber = getISOWeekNumber(currentDate);
+            if (weekNumber !== nextWeekNumber) {
+                const key = `${options?.weeksPrefix}${weekNumber}`;
+                weeks.push({ 
+                    key: `${year}-m${month}-w${key}`,
+                    year: year, 
+                    name: key, 
+                    hours: hoursInWeek
+                });
+                weekNumber = nextWeekNumber;
+                hoursInWeek = 0;
+            }
+
+            // MONTH
+            if (monthFormatter.format(currentDate) !== monthFormatter.format(nextHour)) {
+                const key = monthFormatter.format(currentDate);
+                months.push({
+                    key: `${year}-m${key}`,
+                    year: year,
+                    name: key,
+                    hours: hoursInMonth
+                });
+
+                // QUARTER
+                if ((month + 1) % 3 === 0) {
+                    const key = `${options?.quarterPrefix}${(currentDate.getMonth() + 1) % 3}`;
+                    quarters.push({
+                        key: `${year}-q${key}`,
+                        year: year,
+                        name: key,
+                        hours: hoursInQuarter
+                    });
+                    hoursInQuarter = 0;
+                }
+
+                hoursInMonth = 0;
+            }
+
+            // YEAR
+            if (currentDate.getFullYear() !== nextHour.getFullYear()) {
+                const currentYear = currentDate.getFullYear();
+                const key = options?.years === "full" 
+                ? currentYear.toString() 
+                : currentYear.toString().slice(-2);
+                years.push({
+                    key: `${key}`,
+                    year: currentYear,
+                    name: key,
+                    hours: hoursInYear
+                });
+                hoursInYear = 0;
+            }
+
+            hoursInDay = 0;
+        }
+
+        currentDate = nextHour;
+    }
+
+    const date = new Date(currentDate);
+    const year = date.getFullYear();
+    const month = date.getMonth();
+    const day = date.getDate();
+    if (hoursInDay > 0) {
+        days.push({ 
+            key: `${year}-m${month}-d${day}`,
+            year, 
+            name: daysFormatter.format(currentDate), 
+            hours: hoursInDay
+        } as DateInfo);
+    }
+    if (hoursInWeek > 0) {
+        const key = `${options?.weeksPrefix}${weekNumber}`;
+        weeks.push({ 
+            key: `${year}-m${month}-w${key}`,
+            year: year, 
+            name: key, 
+            hours: hoursInWeek
+        });
+    }
+    if (hoursInMonth > 0) {
+        const key = monthFormatter.format(currentDate);
+        months.push({
+            key: `${year}-m${key}`,
+            year: year,
+            name: key,
+            hours: hoursInMonth
+        });
+    }
+    if (hoursInQuarter > 0) {
+        const key = `${options?.quarterPrefix}${(currentDate.getMonth() + 1) % 3}`;
+        quarters.push({
+            key: `${year}-q${key}`,
+            year: year,
+            name: key,
+            hours: hoursInQuarter
+        });
+        hoursInQuarter = 0;
+    }
+    if (hoursInYear > 0) {
+        const currentYear = currentDate.getFullYear();
+        const key = options?.years === "full" 
+        ? currentYear.toString() 
+        : currentYear.toString().slice(-2);
+        years.push({
+            key: `${key}`,
+            year: currentYear,
+            name: key,
+            hours: hoursInYear
+        });
+    }
+
+
+    return {
+        years: years,
+        quarters: quarters,
+        months: months,
+        weeks: weeks,
+        days: days,
+        hours: hours
+    } as TimeUnits;
 }
