@@ -143,10 +143,13 @@ export const TimelineDataCanvas = React.forwardRef<TimelineDataCanvasHandle, Tim
                     // no longer in rect
                     if (!(stickyX > rightSide)) renderer.fillText(timeunit.name, stickyX, rectHeight - 1 + ySize);
                 } else {
-                    renderer.fillStyle = "#fff";
-                    renderer.fillRect(x - fontSize / 2 - scrollOffsetX, rectHeight + fontSize + 4, fontSize, fontSize)
-                    renderer.fillStyle = "#1f2937";
-                    renderer.fillText(timeunit.name, x - fontSize / 2 - scrollOffsetX, rectHeight - 1 + ySize);
+                    const localHour = Number(timeunit.name);
+                    if (localHour % 6 === 0 && localHour % 24 !== 0) {
+                        renderer.fillStyle = "#fff";
+                        renderer.fillRect(x - fontSize / 2 - scrollOffsetX, rectHeight + fontSize + 4, fontSize, fontSize)
+                        renderer.fillStyle = "#1f2937";
+                        renderer.fillText(timeunit.name, x - fontSize / 2 - scrollOffsetX, rectHeight - 1 + ySize);
+                    }
                 }
 
                 x += currentRectWidth;
