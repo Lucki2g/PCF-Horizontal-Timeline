@@ -5,7 +5,8 @@ import { useSettings } from '../../hooks/SettingsState';
 import { useFilter } from '../../contexts/filter-context';
 import { getHref } from '../util';
 import { useGlobalGlobalContext } from '../../contexts/global-context';
-import Icon from '../icons/Icon';
+import { X } from 'lucide-react';
+import { DynamicIcon } from 'lucide-react/dynamic';
 
 export interface IEntityReference {
     id: string,
@@ -84,9 +85,7 @@ export default function TimelineItemBlock({ parentRef, item, rowIdx, rowCount, t
                     <div className='flex'></div>
                     <div className='flex'>
                         <button onClick={hideDialog} className='hover:bg-slate-100 duration-150 transition-colors bg-white rounded-md p-1'>
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2048 2048" className='h-3.5 w-3.5'>
-                                <path d="M1169 1024l879 879-145 145-879-879-879 879L0 1903l879-879L0 145 145 0l879 879L1903 0l145 145-879 879z"></path>
-                            </svg>
+                            <X size={48} strokeWidth={1.5} absoluteStrokeWidth />
                         </button>
                     </div>
                 </div>
@@ -118,7 +117,7 @@ export default function TimelineItemBlock({ parentRef, item, rowIdx, rowCount, t
                 <button onClick={() => openActivity()} ref={itemRef} className={`group pointer-events-auto hover:cursor-pointer absolute z-10 bg-white flex items-center shadow-dynamics border border-solid border-gray-300 overflow-hidden bottom-full justify-center rounded-[4px] px-1 py-[2px] origin-center`} style={{ left: -leftAlignment }}>
                     <span className='absolute -z-10 left-0 w-1 h-full group-hover:w-full duration-300 transition-all' style={{ backgroundColor: activityInfo[item.type].color }}></span>
                     <p className='whitespace-nowrap mx-1 text-xs group-hover:text-white transition-colors duration-300'>{item.name}</p>
-                    { item.type ? <Icon name={item.type} /> : <></> }
+                    { activityInfo[item.type]?.icon ? <DynamicIcon name={activityInfo[item.type].icon as any} className='w-3.5 h-3.5 group-hover:text-white transition-colors duration-300' size={48} absoluteStrokeWidth /> : <></> }
                 </button>
             }
         </div>

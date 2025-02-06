@@ -406,8 +406,6 @@ export function getAvailableTimeUnits(
             const dayName = daysFormatter.format(currentDate);
             const hours = getTotalHoursBetweenDates(startOfDay, endOfDay);
 
-            console.log(day, timezone, dayName, hours)
-
             days.push({ 
                 key: `${year}-m${month}-d${day}`,
                 year, 

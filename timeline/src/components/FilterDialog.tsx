@@ -8,6 +8,7 @@ import Lookup from './controls/Lookup';
 import Search from './controls/Search';
 import Chips from './controls/Chips';
 import { useGlobalGlobalContext } from '../../contexts/global-context';
+import { FilterX, Save } from 'lucide-react';
 
 interface IFilterDialogProps {
     items: TimelineItem[];
@@ -38,9 +39,7 @@ export default function FilterDialog({ items, onSave }: IFilterDialogProps) {
                     <p className='text-sm'>{t("filter_count").replace("{0}", "" + filteredActivities).replace("{1}", "" + items.length)}</p>
                 </div>
                 <button className='rounded-full transition-colors bg-sky-50 hover:bg-sky-200 mr-2 duration-300 p-2' onClick={() => setCurrentFilter(initialState)}>
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2048 2048" className='w-4 h-4 m-1 fill-sky-600'>
-                        <path d="M0 128h2048v219l-768 768v805H768v-805L0 347V128zm1920 165v-37H128v37l768 768v731h256v-731l768-768zm37 987l91 91-230 229 230 229-91 91-229-230-229 230-91-91 230-229-230-229 91-91 229 230 229-230z"></path>
-                    </svg>
+                    <FilterX size={48} strokeWidth={1.5} absoluteStrokeWidth color='#0284c7' />
                 </button>
             </div>
 
@@ -97,9 +96,7 @@ export default function FilterDialog({ items, onSave }: IFilterDialogProps) {
             <div className='flex w-full justify-center text-sm mt-8'>
                 {/* SAVE */}
                 <button onClick={() => { hideDialog(); onSave(currentFilter) }} className='rounded-[4px] mx-1 py-2 px-4 font-semibold flex items-center hover:text-white text-sky-600 bg-sky-200 hover:bg-sky-300 duration-200 transition-colors group'>
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2048 2048" className='w-3.5 h-3.5 mr-1 fill-sky-600 group-hover:fill-white duration-200 transition-colors'>
-                        <path d="M1792 128q27 0 50 10t40 27 28 41 10 50v1664H357l-229-230V256q0-27 10-50t27-30 41-28 50-10h1536zM512 896h1024V256H512v640zm768 512H640v384h128v-256h128v256h384v-384zm512-1152h-128v768H384V256H256v1381l154 155h102v-512h896v512h384V256z"></path>
-                    </svg>
+                    <Save size={48} strokeWidth={1.5} absoluteStrokeWidth color='#0284c7' />
                     {t("filter_save")}
                 </button>
 
