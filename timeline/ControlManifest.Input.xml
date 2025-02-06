@@ -24,7 +24,7 @@
 
     <!-- LOCALIZATION -->
     <property default-value='systemuser' description-key="Where should the language come from?" display-name-key="Local Source" name="localesource" usage="input" of-type="SingleLine.Text" required="true" />
-    <property default-value='1033' description-key="Locale in LCID string format. Used when Locale Source is 'defined'" display-name-key="Locale" name="locale" usage="input" of-type="Whole.None" />
+    <property default-value='1033' description-key="Locale in LCID string format. Used when Locale Source is defined" display-name-key="Locale" name="locale" usage="input" of-type="Whole.None" />
     <property default-value='browser' description-key="What timezone should dates be calculated in?" display-name-key="TimeZone Source" name="timezonesource" usage="input" of-type="SingleLine.Text" required="true" />
     <property default-value='UTC' description-key="Timezone in IANA Time Zone Database format" display-name-key="Timezone" name="timezone" usage="input" of-type="SingleLine.Text" />
     

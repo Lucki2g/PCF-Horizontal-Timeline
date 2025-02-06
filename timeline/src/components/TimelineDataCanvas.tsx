@@ -165,6 +165,7 @@ export const TimelineDataCanvas = React.forwardRef<
           // top line
           renderer.strokeStyle = "#1f2937";
           renderer.setLineDash([0, 0]);
+          // bottom line for first element
           if (idx === 0) {
             renderer.beginPath();
             renderer.moveTo(x - scrollOffsetX, rectHeight + 0.5);
@@ -175,6 +176,7 @@ export const TimelineDataCanvas = React.forwardRef<
             renderer.closePath();
             renderer.stroke();
           }
+
           renderer.beginPath();
           renderer.moveTo(x - scrollOffsetX, rectHeight + 0.5 + ySize);
           renderer.lineTo(

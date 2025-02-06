@@ -7,19 +7,19 @@ const loadDebugData = () => {
     {
       id: "-1",
       name: "UTC+01",
-      type: "task",
+      type: "appointment",
       date: new Date("2024-05-16T08:00:00.000+01:00"),
     },
     {
       id: "0",
       name: "UTC",
-      type: "task",
+      type: "phonecall",
       date: new Date("2024-05-16T08:00:00.000+00:00"),
     },
     {
       id: "2",
       name: "LOCAL",
-      type: "task",
+      type: "email",
       date: new Date("2024-05-16T08:00:00.000"),
     },
     {
