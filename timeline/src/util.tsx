@@ -51,9 +51,9 @@ export const getIcon = (entitytype: string) => {
     }
 }
 
-type LocaleSource = "override" | "systemuser" | "browser"; 
+type LocaleSource = "override" | "systemuser" | "browser" | "organisation"; 
 export const castToLocaleSource = (value: string | undefined, defaultValue: LocaleSource = "override"): LocaleSource => {
-    const validValues: LocaleSource[] = ["override", "systemuser", "browser"];
+    const validValues: LocaleSource[] = ["override", "systemuser", "browser", "organisation"];
     return validValues.includes(value as LocaleSource) ? (value as LocaleSource) : defaultValue;
 }
 

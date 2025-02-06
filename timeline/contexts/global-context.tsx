@@ -6,6 +6,8 @@ import { LoaderProvider } from "./loader-context";
 import { FilterProvider } from "./filter-context";
 import { DialogProvider } from "./dialog-context";
 
+// the idea is to make this changeable at runtime by the user, with personilized settings
+
 type GlobalContextProps = {
   locale: string;
   setLocale: (locale: string) => void;

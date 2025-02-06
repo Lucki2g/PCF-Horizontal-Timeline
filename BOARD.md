@@ -1,37 +1,51 @@
+V1.0.0
 [x] BUG: Text can be dragged further than the screen
-[x] PERFORMANCE: Rewrite HTML imperative obygning til Canvas og declarative 
+[x] PERFORMANCE: Rewrite HTML imperative version to Canvas declarative 
 [-] FEATURE: Varying sizes of cells
     [x] xSize
-    - ySize / fontSize
 [x] FEATURE: Show specific systemuser tasks
 [x] FEATURE: Goto next activity
-- FEATURE: Count on Activity type chips inside filter
 [x] FEATURE: Timeless Timelines items
-- FEATURE: Fullscreen
-- FEATURE: Tooltips on actions
 [x] FEATURE: Smallest unit changed to hours
-- FEATURE: Priority visualization
-- FEATURE: Grey out finished activities
-- FEATURE: New Activity button
 [-] FEATURE: Process support (status change dates etc.)
     [x] Entity input
-    - BPF Support
-[-] PERFORMANCE: Fix filter dialog lag.
-- FEATURE: Attendies and activityparties, to apply to filter
+[x] PERFORMANCE: Fix filter dialog lag.
 [x] AVAILABILITY: Translate schemanames for activitytypes
-AVAILABILITY: Translation of custom schemanames
 [x] BUG: Crash on lookup focus
-- BUG: Support multiple timelines on one form
 [x] FEATURE: Open Activities in custom modal instead of standard
 [x] BUG: Infinite Activity Loading
-- FEATURE: Spinner på refresh
 [x] AVAILABILITY: hour translation
 [x] BUG: Total in filter no longer correct
-- FEATURE: Icon upload for custom tables
-[x] BEAUTIFY/REFACTOR:
+[-] BEAUTIFY/REFACTOR:
     - Lookup
     - Searchbox
     - Chip
 [x] BUG: Resize does not rerender canvas
 [x] BUG: Tab swap does not rerender canvas
-- FEATURE: Ability to show user locale timezones instead of UTC
+
+V1.1.0
+[x] FEATURE: Ability to show user locale timezones instead of UTC
+[x] FEATURE: Changeable background
+- BUG: Year line flickering
+- REFACTOR: Change icons to use Lucide
+- FEATURE: Tooltips on actions
+- FEATURE: Fullscreen
+[-] FEATURE: Varying sizes of cells
+    [] ySize / fontSize
+- FEATURE: Count on Activity type chips inside filter
+- FEATURE: Priority visualization
+- FEATURE: Grey out finished activities
+- FEATURE: New Activity button
+- FEATURE: Attendies and activityparties, to apply to filter
+[-] FEATURE: Process support (status change dates etc.)
+    - BPF Support
+- AVAILABILITY: Translation of custom schemanames
+- BUG: Support multiple timelines on one form
+- FEATURE: Spinner på refresh
+- FEATURE: Icon upload for custom tables
+[-] BEAUTIFY/REFACTOR:
+    - Action Buttons
+- BUG: Left Stick is odd-looking when all the way left on the timeline
+- FEATURE: Increase modal height size
+- FEATURE: Darkmode
+- FEATURE: Colorblind mode

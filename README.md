@@ -14,22 +14,40 @@ It is built as an alternative to the classic Vertical Timeline by Microsoft, tha
 Hopefully you'll find it useful.
 
 # ⚙️ Features & Releases
-### Version 1.0.0
-<b>Localization - The custom control support below languages in its initial version</b><br/>
-<img src="https://raw.githubusercontent.com/stevenrskelton/flag-icon/master/png/16/country-4x3/us.png" /> en-US <b>[default]</b><br/>
-<img src="https://raw.githubusercontent.com/stevenrskelton/flag-icon/master/png/16/country-4x3/dk.png" /> da-DK<br/>
-<img src="https://raw.githubusercontent.com/stevenrskelton/flag-icon/master/png/16/country-4x3/fr.png" /> fr-FR<br/>
-<img src="https://raw.githubusercontent.com/stevenrskelton/flag-icon/master/png/16/country-4x3/es.png" /> es-ES<br/>
-<img src="https://raw.githubusercontent.com/stevenrskelton/flag-icon/master/png/16/country-4x3/de.png" /> de-DE<br/>
-<img src="https://raw.githubusercontent.com/stevenrskelton/flag-icon/master/png/16/country-4x3/cn.png" /> zh-CN<br/>
-<img src="https://raw.githubusercontent.com/stevenrskelton/flag-icon/master/png/16/country-4x3/jp.png" /> ja-JP<br/>
-<img src="https://raw.githubusercontent.com/stevenrskelton/flag-icon/master/png/16/country-4x3/sa.png" /> ar-SA<br/>
-<img src="https://raw.githubusercontent.com/stevenrskelton/flag-icon/master/png/16/country-4x3/br.png" /> pt-BR<br/>
-<img src="https://raw.githubusercontent.com/stevenrskelton/flag-icon/master/png/16/country-4x3/it.png" /> it-IT<br/>
-<img src="https://raw.githubusercontent.com/stevenrskelton/flag-icon/master/png/16/country-4x3/in.png" /> hi-IN<br/>
-<img src="https://raw.githubusercontent.com/stevenrskelton/flag-icon/master/png/16/country-4x3/nl.png" /> nl-NL<br/>
-<img src="https://raw.githubusercontent.com/stevenrskelton/flag-icon/master/png/16/country-4x3/se.png" /> se-SE<br/>
-<img src="https://raw.githubusercontent.com/stevenrskelton/flag-icon/master/png/16/country-4x3/fi.png" /> fi-FI<br/>
+<div style="background-color: #fde68a; border-radius: 4px; padding: 4px 8px; color: black; display: flex; items-align: center;">
+<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-triangle-alert"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>
+<p style="margin: 0 4px; 0 0">Version 1.0.0 uses the <b>BCP 47 codes</b>, while ≥ 1.1.0 uses <b>LCID Language Codes</b> <a href="https://learn.microsoft.com/en-us/openspecs/office_standards/ms-oe376/6c085406-a698-4e12-9d4d-c3b0ee3dbc4a">See more</a></p>
+</div>
+<b>Localization - The custom control support following languagecodes at the moment</b><br/>
+<img src="https://raw.githubusercontent.com/stevenrskelton/flag-icon/master/png/16/country-4x3/us.png" /> 1033 <b>[default]</b><br/>
+<img src="https://raw.githubusercontent.com/stevenrskelton/flag-icon/master/png/16/country-4x3/dk.png" /> 1030<br/>
+<img src="https://raw.githubusercontent.com/stevenrskelton/flag-icon/master/png/16/country-4x3/fr.png" /> 1036<br/>
+<img src="https://raw.githubusercontent.com/stevenrskelton/flag-icon/master/png/16/country-4x3/es.png" /> 1034<br/>
+<img src="https://raw.githubusercontent.com/stevenrskelton/flag-icon/master/png/16/country-4x3/de.png" />
+1031<br/>
+<img src="https://raw.githubusercontent.com/stevenrskelton/flag-icon/master/png/16/country-4x3/cn.png" /> 2052<br/>
+<img src="https://raw.githubusercontent.com/stevenrskelton/flag-icon/master/png/16/country-4x3/jp.png" /> 1041<br/>
+<img src="https://raw.githubusercontent.com/stevenrskelton/flag-icon/master/png/16/country-4x3/sa.png" /> 1025<br/>
+<img src="https://raw.githubusercontent.com/stevenrskelton/flag-icon/master/png/16/country-4x3/br.png" /> 1046<br/>
+<img src="https://raw.githubusercontent.com/stevenrskelton/flag-icon/master/png/16/country-4x3/it.png" /> 1040<br/>
+<img src="https://raw.githubusercontent.com/stevenrskelton/flag-icon/master/png/16/country-4x3/in.png" /> 1081<br/>
+<img src="https://raw.githubusercontent.com/stevenrskelton/flag-icon/master/png/16/country-4x3/nl.png" /> 1043<br/>
+<img src="https://raw.githubusercontent.com/stevenrskelton/flag-icon/master/png/16/country-4x3/se.png" /> 1053<br/>
+<img src="https://raw.githubusercontent.com/stevenrskelton/flag-icon/master/png/16/country-4x3/fi.png" /> 1035<br/>
+
+---
+
+<b>Locale Source</b><br/>
+<div style="background-color: #bfdbfe; border-radius: 4px; padding: 4px 8px; color: black; display: flex; items-align: center; justify-items: center;">
+<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-alert"><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="12"/><line x1="12" x2="12.01" y1="16" y2="16"/></svg>
+<p style="margin: 0 4px; 0 0">Version <b>≥ 1.1.0</b></p>
+</div>
+The language of the control can be based off of either:
+
+- browser (the browser language)
+- systemuser <b>[default]</b> (the personalization setting langauge)
+- <s>organisation (the language set by the organisation)</s>
+- override (a fixed language on the control)
 
 ---
 
@@ -69,6 +87,18 @@ Hour Cycle
 - h12 (example = "01PM")
 - h23 <b>[default]</b> (example = "13")
 - h24 (example = "13")
+
+---
+
+<b>Timezone Source</b><br/>
+<div style="background-color: #bfdbfe; border-radius: 4px; padding: 4px 8px; color: black; display: flex; items-align: center; justify-items: center;">
+<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-alert"><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="12"/><line x1="12" x2="12.01" y1="16" y2="16"/></svg>
+<p style="margin: 0 4px; 0 0">Version <b>≥ 1.1.0</b></p>
+</div>
+The timezone the timeline is shown in can be based off of either:
+
+- browser <b>[default]</b> (based on user's browser timezone)
+- override (a fixed timezone set on the control in the IANA Time Zone Database)
 
 ---
 
@@ -140,6 +170,32 @@ Inside the filter you have the following options:
 
 <b>Timeless items</b></br>
 You can also see items that do not have any due date (scheduledend) as this is the case. These items will show in a side pane.
+
+---
+
+<b>Background Style & Colors</b><br/>
+<div style="background-color: #bfdbfe; border-radius: 4px; padding: 4px 8px; color: black; display: flex; items-align: center; justify-items: center;">
+<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-alert"><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="12"/><line x1="12" x2="12.01" y1="16" y2="16"/></svg>
+<p style="margin: 0 4px; 0 0">Version <b>≥ 1.1.0</b></p>
+</div>
+The background of the timeline items is customizable. There are a few default options and then an override functionality.
+
+- stripes
+
+![alt text](image.png)
+- dots
+
+![alt text](image-1.png)
+
+- grid <b>[default]</b>
+
+![alt text](image-2.png)
+
+- topography
+
+![alt text](image-3.png)
+
+- override (bgcolor becomes a free text field where you can insert your css "url()". Example: `url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='#eab308' fill-opacity='0.4' fill-rule='evenodd'%3E%3Cpath d='M0 40L40 0H20L0 20M40 40V20L20 40'/%3E%3C/g%3E%3C/svg%3E")`)
 
 ---
 
