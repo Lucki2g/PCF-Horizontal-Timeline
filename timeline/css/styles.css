@@ -1500,4 +1500,4 @@ video {
 .peer:focus ~ .peer-focus\:text-cyan-400 {
   --tw-text-opacity: 1;
   color: rgb(34 211 238 / var(--tw-text-opacity));
-} 
+}

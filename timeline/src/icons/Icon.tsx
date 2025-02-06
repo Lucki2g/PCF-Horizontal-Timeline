@@ -1,4 +1,4 @@
 export interface ActivityInformation {
-    color: string;
-    icon: string;
+  color: string;
+  icon: string;
 }

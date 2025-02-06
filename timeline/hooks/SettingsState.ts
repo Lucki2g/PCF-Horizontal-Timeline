@@ -1,12 +1,12 @@
 ﻿import { useState } from "react";
 
 export interface SettingsState {
-  showlines: boolean
+  showlines: boolean;
 }
 
 export const useSettings = () => {
   const [settings, setSettings] = useState<SettingsState>({
-    showlines: false
+    showlines: false,
   });
 
   const updateShowlines = (showlines: boolean) =>
