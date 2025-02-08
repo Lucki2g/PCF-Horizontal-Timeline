@@ -37,6 +37,11 @@ i18n
           email: "email",
           phonecall: "phonecall",
           milestone: "milestone",
+          action_refresh: "Reload data",
+          action_previous: "Go to: Last activity",
+          action_next: "Go to: Next activity",
+          action_filter: "Filter activities",
+          action_timeless: "Show timeless items"
         },
       },
       "da-DK": {

@@ -23,10 +23,11 @@ V1.0.0
 V1.1.0
 [x] FEATURE: Ability to show user locale timezones instead of UTC
 [x] FEATURE: Changeable background
-[-] BUG: Year line flickering (disappears)
+[x] BUG: Year line flickering (disappears) [was only in debugger]
 [x] REFACTOR: Change icons to use Lucide
-[-] FEATURE: Tooltips on actions
-- BUG: Must find a way to reduce PCF size (most likely lucide issue with dynamic icons)
+[x] FEATURE: Tooltips on actions
+[x] BUG: Must find a way to reduce PCF size (most likely lucide issue with dynamic icons)
+- AVAILABILITY: Update translations with new tooltips
 - FEATURE: Fullscreen
 [-] FEATURE: Varying sizes of cells - ySize / fontSize
 - FEATURE: Count on Activity type chips inside filter

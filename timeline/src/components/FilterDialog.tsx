@@ -40,10 +40,10 @@ export default function FilterDialog({ items, onSave }: IFilterDialogProps) {
           </p>
         </div>
         <button
-          className="mr-2 rounded-full bg-sky-50 transition-colors duration-300 hover:bg-sky-200 aspect-square flex justify-center items-center"
+          className="mr-2 rounded-full bg-sky-50 transition-colors duration-300 hover:bg-sky-200 aspect-square flex justify-center items-center w-12 h-12"
           onClick={() => setCurrentFilter(initialState)}
         >
-          <span className="material-symbols-rounded p-0 m-0 w-4 h-4" style={{ fontSize: "20px" }}>filter_list_off</span>
+          <span className="material-symbols-rounded p-0 m-0 w-6 h-6" style={{ fontSize: "24px" }}>filter_list_off</span>
         </button>
       </div>
 
