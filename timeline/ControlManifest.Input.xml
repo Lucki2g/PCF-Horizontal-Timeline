@@ -1,34 +1,30 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <manifest>
-  <control namespace="ape.dataset.timeline" constructor="timeline" version="0.1.0" display-name-key="timeline" description-key="timeline description" control-type="virtual" >
-    <!--external-service-usage node declares whether this 3rd party PCF control is using external service or not, if yes, this control will be considered as premium and please also add the external domain it is using.
-    If it is not using any external service, please set the enabled="false" and DO NOT add any domain below. The "enabled" will be false by default.
-    Example1:
-      <external-service-usage enabled="true">
-        <domain>www.Microsoft.com</domain>
-      </external-service-usage>
-    Example2:
-      <external-service-usage enabled="false">
-      </external-service-usage>
-    -->
+  <control namespace="ape.dataset.timeline" constructor="timeline" version="1.1.0" display-name-key="timeline" description-key="timeline description" control-type="virtual" >
     <external-service-usage enabled="false">
-      <!--UNCOMMENT TO ADD EXTERNAL DOMAINS
-      <domain></domain>
-      <domain></domain>
-      -->
     </external-service-usage>
 
     <!-- dataset node represents a set of entity records on CDS; alFlow more than one datasets -->
     <property description-key="Model Driven App ID" display-name-key="App ID" name="appid" usage="input" of-type="SingleLine.Text" />
-    <property default-value='en-US' description-key="Locale in LCID string format" display-name-key="Locale" name="locale" usage="input" of-type="SingleLine.Text" />
     <property default-value='day' description-key="Rounding method (the smallest shown item)" display-name-key="Rounding" name="rounding" usage="input" of-type="SingleLine.Text" />
 
+    <!-- LOCALIZATION -->
+    <property default-value='systemuser' description-key="Where should the language come from?" display-name-key="Local Source" name="localesource" usage="input" of-type="SingleLine.Text" required="true" />
+    <property default-value='1033' description-key="Locale in LCID string format. Used when Locale Source is defined" display-name-key="Locale" name="locale" usage="input" of-type="Whole.None" />
+    <property default-value='browser' description-key="What timezone should dates be calculated in?" display-name-key="TimeZone Source" name="timezonesource" usage="input" of-type="SingleLine.Text" required="true" />
+    <property default-value='UTC' description-key="Timezone in IANA Time Zone Database format" display-name-key="Timezone" name="timezone" usage="input" of-type="SingleLine.Text" />
+    
     <!-- ITEMS -->
-    <property default-value='{"task":{"color":"#eab308"},"appointment":{"color":"#7e22ce"},"milestone":{"color":"#e11d48"},"email":{"color":"#16a34a"},"phonecall":{"color":"#fb7185"}}' description-key="activitydata" display-name-key="Activitydata" name="activitydata" usage="input" of-type="SingleLine.TextArea" />
+    <property default-value='{"task":{"color":"#eab308","icon":"assignment_turned_in"},"appointment":{"color":"#7e22ce","icon":"calendar_month"},"milestone":{"color":"#e11d48","icon":""},"email":{"color":"#16a34a","icon":"mail"},"phonecall":{"color":"#fb7185","icon":"call"}}' description-key="activitydata" display-name-key="Activitydata" name="activitydata" usage="input" of-type="SingleLine.TextArea" />
     <property default-value='{"createdon":"Created On","estimatedclosedate":"Estimated Close","actualclose":"Actual Close"}' description-key="milestonedata" display-name-key="Milestones" name="milestonedata" usage="input" of-type="SingleLine.TextArea" />
 
     <!-- SIZING -->
     <property default-value='4' description-key="Size of an hour in pixels" display-name-key="Size x" name="xsize" usage="input" of-type="Whole.None" />
+
+    <!-- STYLING -->
+    <property default-value="grid" description-key="The background style" display-name-key="Background Style" name="bgstyle" usage="input" of-type="SingleLine.Text" />
+    <property default-value="#fff" description-key="The background color" display-name-key="Background Color" name="bgcolor" usage="input" of-type="SingleLine.Text" />
+    <property default-value="#e2e8f0" description-key="The pattern color accent" display-name-key="Pattern Color" name="bgpattern" usage="input" of-type="SingleLine.Text" />
 
     <!-- YEARS -->
     <property default-value='true' description-key="Enable Years" display-name-key="Enable Years" name="yearsenabled" usage="input" of-type="TwoOptions" />
@@ -67,7 +63,6 @@
       <css path="css/styles.css" order="1" />
       <!-- UNCOMMENT TO ADD MORE RESOURCES
       <platform-library name="Fluent" version="8.29.0" />
-      <resx path="strings/timeline.1033.resx" version="1.0.0" />
       -->
     </resources>
     <feature-usage>
