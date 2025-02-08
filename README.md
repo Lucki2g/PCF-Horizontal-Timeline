@@ -226,6 +226,7 @@ The background of the timeline items is customizable. There are a few default op
 
 # 🏆 Credits:
 
-Lucki2g / Software Ape - Developer
+⌨️ Lucki2g - Developer ⌨️
+🦆 Jimmy Henvig - Rubber duck 🦆
 
 # 📋 Road-map:

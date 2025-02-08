@@ -7,6 +7,7 @@ import { useGlobalLoaderContext } from "../../contexts/loader-context";
 import { getLeft } from "../timeUtil";
 import { useGlobalGlobalContext } from "../../contexts/global-context";
 import ActionButton from "./controls/ActionButton";
+import { useTranslation } from "react-i18next";
 
 interface ITimelineActionsProps {
   items: TimelineItem[];
@@ -34,6 +35,7 @@ export default function TimelineActions({
   const { showDialog } = useGlobalDialogContext();
   const { setState } = useGlobalLoaderContext();
   const { xSize } = useGlobalGlobalContext();
+  const { t } = useTranslation();
 
   const animateNext = () => {
     if (!timelineRef.current) return;
@@ -97,7 +99,7 @@ export default function TimelineActions({
         <div className="mr-1 flex items-center justify-center rounded-[4px] bg-white shadow-dynamics">
           {/* Refresh timeline */}
           <ActionButton
-            tooltip="Refresh data"
+            tooltip={t("action_refresh")}
             onClick={() => {
               resetFilters();
               setState(true);
@@ -106,17 +108,17 @@ export default function TimelineActions({
             <span className="material-symbols-rounded">refresh</span>
           </ActionButton>
           {/* Previous activity */}
-          <ActionButton tooltip="Go to previous item" onClick={animatePrevious}>
+          <ActionButton tooltip={t("action_previous")} onClick={animatePrevious}>
           <span className="material-symbols-rounded">first_page</span>
           </ActionButton>
           {/* Next activity */}
-          <ActionButton tooltip="Go to next item" onClick={animateNext}>
+          <ActionButton tooltip={t("action_next")} onClick={animateNext}>
           <span className="material-symbols-rounded">last_page</span>
           </ActionButton>
           <div className="mx-0.5 h-full w-px bg-gray-300" />
           {/* Filter */}
           <ActionButton
-            tooltip="Filter items"
+            tooltip={t("action_filter")}
             onClick={() =>
               showDialog(
                 <FilterDialog items={items} onSave={onSave} />,
@@ -127,7 +129,7 @@ export default function TimelineActions({
           <span className="material-symbols-rounded">filter_list</span>
           </ActionButton>
           {/* Timeless items */}
-          <ActionButton tooltip="Show timeless items" onClick={paneChange}>
+          <ActionButton tooltip={t("action_timeless")} onClick={paneChange}>
             {isPaneOpen ? (
               <span className="material-symbols-rounded">right_panel_open</span>
             ) : (

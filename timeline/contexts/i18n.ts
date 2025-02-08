@@ -70,6 +70,11 @@ i18n
           email: "e-mail",
           phonecall: "telefonopkald",
           milestone: "milepæl",
+          action_refresh: "Genindlæs data",
+          action_previous: "Gå til: Sidste aktivitet",
+          action_next: "Gå til: Næste aktivitet",
+          action_filter: "Filtrer aktiviteter",
+          action_timeless: "Vis tidløse elementer"
         },
       },
       "fr-FR": {
@@ -99,6 +104,11 @@ i18n
           email: "e-mail",
           phonecall: "appel téléphonique",
           milestone: "jalon",
+          action_refresh: "Recharger les données",
+          action_previous: "Aller à : Dernière activité",
+          action_next: "Aller à : Activité suivante",
+          action_filter: "Filtrer les activités",
+          action_timeless: "Afficher les éléments intemporels"
         },
       },
       "es-ES": {
@@ -128,6 +138,11 @@ i18n
           email: "correo electrónico",
           phonecall: "llamada telefónica",
           milestone: "hito",
+          action_refresh: "Recargar datos",
+          action_previous: "Ir a: Última actividad",
+          action_next: "Ir a: Siguiente actividad",
+          action_filter: "Filtrar actividades",
+          action_timeless: "Mostrar elementos sin tiempo"
         },
       },
       "de-DE": {
@@ -157,6 +172,11 @@ i18n
           email: "E-Mail",
           phonecall: "Anruf",
           milestone: "Meilenstein",
+          action_refresh: "Daten neu laden",
+          action_previous: "Gehe zu: Letzte Aktivität",
+          action_next: "Gehe zu: Nächste Aktivität",
+          action_filter: "Aktivitäten filtern",
+          action_timeless: "Zeitlose Elemente anzeigen"
         },
       },
       "zh-CN": {
@@ -185,6 +205,11 @@ i18n
           email: "电子邮件",
           phonecall: "电话",
           milestone: "里程碑",
+          action_refresh: "重新加载数据",
+          action_previous: "前往：上一个活动",
+          action_next: "前往：下一个活动",
+          action_filter: "筛选活动",
+          action_timeless: "显示永恒项目"
         },
       },
       "ja-JP": {
@@ -213,6 +238,11 @@ i18n
           email: "メール",
           phonecall: "電話",
           milestone: "マイルストーン",
+          action_refresh: "データをリロード",
+          action_previous: "移動: 最後のアクティビティ",
+          action_next: "移動: 次のアクティビティ",
+          action_filter: "アクティビティをフィルタ",
+          action_timeless: "タイムレスなアイテムを表示"
         },
       },
       "ar-SA": {
@@ -241,6 +271,11 @@ i18n
           email: "البريد الإلكتروني",
           phonecall: "مكالمة هاتفية",
           milestone: "مرحلة",
+          action_refresh: "إعادة تحميل البيانات",
+          action_previous: "انتقل إلى: آخر نشاط",
+          action_next: "انتقل إلى: النشاط التالي",
+          action_filter: "تصفية الأنشطة",
+          action_timeless: "عرض العناصر الخالدة"
         },
       },
       "pt-BR": {
@@ -270,6 +305,11 @@ i18n
           email: "e-mail",
           phonecall: "telefonema",
           milestone: "marco",
+          action_refresh: "Recarregar dados",
+          action_previous: "Ir para: Última atividade",
+          action_next: "Ir para: Próxima atividade",
+          action_filter: "Filtrar atividades",
+          action_timeless: "Mostrar itens atemporais"
         },
       },
       "it-IT": {
@@ -299,6 +339,11 @@ i18n
           email: "e-mail",
           phonecall: "telefonata",
           milestone: "traguardo",
+          action_refresh: "Ricarica dati",
+          action_previous: "Vai a: Ultima attività",
+          action_next: "Vai a: Prossima attività",
+          action_filter: "Filtra attività",
+          action_timeless: "Mostra elementi senza tempo"
         },
       },
       "hi-IN": {
@@ -328,6 +373,11 @@ i18n
           email: "ईमेल",
           phonecall: "फोन कॉल",
           milestone: "मील का पत्थर",
+          action_refresh: "डेटा पुनः लोड करें",
+          action_previous: "जाएँ: अंतिम गतिविधि",
+          action_next: "जाएँ: अगली गतिविधि",
+          action_filter: "गतिविधियों को फ़िल्टर करें",
+          action_timeless: "टाइमलेस आइटम दिखाएं"
         },
       },
       "nl-NL": {
@@ -357,6 +407,11 @@ i18n
           email: "e-mail",
           phonecall: "telefoongesprek",
           milestone: "mijlpaal",
+          action_refresh: "Gegevens herladen",
+          action_previous: "Ga naar: Laatste activiteit",
+          action_next: "Ga naar: Volgende activiteit",
+          action_filter: "Activiteiten filteren",
+          action_timeless: "Tijdloze items weergeven"
         },
       },
       "sv-SE": {
@@ -385,6 +440,11 @@ i18n
           email: "e-post",
           phonecall: "telefonsamtal",
           milestone: "milstolpe",
+          action_refresh: "Ladda om data",
+          action_previous: "Gå till: Senaste aktivitet",
+          action_next: "Gå till: Nästa aktivitet",
+          action_filter: "Filtrera aktiviteter",
+          action_timeless: "Visa tidlösa objekt"
         },
       },
       "fi-FI": {
@@ -414,6 +474,11 @@ i18n
           email: "sähköposti",
           phonecall: "puhelu",
           milestone: "virstanpylväs",
+          action_refresh: "Lataa tiedot uudelleen",
+          action_previous: "Siirry: Viimeisin toiminta",
+          action_next: "Siirry: Seuraava toiminta",
+          action_filter: "Suodata aktiviteetit",
+          action_timeless: "Näytä ajattomat kohteet"
         },
       },
     },
