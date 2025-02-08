@@ -1,7 +1,6 @@
 import * as React from "react";
 import { IEntityReference, TimelineItem } from "../TimelineItem";
 import { getIcon } from "../../util";
-import { Search } from "lucide-react";
 
 interface ILookupProps {
   options: IEntityReference[];
@@ -85,7 +84,7 @@ export default function Lookup({
           style={{ top: focused || getInput().length > 0 ? "2px" : "14px" }}
         >
           <span className="h-5 w-5 p-1">
-            <Search size={48} strokeWidth={1.5} absoluteStrokeWidth />
+            <span className="material-symbols-rounded">search</span>
           </span>
           <label
             className={`text-start font-semibold tracking-wide transition-all duration-150 ${focused ? "text-cyan-400" : "text-gray-500"} ${focused || getInput().length > 0 ? "text-xs" : "text-sm"}`}

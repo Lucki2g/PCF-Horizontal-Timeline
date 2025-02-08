@@ -56,7 +56,7 @@ export default function TimelessTimelineItemBlock({
         {item.name}
       </p>
       {activityInfo[item.type]?.icon ? (
-        <span className="material-symbols-rounded">{activityInfo[item.type].icon}</span>
+        <span className="material-symbols-rounded transition-colors duration-300 group-hover:text-white" style={{ fontSize: "20px" }}>{activityInfo[item.type].icon}</span>
       ) : (
         <></>
       )}
