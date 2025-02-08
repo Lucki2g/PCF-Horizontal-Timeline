@@ -90,7 +90,7 @@ export default function TimelineItemBlock({
               onClick={hideDialog}
               className="rounded-md bg-white p-1 transition-colors duration-150 hover:bg-slate-100"
             >
-            <span className="material-symbols-rounded">close</span>
+            <span className="material-symbols-rounded w-4 h-4" style={{ fontSize: "16px" }}>close</span>
             </button>
           </div>
         </div>
@@ -163,7 +163,7 @@ export default function TimelineItemBlock({
             {item.name}
           </p>
           {activityInfo[item.type]?.icon ? (
-            <span className="material-symbols-rounded transition-colors duration-300 group-hover:text-white" style={{ fontSize: "20px" }}>{activityInfo[item.type].icon}</span>
+            <span className="material-symbols-rounded transition-colors duration-300 group-hover:text-white w-4 h-4" style={{ fontSize: "16px" }}>{activityInfo[item.type].icon}</span>
           ) : (
             <></>
           )}

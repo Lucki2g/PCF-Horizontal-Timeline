@@ -9,24 +9,44 @@ const loadDebugData = () => {
       name: "UTC+01",
       type: "appointment",
       date: new Date("2024-05-16T08:00:00.000+01:00"),
+      owned: {
+          id: "2",
+          name: "Kaare",
+          entitytype: "systemuser"
+      }
     },
     {
       id: "0",
       name: "UTC",
       type: "phonecall",
       date: new Date("2024-05-16T08:00:00.000+00:00"),
+      owned: {
+          id: "2",
+          name: "Kaare",
+          entitytype: "systemuser"
+      }
     },
     {
       id: "2",
       name: "LOCAL",
       type: "email",
       date: new Date("2024-05-16T08:00:00.000"),
+      owned: {
+          id: "2",
+          name: "Kaare",
+          entitytype: "systemuser"
+      }
     },
     {
       id: "1",
       name: "Remember the chicken",
       type: "task",
       date: new Date("2024-10-29"),
+      owned: {
+          id: "1",
+          name: "Kaares Team",
+          entitytype: "team"
+      }
     },
     // {
     //     id: "2",

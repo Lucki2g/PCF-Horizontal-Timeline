@@ -40,10 +40,10 @@ export default function FilterDialog({ items, onSave }: IFilterDialogProps) {
           </p>
         </div>
         <button
-          className="mr-2 rounded-full bg-sky-50 p-2 transition-colors duration-300 hover:bg-sky-200"
+          className="mr-2 rounded-full bg-sky-50 transition-colors duration-300 hover:bg-sky-200 aspect-square flex justify-center items-center"
           onClick={() => setCurrentFilter(initialState)}
         >
-          <span className="material-symbols-rounded">filter_list_off</span>
+          <span className="material-symbols-rounded p-0 m-0 w-4 h-4" style={{ fontSize: "20px" }}>filter_list_off</span>
         </button>
       </div>
 
@@ -169,7 +169,7 @@ export default function FilterDialog({ items, onSave }: IFilterDialogProps) {
           }}
           className="group mx-1 flex items-center rounded-[4px] bg-sky-200 px-4 py-2 font-semibold text-sky-600 transition-colors duration-200 hover:bg-sky-300 hover:text-white"
         >
-          <span className="material-symbols-rounded">save</span>
+          <span className="material-symbols-rounded w-4 h-4" style={{ fontSize: "16px" }}>save</span>
           {t("filter_save")}
         </button>
 

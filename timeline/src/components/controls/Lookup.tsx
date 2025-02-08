@@ -83,9 +83,7 @@ export default function Lookup({
           className="absolute left-2 flex items-center transition-[top]"
           style={{ top: focused || getInput().length > 0 ? "2px" : "14px" }}
         >
-          <span className="h-5 w-5 p-1">
-            <span className="material-symbols-rounded">search</span>
-          </span>
+          <span className="material-symbols-rounded w-4 h-4" style={{ fontSize: "16px" }}>search</span>
           <label
             className={`text-start font-semibold tracking-wide transition-all duration-150 ${focused ? "text-cyan-400" : "text-gray-500"} ${focused || getInput().length > 0 ? "text-xs" : "text-sm"}`}
           >
@@ -110,7 +108,7 @@ export default function Lookup({
                   className="flex w-full items-center rounded-[4px] p-1 transition-all duration-150 hover:bg-gray-50"
                   onClick={() => selectOption(user)}
                 >
-                  <span className="mr-2 h-4 w-4">
+                  <span className="mr-2 flex justify-center items-center">
                     {getIcon(user.entitytype)}
                   </span>
                   <div className="flex flex-col text-start">

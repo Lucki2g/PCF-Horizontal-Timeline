@@ -39,11 +39,11 @@ export function uuidv4() {
 export const getIcon = (entitytype: string) => {
   switch (entitytype) {
     case "systemuser":
-      return <span className="material-symbols-rounded">person</span>;
+      return <span className="material-symbols-rounded w-4 h-4" style={{ fontSize: "16px" }}>person</span>;
     case "team":
-      return <span className="material-symbols-rounded">groups</span>;
+      return <span className="material-symbols-rounded w-4 h-4" style={{ fontSize: "16px" }}>groups</span>;
     default:
-      return <span className="material-symbols-rounded">extension</span>;
+      return <span className="material-symbols-rounded w-4 h-4" style={{ fontSize: "16px" }}>extension</span>;
   }
 };
 
