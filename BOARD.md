@@ -26,6 +26,7 @@ V1.1.0
 [-] BUG: Year line flickering (disappears)
 [x] REFACTOR: Change icons to use Lucide
 [-] FEATURE: Tooltips on actions
+- BUG: Must find a way to reduce PCF size (most likely lucide issue with dynamic icons)
 - FEATURE: Fullscreen
 [-] FEATURE: Varying sizes of cells - ySize / fontSize
 - FEATURE: Count on Activity type chips inside filter

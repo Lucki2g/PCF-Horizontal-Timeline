@@ -1,6 +1,5 @@
 import * as React from "react";
 import { DEBUG } from "./Timeline";
-import { Puzzle, UserRound, UsersRound } from "lucide-react";
 
 export const getHref = (clientUrl: string, locicalname: string, id: string) => {
   if (DEBUG) return "";
@@ -40,11 +39,11 @@ export function uuidv4() {
 export const getIcon = (entitytype: string) => {
   switch (entitytype) {
     case "systemuser":
-      return <UserRound size={48} strokeWidth={1.5} absoluteStrokeWidth />;
+      return <span className="material-symbols-rounded">person</span>;
     case "team":
-      return <UsersRound size={48} strokeWidth={1.5} absoluteStrokeWidth />;
+      return <span className="material-symbols-rounded">groups</span>;
     default:
-      return <Puzzle size={48} strokeWidth={1.5} absoluteStrokeWidth />;
+      return <span className="material-symbols-rounded">extension</span>;
   }
 };
 

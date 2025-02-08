@@ -3,8 +3,6 @@ import { TimelineItem } from "./TimelineItem";
 import { useGlobalDialogContext } from "../../contexts/dialog-context";
 import { getHref } from "../util";
 import { useGlobalGlobalContext } from "../../contexts/global-context";
-import { X } from "lucide-react";
-import { DynamicIcon } from "lucide-react/dynamic";
 
 export interface TimelessTimelineItemBlock {
   id: string;
@@ -35,7 +33,7 @@ export default function TimelessTimelineItemBlock({
               onClick={hideDialog}
               className="rounded-md bg-white p-1 transition-colors duration-150 hover:bg-slate-100"
             >
-              <X size={48} strokeWidth={1.5} absoluteStrokeWidth />
+            <span className="material-symbols-rounded">close</span>
             </button>
           </div>
         </div>
@@ -58,12 +56,7 @@ export default function TimelessTimelineItemBlock({
         {item.name}
       </p>
       {activityInfo[item.type]?.icon ? (
-        <DynamicIcon
-          name={activityInfo[item.type].icon as any}
-          className="h-3.5 w-3.5 transition-colors duration-300 group-hover:text-white"
-          size={48}
-          absoluteStrokeWidth
-        />
+        <span className="material-symbols-rounded">{activityInfo[item.type].icon}</span>
       ) : (
         <></>
       )}

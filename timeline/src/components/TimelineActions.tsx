@@ -7,14 +7,6 @@ import { useGlobalLoaderContext } from "../../contexts/loader-context";
 import { getLeft } from "../timeUtil";
 import { useGlobalGlobalContext } from "../../contexts/global-context";
 import ActionButton from "./controls/ActionButton";
-import {
-  ArrowBigLeftDash,
-  ArrowBigRightDash,
-  Filter,
-  PanelRightClose,
-  PanelRightOpen,
-  RefreshCcw,
-} from "lucide-react";
 
 interface ITimelineActionsProps {
   items: TimelineItem[];
@@ -111,19 +103,15 @@ export default function TimelineActions({
               setState(true);
             }}
           >
-            <RefreshCcw size={48} strokeWidth={2} absoluteStrokeWidth />
+            <span className="material-symbols-rounded">refresh</span>
           </ActionButton>
           {/* Previous activity */}
           <ActionButton tooltip="Go to previous item" onClick={animatePrevious}>
-            <ArrowBigLeftDash size={48} strokeWidth={1.5} absoluteStrokeWidth />
+          <span className="material-symbols-rounded">first_page</span>
           </ActionButton>
           {/* Next activity */}
           <ActionButton tooltip="Go to next item" onClick={animateNext}>
-            <ArrowBigRightDash
-              size={48}
-              strokeWidth={1.5}
-              absoluteStrokeWidth
-            />
+          <span className="material-symbols-rounded">last_page</span>
           </ActionButton>
           <div className="mx-0.5 h-full w-px bg-gray-300" />
           {/* Filter */}
@@ -136,18 +124,14 @@ export default function TimelineActions({
               )
             }
           >
-            <Filter size={48} strokeWidth={1.5} absoluteStrokeWidth />
+          <span className="material-symbols-rounded">filter_list</span>
           </ActionButton>
           {/* Timeless items */}
           <ActionButton tooltip="Show timeless items" onClick={paneChange}>
             {isPaneOpen ? (
-              <PanelRightOpen size={48} strokeWidth={1.5} absoluteStrokeWidth />
+              <span className="material-symbols-rounded">right_panel_open</span>
             ) : (
-              <PanelRightClose
-                size={48}
-                strokeWidth={1.5}
-                absoluteStrokeWidth
-              />
+              <span className="material-symbols-rounded">right_panel_close</span>
             )}
           </ActionButton>
         </div>
