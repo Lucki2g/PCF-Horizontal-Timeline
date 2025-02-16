@@ -27,7 +27,14 @@ V1.1.0
 [x] REFACTOR: Change icons to use Lucide
 [x] FEATURE: Tooltips on actions
 [x] BUG: Must find a way to reduce PCF size (most likely lucide issue with dynamic icons)
-- AVAILABILITY: Update translations with new tooltips
+[x] AVAILABILITY: Update translations with new tooltips
+[x] FEATURE: Icon upload for custom tables (lucide icons)
+[x] BEAUTIFY/REFACTOR: - Action Buttons
+
+
+v1.2.0
+- FEATURE: Edit options (dialog, dropdown, ModelDriven only options)
+- FEATURE: FluentUI Style
 - FEATURE: Fullscreen
 [-] FEATURE: Varying sizes of cells - ySize / fontSize
 - FEATURE: Count on Activity type chips inside filter
@@ -39,8 +46,6 @@ V1.1.0
 - AVAILABILITY: Translation of custom schemanames
 - BUG: Support multiple timelines on one form
 - FEATURE: Spinner på refresh
-[x] FEATURE: Icon upload for custom tables (lucide icons)
-[x] BEAUTIFY/REFACTOR: - Action Buttons
 - BUG: Left Stick is odd-looking when all the way left on the timeline
 - FEATURE: Increase modal height size
 - FEATURE: Darkmode

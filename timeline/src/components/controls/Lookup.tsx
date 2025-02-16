@@ -1,6 +1,10 @@
 import * as React from "react";
 import { IEntityReference, TimelineItem } from "../TimelineItem";
 import { getIcon } from "../../util";
+import { useGlobalGlobalContext } from "../../../contexts/global-context";
+import { Input, Label } from "@fluentui/react-components";
+import Search from "./Search";
+import { SearchRegular } from "@fluentui/react-icons";
 
 interface ILookupProps {
   options: IEntityReference[];
@@ -22,6 +26,8 @@ export default function Lookup({
   const [isOpen, setIsOpen] = React.useState<boolean>(false);
   const [query, setQuery] = React.useState<string>(currentValue?.name ?? "");
   const [focused, setFocused] = React.useState<boolean>(false);
+
+  const { useFluent } = useGlobalGlobalContext();
 
   React.useEffect(() => {
     if (!isOpen && query) setQuery("");
@@ -62,6 +68,24 @@ export default function Lookup({
   };
 
   return (
+    <>
+    {
+      useFluent ?
+      <div className="flex w-full justify-between items-center">
+        <Label className="w-[150px]" htmlFor={"search_field"}>{label}</Label>
+        <Input 
+          type="text" 
+          appearance="filled-darker" 
+          id={"search_field"} 
+          className="w-full"
+          value={getInput()}
+          contentAfter={<SearchRegular />}
+          onChange={(e) => {
+            setQuery(e.target.value);
+            handleChange(null);
+          }}
+        />
+      </div> :
     <div className="my-2 w-full flex-col">
       <div className="relative w-full">
         <input
@@ -131,5 +155,7 @@ export default function Lookup({
         ></div>
       </div>
     </div>
+  }
+  </>
   );
 }

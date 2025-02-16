@@ -34,7 +34,7 @@ interface ITimelineProps {
   context: ComponentFramework.Context<IInputs>;
 }
 
-export const DEBUG = false;
+export const DEBUG = true;
 
 export default function Timeline({ context }: ITimelineProps) {
   const size = context.mode.allocatedWidth;
@@ -47,6 +47,7 @@ export default function Timeline({ context }: ITimelineProps) {
     setActivityInfo,
     setXSize,
     setClientUrl,
+    setUseFluent,
     timezone,
     locale,
     clientUrl,
@@ -171,6 +172,7 @@ export default function Timeline({ context }: ITimelineProps) {
 
       setActivityInfo(ACTIVITYINFO);
       setXSize(context.parameters.xsize.raw ?? 32);
+      setUseFluent(context.parameters.usefluent.raw ?? false);
       setClientUrl(DEBUG ? "" : (context as any).page.getClientUrl());
 
       // initial data load

@@ -6,6 +6,7 @@ import { DialogProvider } from "../contexts/dialog-context";
 import Timeline from "./Timeline";
 import { IInputs } from "../generated/ManifestTypes";
 import { GlobalProvider } from "../contexts/global-context";
+import { FluentProvider, Input, webLightTheme } from "@fluentui/react-components";
 
 interface IAppProps {
   context: ComponentFramework.Context<IInputs>;
@@ -13,10 +14,13 @@ interface IAppProps {
 
 export default function App({ context }: IAppProps) {
   return (
-    <I18nextProvider i18n={i18n}>
-      <GlobalProvider>
-        <Timeline context={context} />
-      </GlobalProvider>
-    </I18nextProvider>
+    <FluentProvider theme={webLightTheme}>
+      <I18nextProvider i18n={i18n}>
+        <GlobalProvider>
+          <Input appearance="filled-darker" />
+          <Timeline context={context} />
+        </GlobalProvider>
+      </I18nextProvider>
+    </FluentProvider>
   );
 }

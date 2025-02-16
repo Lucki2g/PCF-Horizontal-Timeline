@@ -15,12 +15,13 @@
     "pretty": "npx prettier . --write"
   },
   "dependencies": {
+    "@fluentui/react-components": "^9.58.2",
+    "@fluentui/react-icons": "^2.0.274",
     "@mantine/dates": "^6.0.22",
     "framer-motion": "^6.5.1",
     "i18next": "^23.5.1",
     "i18next-browser-languagedetector": "^8.0.2",
-    "react": "16.8.6",
-    "react-dom": "16.8.6",
+    "react-dom": "^16.14.0",
     "react-i18next": "^15.2.0"
   },
   "devDependencies": {

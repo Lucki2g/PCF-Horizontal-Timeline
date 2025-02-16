@@ -8,6 +8,8 @@ import Lookup from "./controls/Lookup";
 import Search from "./controls/Search";
 import Chips from "./controls/Chips";
 import { useGlobalGlobalContext } from "../../contexts/global-context";
+import { Input, Label } from "@fluentui/react-components";
+import { DismissSquareRegular } from '@fluentui/react-icons';
 
 interface IFilterDialogProps {
   items: TimelineItem[];
@@ -18,7 +20,7 @@ export default function FilterDialog({ items, onSave }: IFilterDialogProps) {
   const { hideDialog } = useGlobalDialogContext();
   const { initialState, filter, filterItems } = useFilter();
   const { t } = useTranslation();
-  const { locale, activityInfo } = useGlobalGlobalContext();
+  const { locale, activityInfo, useFluent } = useGlobalGlobalContext();
 
   const [currentFilter, setCurrentFilter] = React.useState<FilterState>(filter);
   const [filteredActivities, setFilteredActivities] = React.useState<number>();
