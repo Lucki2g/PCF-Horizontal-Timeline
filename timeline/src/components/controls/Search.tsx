@@ -1,6 +1,6 @@
 import * as React from "react";
 import { useGlobalGlobalContext } from "../../../contexts/global-context";
-import { Input, Label } from "@fluentui/react-components";
+import { Field, Input, Label } from "@fluentui/react-components";
 import { useTranslation } from "react-i18next";
 
 interface ISearchProps {
@@ -20,20 +20,21 @@ export default function Search({
 
   const { useFluent } = useGlobalGlobalContext();
 
+  const searchId = "searc-" + (Math.random() + 1).toString(36).substring(7);
+
   return (
     <>
     {
       useFluent ?
-      <div className="flex w-full justify-between items-center">
-        <Label className="w-[150px]" htmlFor={"search_field"}>{label}</Label>
+      <Field label={label} className="w-full" orientation="horizontal">
         <Input 
           type="text" 
           appearance="filled-darker" 
-          id={"search_field"} 
+          id={searchId} 
           onChange={(e) => onChange(e.target.value)} 
           className="w-full"
         />
-      </div> :
+      </Field> :
       <div className="my-2 w-full flex-col">
         <div className="relative my-1 w-full">
           <input

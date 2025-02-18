@@ -49,6 +49,7 @@ function Chip({ label, color, active, onClicked }: IChipProps) {
         tabIndex={1}
         className="peer hidden"
         checked={active}
+        readOnly
       />
       <div
         className={`mr-1 cursor-pointer select-none rounded-[4px] border border-solid bg-opacity-30 px-2 py-0.5 shadow-dynamics transition-colors duration-150`}

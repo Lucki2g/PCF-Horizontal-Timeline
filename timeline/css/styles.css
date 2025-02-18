@@ -809,6 +809,10 @@ video {
   height: 1.5rem;
 }
 
+.h-\[24px\] {
+  height: 24px;
+}
+
 .h-\[5px\] {
   height: 5px;
 }
@@ -875,6 +879,10 @@ video {
 
 .w-\[150px\] {
   width: 150px;
+}
+
+.w-\[24px\] {
+  width: 24px;
 }
 
 .w-\[480px\] {
@@ -1137,6 +1145,11 @@ video {
   background-color: rgb(255 255 255 / var(--tw-bg-opacity));
 }
 
+.bg-sky-100 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(224 242 254 / var(--tw-bg-opacity));
+}
+
 .bg-opacity-10 {
   --tw-bg-opacity: 0.1;
 }
@@ -1223,6 +1236,10 @@ video {
 
 .font-dynamics {
   font-family: "Segoe UI", "Segoe UI Web (West European)", -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif;
+}
+
+.text-\[24px\] {
+  font-size: 24px;
 }
 
 .text-\[8px\] {

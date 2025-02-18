@@ -1,5 +1,6 @@
 import * as React from "react";
 import { DEBUG } from "./Timeline";
+import { FontIcon, Icon } from "@fluentui/react/lib/Icon";
 
 export const getHref = (clientUrl: string, locicalname: string, id: string) => {
   if (DEBUG) return "";
@@ -44,6 +45,17 @@ export const getIcon = (entitytype: string) => {
       return <span className="material-symbols-rounded w-4 h-4" style={{ fontSize: "16px" }}>groups</span>;
     default:
       return <span className="material-symbols-rounded w-4 h-4" style={{ fontSize: "16px" }}>extension</span>;
+  }
+};
+
+export const getFluentIcon = (entitytype: string) => {
+  switch (entitytype) {
+    case "systemuser":
+      return <FontIcon iconName="Contact" className="text-[24px] w-[24px] h-[24px]"/>;
+    case "team":
+      return <FontIcon iconName="Group" className="text-[24px] w-[24px] h-[24px]"/>;
+    default:
+      return <FontIcon iconName="Puzzle" className="text-[24px] w-[24px] h-[24px]"/>;
   }
 };
 

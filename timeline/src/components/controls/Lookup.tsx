@@ -1,10 +1,9 @@
-import * as React from "react";
-import { IEntityReference, TimelineItem } from "../TimelineItem";
-import { getIcon } from "../../util";
+import { IEntityReference } from "../TimelineItem";
+import { getFluentIcon, getIcon } from "../../util";
 import { useGlobalGlobalContext } from "../../../contexts/global-context";
-import { Input, Label } from "@fluentui/react-components";
-import Search from "./Search";
-import { SearchRegular } from "@fluentui/react-icons";
+import React from "react";
+import { Button, Combobox, Field, Input, Label, Text, Option, Avatar } from "@fluentui/react-components";
+import { FontIcon, Icon } from '@fluentui/react/lib/Icon'; // https://github.com/microsoft/fluentui/wiki/Using-icons/f60fc129945263782708736c8c518b3d30653c8e, https://uifabricicons.azurewebsites.net/, https://www.flicon.io/
 
 interface ILookupProps {
   options: IEntityReference[];
@@ -67,25 +66,39 @@ export default function Lookup({
     return "";
   };
 
+  const lookupId = "lookup-" + (Math.random() + 1).toString(36).substring(7);
+
   return (
     <>
     {
       useFluent ?
-      <div className="flex w-full justify-between items-center">
-        <Label className="w-[150px]" htmlFor={"search_field"}>{label}</Label>
-        <Input 
-          type="text" 
-          appearance="filled-darker" 
-          id={"search_field"} 
-          className="w-full"
-          value={getInput()}
-          contentAfter={<SearchRegular />}
+      <Field label={label} orientation="horizontal" className="relative w-full">
+        <Combobox
+          appearance="filled-darker"
+          placeholder="Select an option"
+          value={query}
+          freeform
+          onOptionSelect={(event, data) => {
+            console.log("selected: ", data)
+            // selectOption(data.optionValue?.data as IEntityReference);
+          }}
+          
           onChange={(e) => {
             setQuery(e.target.value);
             handleChange(null);
           }}
-        />
-      </div> :
+        >
+          {filter(options).map((item) => (
+            <Option key={item.id} text={item.name} className="flex items-center justify-start">
+              <Avatar icon={getFluentIcon(item.entitytype)} size={32} shape="square" />
+              <div className="flex flex-col">
+                <Text as="h1">{item.name}</Text>
+                <Text as="p">{item.entitytype}</Text>
+              </div>
+            </Option>
+          ))}
+        </Combobox>
+      </Field> :
     <div className="my-2 w-full flex-col">
       <div className="relative w-full">
         <input
