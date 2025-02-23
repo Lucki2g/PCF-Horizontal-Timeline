@@ -1,6 +1,5 @@
 ﻿import * as React from "react";
 import { useGlobalDialogContext } from "../../contexts/dialog-context";
-import FilterDialog from "./FilterDialog";
 import { TimelineItem } from "./TimelineItem";
 import { FilterState, useFilter } from "../../contexts/filter-context";
 import { useGlobalLoaderContext } from "../../contexts/loader-context";
@@ -8,6 +7,7 @@ import { getLeft } from "../timeUtil";
 import { useGlobalGlobalContext } from "../../contexts/global-context";
 import ActionButton from "./controls/ActionButton";
 import { useTranslation } from "react-i18next";
+import { FilterDialog } from "./dialogs/FilterDialog";
 
 interface ITimelineActionsProps {
   items: TimelineItem[];
@@ -117,17 +117,13 @@ export default function TimelineActions({
           </ActionButton>
           <div className="mx-0.5 h-full w-px bg-gray-300" />
           {/* Filter */}
-          <ActionButton
-            tooltip={t("action_filter")}
-            onClick={() =>
-              showDialog(
-                <FilterDialog items={items} onSave={onSave} />,
-                "w-[540px]",
-              )
-            }
-          >
-          <span className="material-symbols-rounded">filter_list</span>
-          </ActionButton>
+          <FilterDialog onSave={onSave} items={items} childElement={
+            <ActionButton
+              tooltip={t("action_filter")}
+              onClick={() => {}}>
+                <p>a</p>
+              </ActionButton>}
+            />
           {/* Timeless items */}
           <ActionButton tooltip={t("action_timeless")} onClick={paneChange}>
             {isPaneOpen ? (

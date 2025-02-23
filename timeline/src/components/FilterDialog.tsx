@@ -4,12 +4,16 @@ import { useTranslation } from "react-i18next";
 import { IEntityReference, TimelineItem } from "./TimelineItem";
 import { FilterState, useFilter } from "../../contexts/filter-context";
 import { DatePicker } from "@mantine/dates";
+import { DatePicker as FluentDatePicker } from "@fluentui/react-datepicker-compat";
 import Lookup from "./controls/Lookup";
 import Search from "./controls/Search";
 import Chips from "./controls/Chips";
 import { useGlobalGlobalContext } from "../../contexts/global-context";
-import { Input, Label } from "@fluentui/react-components";
-import { DismissSquareRegular } from '@fluentui/react-icons';
+import { Calendar } from "@fluentui/react-calendar-compat";
+import { Button, Field, Input, Label, makeStyles, Switch, Toolbar, ToolbarButton } from "@fluentui/react-components";
+import { Calendar24Regular, DismissSquareRegular } from '@fluentui/react-icons';
+import { MILIS_IN_DAY } from "../timeUtil";
+import { FontIcon } from "@fluentui/react/lib/Icon";
 
 interface IFilterDialogProps {
   items: TimelineItem[];
@@ -22,6 +26,8 @@ export default function FilterDialog({ items, onSave }: IFilterDialogProps) {
   const { t } = useTranslation();
   const { locale, activityInfo, useFluent } = useGlobalGlobalContext();
 
+  const rootElement = React.useRef(null);
+
   const [currentFilter, setCurrentFilter] = React.useState<FilterState>(filter);
   const [filteredActivities, setFilteredActivities] = React.useState<number>();
 
@@ -30,7 +36,7 @@ export default function FilterDialog({ items, onSave }: IFilterDialogProps) {
   }, [currentFilter]);
 
   return (
-    <div className="m-2 flex w-full flex-col items-start justify-start">
+    <div ref={rootElement} className="m-2 flex w-full flex-col items-start justify-start">
       {/* HEADER */}
       <div className="mb-8 flex w-full items-center justify-between">
         <div className="flex flex-col">
@@ -66,19 +72,63 @@ export default function FilterDialog({ items, onSave }: IFilterDialogProps) {
       <Chips
         label={t("filter_activitytypes")}
         states={currentFilter.itemTypes}
-        onChange={(type: string, state: boolean) =>
+        onChange={(type: string, state: boolean) => {
+          console.log(type, "changed to", state)
           setCurrentFilter({
             ...currentFilter,
             itemTypes: { ...currentFilter.itemTypes, [type]: state },
           })
         }
+      }
       />
 
       <div className="my-1 h-px w-full bg-gray-800 bg-opacity-10" />
 
       {/* DATE INTERVAL */}
       {/* https://mantine.dev/dates/date-picker/ */}
-      <div className="relative my-2 w-full flex-col rounded-[4px] bg-neutral-100 p-2 pt-5">
+      {
+        useFluent ?
+        <>
+          <Field label={t("filter_startdate")} orientation="horizontal" className="w-full my-1">
+            <FluentDatePicker 
+              mountNode={rootElement.current}
+              value={currentFilter.startDate} 
+              appearance="filled-darker"
+              highlightSelectedMonth 
+              showGoToToday 
+              showCloseButton
+              onSelectDate={(date) => setCurrentFilter({...currentFilter, startDate: (date && date !== null) ? date : initialState.startDate})}
+              minDate={initialState.startDate}
+              maxDate={initialState.endDate}
+              // calendar={
+              //   highlightSelectedMonth: true
+              //   dateTimeFormatter: 
+              // }
+              // strings={
+
+              // }
+            />
+          </Field>
+          <Field label={t("filter_enddate")}orientation="horizontal" className="w-full my-1">
+            <FluentDatePicker value={currentFilter.endDate} 
+              mountNode={rootElement.current}
+              appearance="filled-darker"
+              highlightSelectedMonth 
+              showGoToToday 
+              showCloseButton
+              onSelectDate={(date) => setCurrentFilter({...currentFilter, endDate: (date && date !== null) ? date : initialState.endDate})}
+              minDate={initialState.startDate}
+              maxDate={initialState.endDate}
+              // strings={
+
+              // }
+              // calendar={
+              //   dateTimeFormatter: 
+              // }
+            />
+          </Field>
+        </> :
+        <div className="relative my-2 w-full flex-col rounded-[4px] bg-neutral-100 p-2 pt-5">
         <p className="absolute left-2 top-0.5 text-start text-xs font-semibold tracking-wide text-gray-500">
           {t("filter_dates")}
         </p>
@@ -144,6 +194,8 @@ export default function FilterDialog({ items, onSave }: IFilterDialogProps) {
           </div>
         </div>
       </div>
+      }
+      
 
       <div className="my-1 h-px w-full bg-gray-800 bg-opacity-10" />
 

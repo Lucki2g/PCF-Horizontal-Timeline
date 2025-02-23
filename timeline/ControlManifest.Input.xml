@@ -18,7 +18,7 @@
     <property default-value="false" description-key="" display-name-key="FluentUI" name="usefluent" usage="input" of-type="TwoOptions" />
 
     <!-- ITEMS -->
-    <property default-value='{"task":{"color":"#eab308","icon":"assignment_turned_in"},"appointment":{"color":"#7e22ce","icon":"calendar_month"},"milestone":{"color":"#e11d48","icon":""},"email":{"color":"#16a34a","icon":"mail"},"phonecall":{"color":"#fb7185","icon":"call"}}' description-key="activitydata" display-name-key="Activitydata" name="activitydata" usage="input" of-type="SingleLine.TextArea" />
+    <property default-value='{"task":{"color":"#eab308","icon":"AccountActivity"},"appointment":{"color":"#7e22ce","icon":"Calendar"},"milestone":{"color":"#e11d48","icon":"Flag"},"email":{"color":"#16a34a","icon":"Mail"},"phonecall":{"color":"#fb7185","icon":"Phone"}}' description-key="activitydata" display-name-key="Activitydata" name="activitydata" usage="input" of-type="SingleLine.TextArea" />
     <property default-value='{"createdon":"Created On","estimatedclosedate":"Estimated Close","actualclose":"Actual Close"}' description-key="milestonedata" display-name-key="Milestones" name="milestonedata" usage="input" of-type="SingleLine.TextArea" />
 
     <!-- SIZING -->
@@ -63,7 +63,7 @@
     <resources>
       <code path="index.ts" order="1"/>
       <platform-library name="React" version="16.8.6" />
-      <platform-library name="Fluent" version="9.46.2" />
+      <!-- <platform-library name="Fluent" version="9.46.2" /> -->
       <css path="css/styles.css" order="1" />
       <!-- UNCOMMENT TO ADD MORE RESOURCES
       -->

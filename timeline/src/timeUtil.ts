@@ -51,6 +51,7 @@ export interface TimeUnits {
 }
 
 const MILIS_IN_HOUR = 1000 * 60 * 60;
+export const MILIS_IN_DAY = MILIS_IN_HOUR * 24;
 export const ITEM_PADDING: number = 12;
 export const fontSize: number = 10;
 export const ySize: number = 24;
