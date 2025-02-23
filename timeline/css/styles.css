@@ -1271,6 +1271,14 @@ video {
   line-height: 1rem;
 }
 
+.text-\[10px\] {
+  font-size: 10px;
+}
+
+.text-\[12px\] {
+  font-size: 12px;
+}
+
 .font-semibold {
   font-weight: 600;
 }

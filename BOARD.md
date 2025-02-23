@@ -32,7 +32,13 @@ V1.1.0
 [x] BEAUTIFY/REFACTOR: - Action Buttons
 
 
-v1.2.0
+v2.0.0
+- UX: Complete movement over to Fluent UI 9
+- TODO: Datepicker localization
+- TODO: Datepicker timezone control
+- TODO: Datepicker start/end date sanitization
+
+v1.2.0 - CANCELLED
 - FEATURE: Edit options (dialog, dropdown, ModelDriven only options)
 - FEATURE: FluentUI Style
 - FEATURE: Fullscreen

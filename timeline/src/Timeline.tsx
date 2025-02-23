@@ -9,7 +9,6 @@ import {
   ySize,
 } from "./timeUtil";
 import { IEntityReference, TimelineItem } from "./components/TimelineItem";
-import TimelineActions from "./components/TimelineActions";
 import { FilterState, useFilter } from "../contexts/filter-context";
 import TimelessTimelineItemBlock from "./components/TimelessTimelineItem";
 import { useTranslation } from "react-i18next";
@@ -29,6 +28,7 @@ import {
 import { ActivityInformation } from "./icons/Icon";
 import { useGlobalGlobalContext } from "../contexts/global-context";
 import { loadData } from "./services/dataLoader";
+import TimelineToolbar from "./components/toolbars/TimelineToolbar";
 
 interface ITimelineProps {
   context: ComponentFramework.Context<IInputs>;
@@ -319,7 +319,7 @@ export default function Timeline({ context }: ITimelineProps) {
       {loadingstate ? <div className="h-1 w-full bg-black"></div> : <></>}
 
       {/* Actions */}
-      <TimelineActions
+      <TimelineToolbar
         timelineRef={timelineRef}
         animate={animateLeft}
         isPaneOpen={isPaneOpen}
