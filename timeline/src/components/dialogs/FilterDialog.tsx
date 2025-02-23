@@ -1,14 +1,13 @@
-import { Badge, Button, Dialog, DialogActions, DialogBody, DialogContent, DialogSurface, DialogTitle, DialogTrigger, DialogTriggerChildProps, Divider, Field, Text, Title2, Title3, Tooltip } from '@fluentui/react-components'
+import { Button, Dialog, DialogActions, DialogBody, DialogContent, DialogSurface, DialogTitle, DialogTrigger, DialogTriggerChildProps, Divider, Field, Text, Title2, Title3, Tooltip } from '@fluentui/react-components'
 import * as React from 'react'
 import Search from '../controls/Search';
 import { useTranslation } from 'react-i18next';
 import { FilterState, useFilter } from '../../../contexts/filter-context';
 import { IEntityReference, TimelineItem } from '../TimelineItem';
-import { FontIcon } from '@fluentui/react/lib/Icon';
-import { ARIAButtonType } from '@fluentui/react-aria';
 import Chips from '../controls/Chips';
 import { DatePicker } from '@fluentui/react-datepicker-compat';
 import Lookup from '../controls/Lookup';
+import { getIconClassName } from "@fluentui/style-utilities"
 
 interface IFilterDialogProps {
     items: TimelineItem[];
@@ -46,7 +45,7 @@ export const FilterDialog = ({ items, childElement, onSave }: IFilterDialogProps
                                     .replace("{1}", "" + items.length)}</Text>
                             </div>
                             <Tooltip content={"clear filter"} relationship='label' withArrow>
-                                <Button style={{ position: "relative" }} shape='rounded' appearance='secondary' onClick={() => setCurrentFilter(initialState)} icon={<FontIcon iconName='ClearFilter' />}/>
+                                <Button style={{ position: "relative" }} shape='rounded' appearance='secondary' onClick={() => setCurrentFilter(initialState)} icon={<i className={`${getIconClassName("ClearFilter")}`} />}/>
                             </Tooltip>
                         </div>
                     </DialogTitle>
@@ -132,7 +131,7 @@ export const FilterDialog = ({ items, childElement, onSave }: IFilterDialogProps
                     </DialogContent>
                     <DialogActions>
                         <DialogTrigger disableButtonEnhancement>
-                            <Button appearance='primary' icon={<FontIcon iconName='Save' />} onClick={() => onSave(currentFilter)}>{t("filter_save")}</Button>
+                            <Button appearance='primary' icon={<i className={`${getIconClassName("Save")}`} />} onClick={() => onSave(currentFilter)}>{t("filter_save")}</Button>
                         </DialogTrigger>
                         <DialogTrigger disableButtonEnhancement>
                             <Button>{t("filter_close")}</Button>

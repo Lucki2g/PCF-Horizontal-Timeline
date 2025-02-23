@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <manifest>
-  <control namespace="ape.dataset.timeline" constructor="timeline" version="1.1.0" display-name-key="timeline" description-key="timeline description" control-type="virtual" >
+  <control namespace="ape.dataset.timeline" constructor="timeline" version="2.0.0" display-name-key="timeline" description-key="timeline description" control-type="virtual" >
     <external-service-usage enabled="false">
     </external-service-usage>
 
@@ -14,9 +14,6 @@
     <property default-value='browser' description-key="What timezone should dates be calculated in?" display-name-key="TimeZone Source" name="timezonesource" usage="input" of-type="SingleLine.Text" required="true" />
     <property default-value='UTC' description-key="Timezone in IANA Time Zone Database format" display-name-key="Timezone" name="timezone" usage="input" of-type="SingleLine.Text" />
     
-    <!-- STYLING -->
-    <property default-value="false" description-key="" display-name-key="FluentUI" name="usefluent" usage="input" of-type="TwoOptions" />
-
     <!-- ITEMS -->
     <property default-value='{"task":{"color":"#eab308","icon":"AccountActivity"},"appointment":{"color":"#7e22ce","icon":"Calendar"},"milestone":{"color":"#e11d48","icon":"Flag"},"email":{"color":"#16a34a","icon":"Mail"},"phonecall":{"color":"#fb7185","icon":"Phone"}}' description-key="activitydata" display-name-key="Activitydata" name="activitydata" usage="input" of-type="SingleLine.TextArea" />
     <property default-value='{"createdon":"Created On","estimatedclosedate":"Estimated Close","actualclose":"Actual Close"}' description-key="milestonedata" display-name-key="Milestones" name="milestonedata" usage="input" of-type="SingleLine.TextArea" />

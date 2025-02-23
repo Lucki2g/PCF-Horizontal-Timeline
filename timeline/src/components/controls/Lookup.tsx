@@ -1,9 +1,8 @@
 import { IEntityReference } from "../TimelineItem";
-import { getFluentIcon } from "../../util";
-import React, { useEffect } from "react";
-import { Combobox, Field, Text, Option, Avatar, Caption1Strong, TagPicker, TagPickerControl, TagPickerGroup, Tag, TagPickerList, TagPickerOption, TagPickerOptionGroup, useTagPickerFilter, TagPickerInput } from "@fluentui/react-components";
+import React from "react";
+import { Field, Avatar, TagPicker, TagPickerControl, TagPickerGroup, Tag, TagPickerList, TagPickerOption, TagPickerOptionGroup, useTagPickerFilter, TagPickerInput } from "@fluentui/react-components";
 import { useTranslation } from "react-i18next";
-import { FontIcon } from "@fluentui/react/lib/Icon";
+import { getIconClassName } from "@fluentui/style-utilities"
 // https://github.com/microsoft/fluentui/wiki/Using-icons/f60fc129945263782708736c8c518b3d30653c8e, https://uifabricicons.azurewebsites.net/, https://www.flicon.io/
 
 interface ILookupProps {
@@ -31,7 +30,7 @@ export default function Lookup({
     setSelectedOption(currentValue);
   }, [currentValue])
 
-  const onOptionSelect = (_, data) => {
+  const onOptionSelect = (_: any, data: any) => {
     if (data.value === "no-options") return;
 
     if (data.selectedOptions.length === 0) return selectOption(null);
@@ -73,7 +72,7 @@ export default function Lookup({
               shape="square"
               color="colorful"
               idForColor={optionData.name}
-              icon={<FontIcon iconName="Group" />}
+              icon={<i className={`${getIconClassName("Group")}`} />}
             />
           }
           key={option}
@@ -111,7 +110,7 @@ export default function Lookup({
               shape="square"
               color="colorful"
               idForColor={optionData.name}
-              icon={<FontIcon iconName="Contact" />}
+              icon={<i className={`${getIconClassName("Contact")}`} />}
             />
           }
           key={option}
@@ -145,7 +144,7 @@ export default function Lookup({
                   shape="square"
                   color="colorful"
                   idForColor={selectedOption.name}
-                  icon={<FontIcon iconName={selectedOption.entitytype === "team" ? "Group" : "Contact"} />}
+                  icon={<i className={`${getIconClassName(selectedOption.entitytype === "team" ? "Group" : "Contact")}`} />}
                 />
               }>
                 {selectedOption.name}

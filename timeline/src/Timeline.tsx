@@ -47,7 +47,6 @@ export default function Timeline({ context }: ITimelineProps) {
     setActivityInfo,
     setXSize,
     setClientUrl,
-    setUseFluent,
     timezone,
     locale,
     clientUrl,
@@ -172,7 +171,6 @@ export default function Timeline({ context }: ITimelineProps) {
 
       setActivityInfo(ACTIVITYINFO);
       setXSize(context.parameters.xsize.raw ?? 32);
-      setUseFluent(context.parameters.usefluent.raw ?? false);
       setClientUrl(DEBUG ? "" : (context as any).page.getClientUrl());
 
       // initial data load

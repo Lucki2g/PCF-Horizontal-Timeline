@@ -1,8 +1,7 @@
 import * as React from "react";
 import { useGlobalGlobalContext } from "../../../contexts/global-context";
 import { Field, InteractionTag, InteractionTagPrimary, TagGroup } from "@fluentui/react-components";
-import { FontIcon } from "@fluentui/react/lib/Icon";
-import { t } from "i18next";
+import { getIconClassName } from "@fluentui/style-utilities"
 
 interface IChipsProps {
   label: string;
@@ -21,9 +20,8 @@ export default function Chips({ label, states, onChange }: IChipsProps) {
 
           return (
               <InteractionTag key={type} style={{ borderStyle: "solid", borderColor: states[type] ? data.color : "#7E7E7E", borderWidth: "1px", position: "relative", margin: "2px 0" }} value={type} onClick={() => onChange(type, !states[type])}>
-                <InteractionTagPrimary media={<FontIcon className="text-[11px] w-[20px] h-[20px] flex items-center justify-center rounded-[4px] text-white opacity-55" 
-                iconName={data.icon} 
-                style={{ backgroundColor: states[type] ? data.color : "#7E7E7E" }} />}>
+                <InteractionTagPrimary media={
+                    <i className={`${getIconClassName(data.icon)} text-[11px] w-[20px] h-[20px] flex items-center justify-center rounded-[4px] text-white opacity-55`} style={{ backgroundColor: states[type] ? data.color : "#7E7E7E" }} />}>
                   {type}
                 </InteractionTagPrimary>
               </InteractionTag>)

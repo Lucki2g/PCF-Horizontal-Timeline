@@ -25,9 +25,6 @@ type GlobalContextProps = {
 
   clientUrl: string;
   setClientUrl: (url: string) => void;
-
-  useFluent: boolean;
-  setUseFluent: (val: boolean) => void;
 };
 
 const initialState: GlobalContextProps = {
@@ -41,8 +38,6 @@ const initialState: GlobalContextProps = {
   setXSize: () => {},
   clientUrl: "",
   setClientUrl: () => {},
-  useFluent: false,
-  setUseFluent: () => {},
 };
 
 const GlobalContext = createContext<GlobalContextProps>(initialState);
@@ -59,7 +54,6 @@ export const GlobalProvider = ({ children }: { children: ReactNode }) => {
   const [clientUrl, setClientUrl] = React.useState<string>(
     initialState.clientUrl,
   );
-  const [useFluent, setUseFluent] = React.useState<boolean>(initialState.useFluent);
 
   const { i18n } = useTranslation();
 
@@ -80,8 +74,6 @@ export const GlobalProvider = ({ children }: { children: ReactNode }) => {
         setXSize,
         clientUrl,
         setClientUrl,
-        useFluent,
-        setUseFluent,
       }}
     >
       <LoaderProvider>

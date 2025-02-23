@@ -37,6 +37,7 @@ v2.0.0
 - TODO: Datepicker localization
 - TODO: Datepicker timezone control
 - TODO: Datepicker start/end date sanitization
+[!] Write about Attachment size limitations
 
 v1.2.0 - CANCELLED
 - FEATURE: Edit options (dialog, dropdown, ModelDriven only options)
