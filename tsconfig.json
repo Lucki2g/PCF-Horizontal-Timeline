@@ -4,7 +4,5 @@
     "module": "es2015", // https://learn.microsoft.com/en-us/power-apps/developer/component-framework/code-components-best-practices#:~:text=Use%20path%2Dbased%20imports%20from%20Fluent%20to%20reduce%20bundle%20size
     "moduleResolution": "node",
     "typeRoots": ["node_modules/@types"],
-    "allowSyntheticDefaultImports": true,
-    "skipLibCheck": true,
   }
 }

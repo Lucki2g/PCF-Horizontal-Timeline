@@ -1,5 +1,5 @@
 import { IEntityReference } from "../TimelineItem";
-import React from "react";
+import * as React from "react";
 import { Field, Avatar, TagPicker, TagPickerControl, TagPickerGroup, Tag, TagPickerList, TagPickerOption, TagPickerOptionGroup, useTagPickerFilter, TagPickerInput } from "@fluentui/react-components";
 import { useTranslation } from "react-i18next";
 import { getIconClassName } from "@fluentui/style-utilities"

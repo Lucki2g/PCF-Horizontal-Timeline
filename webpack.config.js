@@ -1,6 +1,7 @@
 const {
     default: FluentUIReactIconsFontSubsettingPlugin,
   } = require('@fluentui/react-icons-font-subsetting-webpack-plugin');
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 module.exports = {
   devtool: 'source-map',
@@ -18,6 +19,7 @@ module.exports = {
     conditionNames: ['fluentIconFont', 'import'],
   },
   plugins: [
+    new BundleAnalyzerPlugin(),
     // Include this plugin
     new FluentUIReactIconsFontSubsettingPlugin(),
   ],

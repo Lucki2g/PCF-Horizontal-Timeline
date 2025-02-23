@@ -1,5 +1,4 @@
 import { Button, Toolbar, ToolbarDivider, Tooltip } from '@fluentui/react-components'
-import React from 'react'
 import { FilterState, useFilter } from '../../../contexts/filter-context';
 import { useGlobalLoaderContext } from '../../../contexts/loader-context';
 import { useTranslation } from 'react-i18next';
@@ -8,6 +7,7 @@ import { getLeft } from '../../timeUtil';
 import { useGlobalGlobalContext } from '../../../contexts/global-context';
 import { FilterDialog } from '../dialogs/FilterDialog';
 import { getIconClassName } from '@fluentui/style-utilities';
+import * as React from 'react';
 
 interface ITimelineToolbar {
   items: TimelineItem[];

@@ -45,7 +45,7 @@ export const FilterDialog = ({ items, childElement, onSave }: IFilterDialogProps
                                     .replace("{1}", "" + items.length)}</Text>
                             </div>
                             <Tooltip content={"clear filter"} relationship='label' withArrow>
-                                <Button style={{ position: "relative" }} shape='rounded' appearance='secondary' onClick={() => setCurrentFilter(initialState)} icon={<i className={`${getIconClassName("ClearFilter")}`} />}/>
+                                <Button style={{ position: "relative" }} shape='rounded' appearance='subtle' onClick={() => setCurrentFilter(initialState)} icon={<i className={`${getIconClassName("ClearFilter")}`} />}/>
                             </Tooltip>
                         </div>
                     </DialogTitle>
