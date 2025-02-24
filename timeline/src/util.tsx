@@ -1,6 +1,5 @@
 import * as React from "react";
 import { DEBUG } from "./Timeline";
-import { getIconClassName } from '@fluentui/style-utilities';
 
 export const getHref = (clientUrl: string, locicalname: string, id: string) => {
   if (DEBUG) return "";
@@ -51,11 +50,11 @@ export const getIcon = (entitytype: string) => {
 export const getFluentIcon = (entitytype: string) => {
   switch (entitytype) {
     case "systemuser":
-      return <i className={`${getIconClassName("Contact")} text-[24px] w-[24px] h-[24px]`} />
+      return <i className={`material-symbols-rounded text-[24px] w-[24px] h-[24px]`}>person</i>
     case "team":
-      return <i className={`${getIconClassName("Group")} text-[24px] w-[24px] h-[24px]`} />
+      return <i className={`material-symbols-rounded text-[24px] w-[24px] h-[24px]`}>group</i>
     default:
-      return <i className={`${getIconClassName("Puzzle")} text-[24px] w-[24px] h-[24px]`} />
+      return <i className={`material-symbols-rounded text-[24px] w-[24px] h-[24px]`}>extension</i>
   }
 };
 

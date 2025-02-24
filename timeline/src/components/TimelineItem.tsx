@@ -5,7 +5,6 @@ import { useSettings } from "../../hooks/SettingsState";
 import { useFilter } from "../../contexts/filter-context";
 import { getHref } from "../util";
 import { useGlobalGlobalContext } from "../../contexts/global-context";
-import { getIconClassName } from "@fluentui/style-utilities";
 
 export interface IEntityReference {
   id: string;
@@ -91,7 +90,7 @@ export default function TimelineItemBlock({
               onClick={hideDialog}
               className="rounded-md bg-white p-1 transition-colors duration-150 hover:bg-slate-100"
             >
-              <i className={`${getIconClassName("ChromeClose")} text-[24px] w-[24px] h-[24px]`} />
+              <i className={`material-symbols-rounded text-[24px] w-[24px] h-[24px]`}>close</i>
             </button>
           </div>
         </div>
@@ -164,7 +163,7 @@ export default function TimelineItemBlock({
             {item.name}
           </p>
           {activityInfo[item.type]?.icon ? (
-            <i className={`${getIconClassName(activityInfo[item.type].icon)} flex items-center justify-center w-4 h-4 text-[12px] transition-colors duration-300 group-hover:text-white`} />
+            <i className={`flex items-center justify-center w-4 h-4 text-[12px] transition-colors duration-300 group-hover:text-white`}>{activityInfo[item.type].icon}</i>
           ) : (
             <></>
           )}

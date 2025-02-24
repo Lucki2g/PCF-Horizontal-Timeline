@@ -6,7 +6,6 @@ import { TimelineItem } from '../TimelineItem';
 import { getLeft } from '../../timeUtil';
 import { useGlobalGlobalContext } from '../../../contexts/global-context';
 import { FilterDialog } from '../dialogs/FilterDialog';
-import { getIconClassName } from '@fluentui/style-utilities';
 import * as React from 'react';
 
 interface ITimelineToolbar {
@@ -105,7 +104,7 @@ export default function TimelineToolbar({
                                 resetFilters();
                                 setState(true);
                             }} 
-                            icon={<i className={`${getIconClassName("Refresh")} text-[12px]`} />}
+                            icon={<i className={`material-symbols-rounded text-[12px]`}>refresh</i>}
                         />
                     </Tooltip>
                     
@@ -117,7 +116,7 @@ export default function TimelineToolbar({
                             appearance='subtle'
                             size='small' 
                             onClick={animatePrevious} 
-                            icon={<i className={`${getIconClassName("Previous")} text-[12px]`} />}
+                            icon={<i className={`material-symbols-rounded text-[12px]`}>skip_previous</i>}
                         />
                     </Tooltip>
                     {/* Next */}
@@ -126,7 +125,7 @@ export default function TimelineToolbar({
                             appearance='subtle'
                             size='small' 
                             onClick={animateNext} 
-                            icon={<i className={`${getIconClassName("Next")} text-[12px]`} />}
+                            icon={<i className={`material-symbols-rounded text-[12px]`}>skip_nex</i>}
                         />
                     </Tooltip>
                     
@@ -137,7 +136,7 @@ export default function TimelineToolbar({
                         <FilterDialog onSave={onSave} items={items} childElement={
                             <Button
                                 appearance='subtle'
-                            size='small' icon={<i className={`${getIconClassName("Filter")} text-[12px]`} />}/>
+                            size='small' icon={<i className={`material-symbols-rounded text-[12px]`}>filter_alt</i>}/>
                         }/>
                     </Tooltip>
                     
@@ -149,7 +148,7 @@ export default function TimelineToolbar({
                             appearance='subtle'
                             size='small' 
                             onClick={paneChange} 
-                            icon={<i className={`${getIconClassName(isPaneOpen ? "OpenPane" : "ClosePane")} text-[12px]`} />}
+                            icon={<i className={`material-symbols-rounded text-[12px]`}>{isPaneOpen ? "right_panel_open" : "right_panel_close"}</i>}
                         />
                     </Tooltip>
                 </Toolbar>

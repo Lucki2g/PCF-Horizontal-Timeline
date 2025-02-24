@@ -2,7 +2,6 @@ import { IEntityReference } from "../TimelineItem";
 import * as React from "react";
 import { Field, Avatar, TagPicker, TagPickerControl, TagPickerGroup, Tag, TagPickerList, TagPickerOption, TagPickerOptionGroup, useTagPickerFilter, TagPickerInput } from "@fluentui/react-components";
 import { useTranslation } from "react-i18next";
-import { getIconClassName } from "@fluentui/style-utilities"
 // https://github.com/microsoft/fluentui/wiki/Using-icons/f60fc129945263782708736c8c518b3d30653c8e, https://uifabricicons.azurewebsites.net/, https://www.flicon.io/
 
 interface ILookupProps {
@@ -72,7 +71,7 @@ export default function Lookup({
               shape="square"
               color="colorful"
               idForColor={optionData.name}
-              icon={<i className={`${getIconClassName("Group")}`} />}
+              icon={<i className={`material-symbols-rounded`}>group</i>}
             />
           }
           key={option}
@@ -110,7 +109,7 @@ export default function Lookup({
               shape="square"
               color="colorful"
               idForColor={optionData.name}
-              icon={<i className={`${getIconClassName("Contact")}`} />}
+              icon={<i className={`material-symbols-rounded`}>person</i>}
             />
           }
           key={option}
@@ -144,7 +143,7 @@ export default function Lookup({
                   shape="square"
                   color="colorful"
                   idForColor={selectedOption.name}
-                  icon={<i className={`${getIconClassName(selectedOption.entitytype === "team" ? "Group" : "Contact")}`} />}
+                  icon={<i className={`material-symbols-rounded`}>{selectedOption.entitytype === "team" ? "group" : "person"}</i>}
                 />
               }>
                 {selectedOption.name}

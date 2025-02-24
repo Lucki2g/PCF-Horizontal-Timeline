@@ -3,7 +3,6 @@ import * as React from "react";
 import DataSetInterfaces = ComponentFramework.PropertyHelper.DataSetApi;
 import App from "./src/App";
 type DataSet = ComponentFramework.PropertyTypes.DataSet;
-import { initializeIcons } from '@fluentui/font-icons-mdl2';
 
 export class timeline
   implements ComponentFramework.ReactControl<IInputs, IOutputs>
@@ -30,7 +29,11 @@ export class timeline
   ): void {
     context.mode.trackContainerResize(true);
     this.notifyOutputChanged = notifyOutputChanged;
-    initializeIcons();
+    const googleIconFont = document.createElement("link");
+    googleIconFont.setAttribute("rel", "stylesheet");
+    googleIconFont.setAttribute("type", "text/css");
+    googleIconFont.setAttribute("href", "https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200");
+    document.getElementsByTagName("head")[0].appendChild(googleIconFont)
   }
 
   /**
