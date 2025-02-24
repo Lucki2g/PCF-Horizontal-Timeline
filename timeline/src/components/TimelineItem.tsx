@@ -90,7 +90,11 @@ export default function TimelineItemBlock({
               onClick={hideDialog}
               className="rounded-md bg-white p-1 transition-colors duration-150 hover:bg-slate-100"
             >
-              <i className={`material-symbols-rounded text-[24px] w-[24px] h-[24px]`}>close</i>
+              <i
+                className={`material-symbols-rounded h-[24px] w-[24px] text-[24px]`}
+              >
+                close
+              </i>
             </button>
           </div>
         </div>
@@ -163,7 +167,11 @@ export default function TimelineItemBlock({
             {item.name}
           </p>
           {activityInfo[item.type]?.icon ? (
-            <i className={`flex items-center justify-center w-4 h-4 text-[12px] transition-colors duration-300 group-hover:text-white`}>{activityInfo[item.type].icon}</i>
+            <i
+              className={`flex h-4 w-4 items-center justify-center text-[12px] transition-colors duration-300 group-hover:text-white`}
+            >
+              {activityInfo[item.type].icon}
+            </i>
           ) : (
             <></>
           )}

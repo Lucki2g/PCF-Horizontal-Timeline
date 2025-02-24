@@ -34,7 +34,7 @@ interface ITimelineProps {
   context: ComponentFramework.Context<IInputs>;
 }
 
-export const DEBUG = true;
+export const DEBUG = false;
 
 export default function Timeline({ context }: ITimelineProps) {
   const size = context.mode.allocatedWidth;
@@ -106,14 +106,34 @@ export default function Timeline({ context }: ITimelineProps) {
   ).map((i) => i.value);
   const ACTIVITYINFO = JSON.parse(
     context.parameters.activitydata.raw ??
-      '{"task":{"color":"#eab308"},"appointment":{"color":"#7e22ce"},"milestone":{"color":"#e11d48"},"email":{"color":"#16a34a"},"phonecall":{"color":"#fb7185"}}',
+      `{
+        "task": {
+            "color": "#eab308",
+            "icon": "assignment_turned_in"
+        },
+        "appointment": {
+            "color": "#7e22ce",
+            "icon": "calendar_month"
+        },
+        "milestone": {
+            "color": "#e11d48",
+            "icon": ""
+        },
+        "email": {
+            "color": "#16a34a",
+            "icon": "mail"
+        },
+        "phonecall": {
+            "color": "#fb7185",
+            "icon": "call"
+        }
+    }`,
   ) as { [schemaname: string]: ActivityInformation };
   const GRIDSTYLE = castToGridStyle(
     context.parameters.bgstyle.raw ?? "",
     "grid",
   );
   const BACKGROUND: string = getBackground(context, GRIDSTYLE); // does this open for XSS? - TODO come back and check
-  
 
   // States
   const [isMouseDown, setMouseDown] = React.useState<boolean>(false);

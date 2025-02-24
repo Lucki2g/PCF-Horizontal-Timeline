@@ -31,25 +31,26 @@ V1.1.0
 [x] FEATURE: Icon upload for custom tables (lucide icons)
 [x] BEAUTIFY/REFACTOR: - Action Buttons
 
-
 v2.0.0
+
 - UX: Complete movement over to Fluent UI 9
 - TODO: Datepicker localization
 - TODO: Datepicker timezone control
 - TODO: Datepicker start/end date sanitization
-[!] Write about Attachment size limitations
+  [!] Write about Attachment size limitations
 
 v1.2.0 - CANCELLED
+
 - FEATURE: Edit options (dialog, dropdown, ModelDriven only options)
 - FEATURE: FluentUI Style
 - FEATURE: Fullscreen
-[-] FEATURE: Varying sizes of cells - ySize / fontSize
+  [-] FEATURE: Varying sizes of cells - ySize / fontSize
 - FEATURE: Count on Activity type chips inside filter
 - FEATURE: Priority visualization
 - FEATURE: Grey out finished activities
 - FEATURE: New Activity button
 - FEATURE: Attendies and activityparties, to apply to filter
-[-] FEATURE: Process support (status change dates etc.) - BPF Support
+  [-] FEATURE: Process support (status change dates etc.) - BPF Support
 - AVAILABILITY: Translation of custom schemanames
 - BUG: Support multiple timelines on one form
 - FEATURE: Spinner på refresh

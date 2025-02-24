@@ -1,4 +1,5 @@
 # solution preparation
+
 pac solution init --publisher-name delegate --publisher-prefix dg
 
 <ItemGroup>
@@ -6,5 +7,6 @@ pac solution init --publisher-name delegate --publisher-prefix dg
 </ItemGroup>
 
 # build
+
 msbuild /t:build /restore
 msbuild /t:build /restore /p:Configuration=Release

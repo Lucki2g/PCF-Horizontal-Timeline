@@ -6,7 +6,11 @@ import { DialogProvider } from "../contexts/dialog-context";
 import Timeline from "./Timeline";
 import { IInputs } from "../generated/ManifestTypes";
 import { GlobalProvider } from "../contexts/global-context";
-import { FluentProvider, Input, webLightTheme } from "@fluentui/react-components";
+import {
+  FluentProvider,
+  Input,
+  webLightTheme,
+} from "@fluentui/react-components";
 
 interface IAppProps {
   context: ComponentFramework.Context<IInputs>;

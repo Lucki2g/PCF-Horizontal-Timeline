@@ -2,18 +2,8 @@
 //     default: FluentUIReactIconsFontSubsettingPlugin,
 //   } = require('@fluentui/react-icons-font-subsetting-webpack-plugin');
 // const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
-const webpack = require('webpack');
-const path = require('path');
 
 module.exports = {
-  externals: {
-    '@fluentui/react-icons/lib': '@fluentui/react-icons/lib',
-  },
-  resolve: {
-    alias: {
-      '@fluentui/react-icons': path.resolve(__dirname, 'src/empty-module.js')
-    }
-  },
   // devtool: 'source-map',
   // module: {
   //   rules: [
@@ -29,9 +19,6 @@ module.exports = {
   //   conditionNames: ['fluentIconFont', 'import'],
   // },
   plugins: [
-    new webpack.IgnorePlugin({
-      resourceRegExp: /@fluentui\/react-icons\/lib/,
-    }),
     // new BundleAnalyzerPlugin({ analyzerMode: "server", analyzerPort: 8088, analyzerHost: "127.0.0.2" }),
   ],
 };

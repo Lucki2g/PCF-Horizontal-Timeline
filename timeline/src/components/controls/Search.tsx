@@ -15,12 +15,12 @@ export default function Search({
   onChange,
 }: ISearchProps) {
   return (
-    <Field label={label} className="w-full my-1" orientation="horizontal">
-      <Input 
+    <Field label={label} className="my-1 w-full" orientation="horizontal">
+      <Input
         value={value}
-        type="text" 
-        appearance="filled-darker" 
-        onChange={(e) => onChange(e.target.value)} 
+        type="text"
+        appearance="filled-darker"
+        onChange={(e) => onChange(e.target.value)}
         className="w-full"
       />
     </Field>
