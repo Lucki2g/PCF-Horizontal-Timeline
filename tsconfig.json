@@ -1,9 +1,10 @@
 {
   "extends": "./node_modules/pcf-scripts/tsconfig_base.json",
   "compilerOptions": {
-    "module": "NodeNext",
-    "moduleResolution": "nodenext",
+    "module": "ESNext",
+    "moduleResolution": "node",
     "typeRoots": ["node_modules/@types"],
+    "sourceMap": true,
     "allowSyntheticDefaultImports": true,
     "skipLibCheck": true,
     "noImplicitAny": false // allows framer-motions old version to work for NodeNext modules

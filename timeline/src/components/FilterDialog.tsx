@@ -3,7 +3,6 @@ import { useGlobalDialogContext } from "../../contexts/dialog-context";
 import { useTranslation } from "react-i18next";
 import { IEntityReference, TimelineItem } from "./TimelineItem";
 import { FilterState, useFilter } from "../../contexts/filter-context";
-import { DatePicker } from "@mantine/dates";
 import Lookup from "./controls/Lookup";
 import Search from "./controls/Search";
 import Chips from "./controls/Chips";
@@ -94,7 +93,7 @@ export default function FilterDialog({ items, onSave }: IFilterDialogProps) {
                 })}
               </p>
             </div>
-            <DatePicker
+            {/* <DatePicker
               className="rounded-[4px] bg-white p-2"
               locale={locale}
               minDate={initialState.startDate}
@@ -108,7 +107,7 @@ export default function FilterDialog({ items, onSave }: IFilterDialogProps) {
                 })
               }
               value={currentFilter.startDate}
-            />
+            /> */}
           </div>
 
           <div className="mx-1 flex flex-col">
@@ -124,7 +123,7 @@ export default function FilterDialog({ items, onSave }: IFilterDialogProps) {
                 })}
               </p>
             </div>
-            <DatePicker
+            {/* <DatePicker
               className="rounded-[4px] bg-white p-2"
               locale={locale}
               minDate={initialState.startDate}
@@ -138,7 +137,7 @@ export default function FilterDialog({ items, onSave }: IFilterDialogProps) {
                 })
               }
               value={currentFilter.endDate}
-            />
+            /> */}
           </div>
         </div>
       </div>
