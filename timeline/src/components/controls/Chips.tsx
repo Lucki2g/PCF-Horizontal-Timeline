@@ -1,11 +1,7 @@
 import * as React from "react";
 import { useGlobalGlobalContext } from "../../../contexts/global-context";
-import {
-  Field,
-  InteractionTag,
-  InteractionTagPrimary,
-  TagGroup,
-} from "@fluentui/react-components";
+import { Field } from "@fluentui/react-field";
+import { InteractionTag, InteractionTagPrimary, TagGroup } from "@fluentui/react-tags"
 
 interface IChipsProps {
   label: string;

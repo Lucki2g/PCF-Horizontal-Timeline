@@ -1,20 +1,10 @@
-import {
-  Button,
-  Dialog,
-  DialogActions,
-  DialogBody,
-  DialogContent,
-  DialogSurface,
-  DialogTitle,
-  DialogTrigger,
-  DialogTriggerChildProps,
-  Divider,
-  Field,
-  Text,
-  Title2,
-  Title3,
-  Tooltip,
-} from "@fluentui/react-components";
+import { Button } from "@fluentui/react-button";
+import { Dialog, DialogActions, DialogBody, DialogContent, DialogSurface, DialogTitle, DialogTrigger, DialogTriggerChildProps } from "@fluentui/react-dialog";
+import { Divider } from "@fluentui/react-divider";
+import { Field } from "@fluentui/react-field";
+import { Text, Title3 } from "@fluentui/react-text";
+import { Tooltip } from "@fluentui/react-tooltip";
+
 import * as React from "react";
 import Search from "../controls/Search";
 import { useTranslation } from "react-i18next";

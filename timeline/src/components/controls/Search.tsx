@@ -1,5 +1,6 @@
 import * as React from "react";
-import { Field, Input } from "@fluentui/react-components";
+import { Field } from "@fluentui/react-field";
+import { Input } from "@fluentui/react-input";
 
 interface ISearchProps {
   label: string;

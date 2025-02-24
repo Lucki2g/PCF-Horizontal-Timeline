@@ -1,9 +1,6 @@
-import {
-  Button,
-  Toolbar,
-  ToolbarDivider,
-  Tooltip,
-} from "@fluentui/react-components";
+import { Button } from "@fluentui/react-button";
+import { Toolbar, ToolbarDivider } from "@fluentui/react-toolbar";
+import { Tooltip } from "@fluentui/react-tooltip";
 import { FilterState, useFilter } from "../../../contexts/filter-context";
 import { useGlobalLoaderContext } from "../../../contexts/loader-context";
 import { useTranslation } from "react-i18next";
