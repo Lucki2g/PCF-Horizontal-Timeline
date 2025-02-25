@@ -34,7 +34,7 @@ interface ITimelineProps {
   context: ComponentFramework.Context<IInputs>;
 }
 
-export const DEBUG = false;
+export const DEBUG = true;
 
 export default function Timeline({ context }: ITimelineProps) {
   const size = context.mode.allocatedWidth;
@@ -108,23 +108,23 @@ export default function Timeline({ context }: ITimelineProps) {
       `{
         "task": {
             "color": "#eab308",
-            "icon": "assignment_turned_in"
+            "icon": "AccountActivity"
         },
         "appointment": {
             "color": "#7e22ce",
-            "icon": "calendar_month"
+            "icon": "Calendar"
         },
         "milestone": {
             "color": "#e11d48",
-            "icon": ""
+            "icon": "Flag"
         },
         "email": {
             "color": "#16a34a",
-            "icon": "mail"
+            "icon": "Mail"
         },
         "phonecall": {
             "color": "#fb7185",
-            "icon": "call"
+            "icon": "Phone"
         }
     }`,
   ) as { [schemaname: string]: ActivityInformation };
@@ -328,8 +328,6 @@ export default function Timeline({ context }: ITimelineProps) {
     setState(false);
   };
 
-  console.log("allocated width: ", context.mode.allocatedWidth)
-
   return loadingstate ? (
     <></>
   ) : (
@@ -363,6 +361,7 @@ export default function Timeline({ context }: ITimelineProps) {
         style={{
           backgroundImage: BACKGROUND,
           backgroundColor: context.parameters.bgcolor.raw ?? "#fff",
+          width: context.mode.allocatedWidth
         }}
       >
         <TimelineDataCanvas

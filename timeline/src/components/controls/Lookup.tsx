@@ -153,7 +153,7 @@ export default function Lookup({
               <Tag
                 value={selectedOption.name}
                 shape="rounded"
-                dismissIcon={<i className={`${getIconClassName("ChromeClose")}`} />}
+                dismissIcon={<i className={`${getIconClassName("ChromeClose")} text-[11px]`} />}
                 media={
                   <Avatar
                     shape="square"
