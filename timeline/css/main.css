@@ -21,11 +21,3 @@
     transform: rotate(360deg);
   }
 }
-
-.material-symbols-rounded {
-  font-variation-settings:
-    'FILL' 0,
-    'wght' 100,
-    'GRAD' 200,
-    'opsz' 48
-}

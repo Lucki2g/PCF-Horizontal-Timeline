@@ -9,7 +9,6 @@ import {
   ySize,
 } from "./timeUtil";
 import { IEntityReference, TimelineItem } from "./components/TimelineItem";
-import TimelineActions from "./components/TimelineActions";
 import { FilterState, useFilter } from "../contexts/filter-context";
 import TimelessTimelineItemBlock from "./components/TimelessTimelineItem";
 import { useTranslation } from "react-i18next";
@@ -29,12 +28,13 @@ import {
 import { ActivityInformation } from "./icons/Icon";
 import { useGlobalGlobalContext } from "../contexts/global-context";
 import { loadData } from "./services/dataLoader";
+import TimelineToolbar from "./components/toolbars/TimelineToolbar";
 
 interface ITimelineProps {
   context: ComponentFramework.Context<IInputs>;
 }
 
-export const DEBUG = false;
+export const DEBUG = true;
 
 export default function Timeline({ context }: ITimelineProps) {
   const size = context.mode.allocatedWidth;
@@ -48,7 +48,6 @@ export default function Timeline({ context }: ITimelineProps) {
     setXSize,
     setClientUrl,
     timezone,
-    locale,
     clientUrl,
     activityInfo,
   } = useGlobalGlobalContext();
@@ -106,14 +105,34 @@ export default function Timeline({ context }: ITimelineProps) {
   ).map((i) => i.value);
   const ACTIVITYINFO = JSON.parse(
     context.parameters.activitydata.raw ??
-      '{"task":{"color":"#eab308"},"appointment":{"color":"#7e22ce"},"milestone":{"color":"#e11d48"},"email":{"color":"#16a34a"},"phonecall":{"color":"#fb7185"}}',
+      `{
+        "task": {
+            "color": "#eab308",
+            "icon": "AccountActivity"
+        },
+        "appointment": {
+            "color": "#7e22ce",
+            "icon": "Calendar"
+        },
+        "milestone": {
+            "color": "#e11d48",
+            "icon": "Flag"
+        },
+        "email": {
+            "color": "#16a34a",
+            "icon": "Mail"
+        },
+        "phonecall": {
+            "color": "#fb7185",
+            "icon": "Phone"
+        }
+    }`,
   ) as { [schemaname: string]: ActivityInformation };
   const GRIDSTYLE = castToGridStyle(
     context.parameters.bgstyle.raw ?? "",
     "grid",
   );
   const BACKGROUND: string = getBackground(context, GRIDSTYLE); // does this open for XSS? - TODO come back and check
-  
 
   // States
   const [isMouseDown, setMouseDown] = React.useState<boolean>(false);
@@ -317,7 +336,7 @@ export default function Timeline({ context }: ITimelineProps) {
       {loadingstate ? <div className="h-1 w-full bg-black"></div> : <></>}
 
       {/* Actions */}
-      <TimelineActions
+      <TimelineToolbar
         timelineRef={timelineRef}
         animate={animateLeft}
         isPaneOpen={isPaneOpen}
@@ -342,6 +361,7 @@ export default function Timeline({ context }: ITimelineProps) {
         style={{
           backgroundImage: BACKGROUND,
           backgroundColor: context.parameters.bgcolor.raw ?? "#fff",
+          width: context.mode.allocatedWidth
         }}
       >
         <TimelineDataCanvas

@@ -41,7 +41,7 @@ i18n
           action_previous: "Go to: Last activity",
           action_next: "Go to: Next activity",
           action_filter: "Filter activities",
-          action_timeless: "Show timeless items"
+          action_timeless: "Show timeless items",
         },
       },
       "da-DK": {
@@ -74,7 +74,7 @@ i18n
           action_previous: "Gå til: Sidste aktivitet",
           action_next: "Gå til: Næste aktivitet",
           action_filter: "Filtrer aktiviteter",
-          action_timeless: "Vis tidløse elementer"
+          action_timeless: "Vis tidløse elementer",
         },
       },
       "fr-FR": {
@@ -108,7 +108,7 @@ i18n
           action_previous: "Aller à : Dernière activité",
           action_next: "Aller à : Activité suivante",
           action_filter: "Filtrer les activités",
-          action_timeless: "Afficher les éléments intemporels"
+          action_timeless: "Afficher les éléments intemporels",
         },
       },
       "es-ES": {
@@ -142,7 +142,7 @@ i18n
           action_previous: "Ir a: Última actividad",
           action_next: "Ir a: Siguiente actividad",
           action_filter: "Filtrar actividades",
-          action_timeless: "Mostrar elementos sin tiempo"
+          action_timeless: "Mostrar elementos sin tiempo",
         },
       },
       "de-DE": {
@@ -176,7 +176,7 @@ i18n
           action_previous: "Gehe zu: Letzte Aktivität",
           action_next: "Gehe zu: Nächste Aktivität",
           action_filter: "Aktivitäten filtern",
-          action_timeless: "Zeitlose Elemente anzeigen"
+          action_timeless: "Zeitlose Elemente anzeigen",
         },
       },
       "zh-CN": {
@@ -209,7 +209,7 @@ i18n
           action_previous: "前往：上一个活动",
           action_next: "前往：下一个活动",
           action_filter: "筛选活动",
-          action_timeless: "显示永恒项目"
+          action_timeless: "显示永恒项目",
         },
       },
       "ja-JP": {
@@ -242,7 +242,7 @@ i18n
           action_previous: "移動: 最後のアクティビティ",
           action_next: "移動: 次のアクティビティ",
           action_filter: "アクティビティをフィルタ",
-          action_timeless: "タイムレスなアイテムを表示"
+          action_timeless: "タイムレスなアイテムを表示",
         },
       },
       "ar-SA": {
@@ -275,7 +275,7 @@ i18n
           action_previous: "انتقل إلى: آخر نشاط",
           action_next: "انتقل إلى: النشاط التالي",
           action_filter: "تصفية الأنشطة",
-          action_timeless: "عرض العناصر الخالدة"
+          action_timeless: "عرض العناصر الخالدة",
         },
       },
       "pt-BR": {
@@ -309,7 +309,7 @@ i18n
           action_previous: "Ir para: Última atividade",
           action_next: "Ir para: Próxima atividade",
           action_filter: "Filtrar atividades",
-          action_timeless: "Mostrar itens atemporais"
+          action_timeless: "Mostrar itens atemporais",
         },
       },
       "it-IT": {
@@ -343,7 +343,7 @@ i18n
           action_previous: "Vai a: Ultima attività",
           action_next: "Vai a: Prossima attività",
           action_filter: "Filtra attività",
-          action_timeless: "Mostra elementi senza tempo"
+          action_timeless: "Mostra elementi senza tempo",
         },
       },
       "hi-IN": {
@@ -377,7 +377,7 @@ i18n
           action_previous: "जाएँ: अंतिम गतिविधि",
           action_next: "जाएँ: अगली गतिविधि",
           action_filter: "गतिविधियों को फ़िल्टर करें",
-          action_timeless: "टाइमलेस आइटम दिखाएं"
+          action_timeless: "टाइमलेस आइटम दिखाएं",
         },
       },
       "nl-NL": {
@@ -411,7 +411,7 @@ i18n
           action_previous: "Ga naar: Laatste activiteit",
           action_next: "Ga naar: Volgende activiteit",
           action_filter: "Activiteiten filteren",
-          action_timeless: "Tijdloze items weergeven"
+          action_timeless: "Tijdloze items weergeven",
         },
       },
       "sv-SE": {
@@ -444,7 +444,7 @@ i18n
           action_previous: "Gå till: Senaste aktivitet",
           action_next: "Gå till: Nästa aktivitet",
           action_filter: "Filtrera aktiviteter",
-          action_timeless: "Visa tidlösa objekt"
+          action_timeless: "Visa tidlösa objekt",
         },
       },
       "fi-FI": {
@@ -478,7 +478,7 @@ i18n
           action_previous: "Siirry: Viimeisin toiminta",
           action_next: "Siirry: Seuraava toiminta",
           action_filter: "Suodata aktiviteetit",
-          action_timeless: "Näytä ajattomat kohteet"
+          action_timeless: "Näytä ajattomat kohteet",
         },
       },
     },

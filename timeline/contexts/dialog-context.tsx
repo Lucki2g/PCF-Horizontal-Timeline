@@ -1,9 +1,6 @@
 ﻿import { createContext, useContext, useState, ReactNode } from "react";
 import * as React from "react";
 import GlobalDialog from "../src/components/Dialog";
-import { AnimatePresence } from "framer-motion";
-import * as ReactDOM from "react-dom";
-import ToolTip from "../src/components/controls/ToolTip";
 
 // The modal is used for large components.
 // The Dialog is for error, warning, info
@@ -55,15 +52,8 @@ export const DialogProvider = ({ children }: { children: ReactNode }) => {
         tooltip,
       }}
     >
-      <AnimatePresence exitBeforeEnter>
-        {state.node && <GlobalDialog element={state.node} size={state.size} />}
-        {tooltip.element && (
-          <ToolTip
-            description={tooltip.description}
-            element={tooltip.element}
-          />
-        )}
-      </AnimatePresence>
+      {state.node && <GlobalDialog element={state.node} size={state.size} />}
+      {tooltip.element}
       {children}
     </DialogContext.Provider>
   );

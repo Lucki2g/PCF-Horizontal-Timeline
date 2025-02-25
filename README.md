@@ -15,7 +15,9 @@ It is built as an alternative to the classic Vertical Timeline by Microsoft, tha
 Hopefully you'll find it useful.
 
 # ⚙️ Features & Configuration
+
 ### Localization
+
 The custom control support following languagecodes at the moment
 
 > [!IMPORTANT]
@@ -40,6 +42,7 @@ The custom control support following languagecodes at the moment
 ---
 
 ### Locale Source
+
 The language of the control can be set in different ways. Supported methods are:
 
 > [!IMPORTANT]
@@ -53,44 +56,53 @@ The language of the control can be set in different ways. Supported methods are:
 ---
 
 ### Time units
+
 The control uses the <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DateTimeFormat">Intl.DateTimeFormat</a> object to enable language-sensitive date and time formatting. The control allows for the following formatting:
 
 > [!INFO]
 > There are individual toggles to enable/disable the date information entirely.
 
 > Years
->- full <b>[default]</b> (example = "2025")
->- short (example = "25")
+>
+> - full <b>[default]</b> (example = "2025")
+> - short (example = "25")
 
 > Quarters
->- prefix <b>[default = empty]</b> (example = "Quarter " -> "Quarter 1")
+>
+> - prefix <b>[default = empty]</b> (example = "Quarter " -> "Quarter 1")
 
 > Months
->- numeric (example = "1")
->- 2-digit (example = "01")
->- long <b>[default]</b> (example = "January")
->- short (example = "Jan")
->- narrow (example = "J")
+>
+> - numeric (example = "1")
+> - 2-digit (example = "01")
+> - long <b>[default]</b> (example = "January")
+> - short (example = "Jan")
+> - narrow (example = "J")
 
 > Weeks
->- prefix <b>[default = empty]</b> (example = "W" -> "W1")
+>
+> - prefix <b>[default = empty]</b> (example = "W" -> "W1")
 
 > Days
->- numeric (example = "1")
->- 2-digit <b>[default]</b> (example = "01")
->- long (example = "Monday")
->- short (example = "Mon")
+>
+> - numeric (example = "1")
+> - 2-digit <b>[default]</b> (example = "01")
+> - long (example = "Monday")
+> - short (example = "Mon")
+
 - narrow (example = "M")
 
 > Hours
->- numeric (example = "1")
->- 2-digit <b>[default]</b> (example = "01")
+>
+> - numeric (example = "1")
+> - 2-digit <b>[default]</b> (example = "01")
 
 > Hour Cycle
->- h11 (example = "01PM")
->- h12 (example = "01PM")
->- h23 <b>[default]</b> (example = "13")
->- h24 (example = "13")
+>
+> - h11 (example = "01PM")
+> - h12 (example = "01PM")
+> - h23 <b>[default]</b> (example = "13")
+> - h24 (example = "13")
 
 ---
 
@@ -103,6 +115,7 @@ To control what timezone dates are shown in, you can base it on either:
 
 > [!TIP]
 > Examples of the <a href="https://nodatime.org/TimeZones">IANA Time Zone Database</a> formats:
+>
 > - America/Santiago
 > - Europe/Copenhagen
 
@@ -112,6 +125,7 @@ To control what timezone dates are shown in, you can base it on either:
 ---
 
 ### Custom table support
+
 When configuring the control you can give a json-formatted string that will describe supported tables.
 
 > [!IMPORTANT]
@@ -128,6 +142,7 @@ When configuring the control you can give a json-formatted string that will desc
 ```
 
 > Default
+
 ```
 {
   "task": {
@@ -156,6 +171,7 @@ When configuring the control you can give a json-formatted string that will desc
 ---
 
 ### Custom milestones
+
 Milestones are dates on your record, that you wish to see on the timeline. You can define a json-formatted string that will describe the dates put into the timeline. Note that if the column schemaname is incorrect, the milestone is not shown - without any errors/warnings.
 
 ```
@@ -165,6 +181,7 @@ Milestones are dates on your record, that you wish to see on the timeline. You c
 ```
 
 > Default
+
 ```
 {
   "createdon": "Created On",
@@ -176,6 +193,7 @@ Milestones are dates on your record, that you wish to see on the timeline. You c
 ---
 
 ### Custom scaling
+
 You can adjust the smallest unit's size (an hour) on the timeline. All other date elements will follow this sizing.
 Example: if set to 1 (minimum size) -> a day will become 24px in width -> a week will become 24px\*7=188px in width.
 
@@ -187,6 +205,7 @@ Example: if set to 1 (minimum size) -> a day will become 24px in width -> a week
 ---
 
 ### Filter
+
 Inside the filter you have the following options:
 
 - Filter by display name (text search)
@@ -197,6 +216,7 @@ Inside the filter you have the following options:
 ---
 
 ### Timeless items
+
 You can also see items that do not have any due date (scheduledend). These items will show in a side pane when opened via the actionbar.
 
 ---
@@ -204,11 +224,12 @@ You can also see items that do not have any due date (scheduledend). These items
 ### Background Style & Colors
 
 The background of the timeline items is customizable. There are a few default options and then an override functionality.
+
 > [!IMPORTANT]
 > In version <b>≥ 1.1.0</b>
 
 - stripes
-![alt text](image.png)
+  ![alt text](image.png)
 
 - dots
 
@@ -230,6 +251,7 @@ The background of the timeline items is customizable. There are a few default op
 ---
 
 ### Smaller features
+
 - Touch support
 - Canvas & Custom Page support
 
