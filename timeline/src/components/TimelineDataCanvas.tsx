@@ -19,6 +19,7 @@ import { useGlobalGlobalContext } from "../../contexts/global-context";
 // OBS: Lazy Loading would only work until elements were loaded.
 // OBS: Virtualization batches scroll events causing "blinking" when scrolling.
 // OBS: Browsers have limits for the canvas area, hence why there is a limit on visible dates. This limit is controlled by available system memory and other factors.
+// Using canvas rendering was my solution to all these limitations (alternative could be to limit visible area or do picture cacheing)
 
 export type RoundingType = "year" | "quarter" | "month" | "day" | "none";
 

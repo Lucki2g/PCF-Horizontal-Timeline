@@ -34,7 +34,7 @@ interface ITimelineProps {
   context: ComponentFramework.Context<IInputs>;
 }
 
-export const DEBUG = true;
+export const DEBUG = false;
 
 export default function Timeline({ context }: ITimelineProps) {
   const size = context.mode.allocatedWidth;
@@ -48,7 +48,6 @@ export default function Timeline({ context }: ITimelineProps) {
     setXSize,
     setClientUrl,
     timezone,
-    locale,
     clientUrl,
     activityInfo,
   } = useGlobalGlobalContext();
@@ -328,6 +327,8 @@ export default function Timeline({ context }: ITimelineProps) {
     });
     setState(false);
   };
+
+  console.log("allocated width: ", context.mode.allocatedWidth)
 
   return loadingstate ? (
     <></>

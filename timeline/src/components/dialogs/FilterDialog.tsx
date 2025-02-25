@@ -11,9 +11,11 @@ import { useTranslation } from "react-i18next";
 import { FilterState, useFilter } from "../../../contexts/filter-context";
 import { IEntityReference, TimelineItem } from "../TimelineItem";
 import Chips from "../controls/Chips";
-import { DatePicker } from "@fluentui/react-datepicker-compat";
+import { CalendarStrings, DatePicker } from "@fluentui/react-datepicker-compat";
 import Lookup from "../controls/Lookup";
 import { getIcon, getIconClassName } from "@fluentui/style-utilities";
+import type { CalendarProps } from '@fluentui/react-calendar-compat';
+import { useGlobalGlobalContext } from "../../../contexts/global-context";
 
 interface IFilterDialogProps {
   items: TimelineItem[];
@@ -28,6 +30,7 @@ export const FilterDialog = ({
 }: IFilterDialogProps) => {
   const { t } = useTranslation();
   const { initialState, filter, filterItems } = useFilter();
+  const { locale } = useGlobalGlobalContext();
   const rootElement = React.useRef(null);
 
   const [currentFilter, setCurrentFilter] = React.useState<FilterState>(filter);
@@ -36,6 +39,62 @@ export const FilterDialog = ({
   React.useEffect(() => {
     setFilteredActivities(filterItems(currentFilter, items).length);
   }, [currentFilter]);
+
+  const dateCalendarInformation = React.useMemo(() => {
+    // formatters
+    const formatterMonthLong = new Intl.DateTimeFormat(locale, { month: "long" });
+    const formatterMonthShort = new Intl.DateTimeFormat(locale, { month: "short" });
+    const formatterDayLong = new Intl.DateTimeFormat(locale, { weekday: "long" });
+    const formatterDayShort = new Intl.DateTimeFormat(locale, { weekday: "narrow" });
+  
+    // January 4, 1970 is a Sunday.
+    const days = [...Array(7).keys()].map((d) =>
+      formatterDayLong.format(new Date(1970, 0, d + 4))
+    );
+    const shortDays = [...Array(7).keys()].map((d) =>
+      formatterDayShort.format(new Date(1970, 0, d + 4))
+    );
+  
+    return {
+      calendarDayProps: {
+        strings: {
+          goToToday: t("datepicker_gototoday"),
+          months: [...Array(12).keys()].map((m) =>
+            formatterMonthLong.format(new Date(1970, m, 1))
+          ),
+          shortMonths: [...Array(12).keys()].map((m) =>
+            formatterMonthShort.format(new Date(1970, m, 1))
+          ),
+          days,
+          shortDays,
+        },
+        navigationIcons: {
+          upNavigation: (
+            <i className={`${getIconClassName("Up")} text-[11px]`} />
+          ),
+          downNavigation: (
+            <i className={`${getIconClassName("Down")} text-[11px]`} />
+          ),
+          dismiss: (
+            <i className={`${getIconClassName("ChromeClose")} text-[11px]`} />
+          ),
+        },
+      },
+      calendarMonthProps: {
+        navigationIcons: {
+          upNavigation: (
+            <i className={`${getIconClassName("Up")} text-[11px]`} />
+          ),
+          downNavigation: (
+            <i className={`${getIconClassName("Down")} text-[11px]`} />
+          ),
+          dismiss: (
+            <i className={`${getIconClassName("ChromeClose")} text-[11px]`} />
+          ),
+        },
+      },
+    };
+  }, [locale]);
 
   return (
     <Dialog>
@@ -107,6 +166,8 @@ export const FilterDialog = ({
                 highlightSelectedMonth
                 showGoToToday
                 showCloseButton
+                contentAfter={<i className={`${getIconClassName("Calendar")} text-[11px]`} />}
+                calendar={dateCalendarInformation}
                 onSelectDate={(date) =>
                   setCurrentFilter({
                     ...currentFilter,
@@ -116,13 +177,6 @@ export const FilterDialog = ({
                 }
                 minDate={initialState.startDate}
                 maxDate={initialState.endDate}
-                // calendar={
-                //   highlightSelectedMonth: true
-                //   dateTimeFormatter:
-                // }
-                // strings={
-
-                // }
               />
             </Field>
             <Field
@@ -137,6 +191,8 @@ export const FilterDialog = ({
                 highlightSelectedMonth
                 showGoToToday
                 showCloseButton
+                contentAfter={<i className={`${getIconClassName("Calendar")} text-[11px]`} />}
+                calendar={dateCalendarInformation}
                 onSelectDate={(date) =>
                   setCurrentFilter({
                     ...currentFilter,

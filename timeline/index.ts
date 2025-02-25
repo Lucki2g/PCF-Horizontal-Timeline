@@ -31,14 +31,6 @@ export class timeline
     context.mode.trackContainerResize(true);
     this.notifyOutputChanged = notifyOutputChanged;
     initializeIcons();
-    const googleIconFont = document.createElement("link");
-    googleIconFont.setAttribute("rel", "stylesheet");
-    googleIconFont.setAttribute("type", "text/css");
-    googleIconFont.setAttribute(
-      "href",
-      "https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200",
-    );
-    document.getElementsByTagName("head")[0].appendChild(googleIconFont);
   }
 
   /**

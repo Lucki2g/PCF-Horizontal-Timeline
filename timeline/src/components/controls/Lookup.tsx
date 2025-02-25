@@ -147,12 +147,13 @@ export default function Lookup({
         selectedOptions={selectedOption ? [selectedOption.name] : []}
         appearance="filled-darker"
       >
-        <TagPickerControl>
+        <TagPickerControl expandIcon={<i className={`${getIconClassName("Search")} text-[11px]`} />}>
           <TagPickerGroup>
             {selectedOption ? (
               <Tag
                 value={selectedOption.name}
                 shape="rounded"
+                dismissIcon={<i className={`${getIconClassName("ChromeClose")}`} />}
                 media={
                   <Avatar
                     shape="square"

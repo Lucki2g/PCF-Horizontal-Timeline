@@ -1,6 +1,8 @@
 import * as React from "react";
 import { DEBUG } from "./Timeline";
 import { getIconClassName } from "@fluentui/style-utilities"
+import type { CalendarProps } from '@fluentui/react-calendar-compat';
+import { i18n } from "i18next";
 
 export const getHref = (clientUrl: string, locicalname: string, id: string) => {
   if (DEBUG) return "";
@@ -36,25 +38,6 @@ export function uuidv4() {
     return v.toString(16);
   });
 }
-
-export const getFluentIcon = (entitytype: string) => {
-  switch (entitytype) {
-    case "systemuser":
-      return (
-        <i className={`${getIconClassName("Contact")} h-[24px] w-[24px] text-[24px]`} />
-      );
-    case "team":
-      return (
-        <i className={`${getIconClassName("Group")} h-[24px] w-[24px] text-[24px]`} />
-      );
-    default:
-      return (
-        <i className={`${getIconClassName("Puzzle")} h-[24px] w-[24px] text-[24px]`}>
-          extension
-        </i>
-      );
-  }
-};
 
 type LocaleSource = "override" | "systemuser" | "browser" | "organisation";
 export const castToLocaleSource = (
