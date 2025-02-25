@@ -2,6 +2,7 @@ import * as React from "react";
 import { useGlobalGlobalContext } from "../../../contexts/global-context";
 import { Field } from "@fluentui/react-field";
 import { InteractionTag, InteractionTagPrimary, TagGroup } from "@fluentui/react-tags"
+import { getIconClassName } from "@fluentui/style-utilities";
 
 interface IChipsProps {
   label: string;
@@ -33,14 +34,10 @@ export default function Chips({ label, states, onChange }: IChipsProps) {
             >
               <InteractionTagPrimary
                 media={
-                  <i
-                    className={`material-symbols-rounded flex h-[20px] w-[20px] items-center justify-center rounded-[4px] text-[11px] text-white opacity-55`}
+                  <i className={`${getIconClassName(data.icon)} flex h-[20px] w-[20px] items-center justify-center rounded-[4px] text-[11px] text-white opacity-55`}
                     style={{
                       backgroundColor: states[type] ? data.color : "#7E7E7E",
-                    }}
-                  >
-                    {data.icon}
-                  </i>
+                    }} />
                 }
               >
                 {type}

@@ -9,6 +9,7 @@ import { getLeft } from "../../timeUtil";
 import { useGlobalGlobalContext } from "../../../contexts/global-context";
 import { FilterDialog } from "../dialogs/FilterDialog";
 import * as React from "react";
+import { getIconClassName } from "@fluentui/style-utilities";
 
 interface ITimelineToolbar {
   items: TimelineItem[];
@@ -111,9 +112,7 @@ export default function TimelineToolbar({
                 setState(true);
               }}
               icon={
-                <i className={`material-symbols-rounded text-[12px]`}>
-                  refresh
-                </i>
+                <i className={`${getIconClassName("Refresh")} text-[12px]`} />
               }
             />
           </Tooltip>
@@ -131,9 +130,7 @@ export default function TimelineToolbar({
               size="small"
               onClick={animatePrevious}
               icon={
-                <i className={`material-symbols-rounded text-[12px]`}>
-                  skip_previous
-                </i>
+                <i className={`${getIconClassName("Previous")} text-[12px]`} />
               }
             />
           </Tooltip>
@@ -144,9 +141,7 @@ export default function TimelineToolbar({
               size="small"
               onClick={animateNext}
               icon={
-                <i className={`material-symbols-rounded text-[12px]`}>
-                  skip_nex
-                </i>
+                <i className={`${getIconClassName("Next")} text-[12px]`} />
               }
             />
           </Tooltip>
@@ -167,9 +162,7 @@ export default function TimelineToolbar({
                   appearance="subtle"
                   size="small"
                   icon={
-                    <i className={`material-symbols-rounded text-[12px]`}>
-                      filter_alt
-                    </i>
+                    <i className={`${getIconClassName("Filter")} text-[12px]`} />
                   }
                 />
               }
@@ -189,9 +182,7 @@ export default function TimelineToolbar({
               size="small"
               onClick={paneChange}
               icon={
-                <i className={`material-symbols-rounded text-[12px]`}>
-                  {isPaneOpen ? "right_panel_open" : "right_panel_close"}
-                </i>
+                <i className={`${getIconClassName(isPaneOpen ? "OpenPane" : "ClosePane")} text-[12px]`}/>
               }
             />
           </Tooltip>

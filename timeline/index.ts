@@ -1,4 +1,5 @@
 import { IInputs, IOutputs } from "./generated/ManifestTypes";
+import { initializeIcons } from '@fluentui/font-icons-mdl2';
 import * as React from "react";
 import DataSetInterfaces = ComponentFramework.PropertyHelper.DataSetApi;
 import App from "./src/App";
@@ -29,6 +30,7 @@ export class timeline
   ): void {
     context.mode.trackContainerResize(true);
     this.notifyOutputChanged = notifyOutputChanged;
+    initializeIcons();
     const googleIconFont = document.createElement("link");
     googleIconFont.setAttribute("rel", "stylesheet");
     googleIconFont.setAttribute("type", "text/css");

@@ -1,5 +1,6 @@
 import * as React from "react";
 import { DEBUG } from "./Timeline";
+import { getIconClassName } from "@fluentui/style-utilities"
 
 export const getHref = (clientUrl: string, locicalname: string, id: string) => {
   if (DEBUG) return "";
@@ -36,55 +37,19 @@ export function uuidv4() {
   });
 }
 
-export const getIcon = (entitytype: string) => {
-  switch (entitytype) {
-    case "systemuser":
-      return (
-        <span
-          className="material-symbols-rounded h-4 w-4"
-          style={{ fontSize: "16px" }}
-        >
-          person
-        </span>
-      );
-    case "team":
-      return (
-        <span
-          className="material-symbols-rounded h-4 w-4"
-          style={{ fontSize: "16px" }}
-        >
-          groups
-        </span>
-      );
-    default:
-      return (
-        <span
-          className="material-symbols-rounded h-4 w-4"
-          style={{ fontSize: "16px" }}
-        >
-          extension
-        </span>
-      );
-  }
-};
-
 export const getFluentIcon = (entitytype: string) => {
   switch (entitytype) {
     case "systemuser":
       return (
-        <i className={`material-symbols-rounded h-[24px] w-[24px] text-[24px]`}>
-          person
-        </i>
+        <i className={`${getIconClassName("Contact")} h-[24px] w-[24px] text-[24px]`} />
       );
     case "team":
       return (
-        <i className={`material-symbols-rounded h-[24px] w-[24px] text-[24px]`}>
-          group
-        </i>
+        <i className={`${getIconClassName("Group")} h-[24px] w-[24px] text-[24px]`} />
       );
     default:
       return (
-        <i className={`material-symbols-rounded h-[24px] w-[24px] text-[24px]`}>
+        <i className={`${getIconClassName("Puzzle")} h-[24px] w-[24px] text-[24px]`}>
           extension
         </i>
       );

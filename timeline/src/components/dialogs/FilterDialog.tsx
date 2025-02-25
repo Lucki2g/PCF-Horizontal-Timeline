@@ -13,6 +13,7 @@ import { IEntityReference, TimelineItem } from "../TimelineItem";
 import Chips from "../controls/Chips";
 import { DatePicker } from "@fluentui/react-datepicker-compat";
 import Lookup from "../controls/Lookup";
+import { getIcon, getIconClassName } from "@fluentui/style-utilities";
 
 interface IFilterDialogProps {
   items: TimelineItem[];
@@ -61,7 +62,7 @@ export const FilterDialog = ({
                   appearance="subtle"
                   onClick={() => setCurrentFilter(initialState)}
                   icon={
-                    <i className={`material-symbols-rounded`}>filter_alt</i>
+                    <i className={`${getIconClassName("ClearFilter")}`} />
                   }
                 />
               </Tooltip>
@@ -172,7 +173,7 @@ export const FilterDialog = ({
             <DialogTrigger disableButtonEnhancement>
               <Button
                 appearance="primary"
-                icon={<i className={`material-symbols-rounded`}>save</i>}
+                icon={<i className={`${getIconClassName("Save")}`} />}
                 onClick={() => onSave(currentFilter)}
               >
                 {t("filter_save")}
