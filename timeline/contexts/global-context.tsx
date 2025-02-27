@@ -4,7 +4,7 @@ import { ActivityInformation } from "../src/icons/Icon";
 import { useTranslation } from "react-i18next";
 import { LoaderProvider } from "./loader-context";
 import { FilterProvider } from "./filter-context";
-import { DialogProvider } from "./dialog-context";
+import { ItemEditType } from "../src/util";
 
 // the idea is to make this changeable at runtime by the user, with personilized settings
 
@@ -25,6 +25,9 @@ type GlobalContextProps = {
 
   clientUrl: string;
   setClientUrl: (url: string) => void;
+
+  itemEditType: ItemEditType;
+  setItemEditType: (type: ItemEditType) => void;
 };
 
 const initialState: GlobalContextProps = {
@@ -38,6 +41,8 @@ const initialState: GlobalContextProps = {
   setXSize: () => {},
   clientUrl: "",
   setClientUrl: () => {},
+  itemEditType: "modal",
+  setItemEditType: () => {},
 };
 
 const GlobalContext = createContext<GlobalContextProps>(initialState);
@@ -47,6 +52,7 @@ export const useGlobalGlobalContext = () => useContext(GlobalContext);
 export const GlobalProvider = ({ children }: { children: ReactNode }) => {
   const [locale, setLocale] = React.useState<string>(initialState.locale);
   const [timezone, setTimeZone] = React.useState<string>(initialState.timezone);
+  const [itemEditType, setItemEditType] = React.useState<ItemEditType>("modal");
   const [activityInfo, setActivityInfo] = React.useState<{
     [schemaname: string]: ActivityInformation;
   }>(initialState.activityInfo);
@@ -74,11 +80,13 @@ export const GlobalProvider = ({ children }: { children: ReactNode }) => {
         setXSize,
         clientUrl,
         setClientUrl,
+        itemEditType,
+        setItemEditType,
       }}
     >
       <LoaderProvider>
         <FilterProvider>
-          <DialogProvider>{children}</DialogProvider>
+          {children}
         </FilterProvider>
       </LoaderProvider>
     </GlobalContext.Provider>

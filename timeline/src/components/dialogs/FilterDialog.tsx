@@ -14,24 +14,18 @@ import Chips from "../controls/Chips";
 import { CalendarStrings, DatePicker } from "@fluentui/react-datepicker-compat";
 import Lookup from "../controls/Lookup";
 import { getIcon, getIconClassName } from "@fluentui/style-utilities";
-import type { CalendarProps } from '@fluentui/react-calendar-compat';
 import { useGlobalGlobalContext } from "../../../contexts/global-context";
 
 interface IFilterDialogProps {
   items: TimelineItem[];
-  childElement: React.ReactElement<DialogTriggerChildProps>;
+  triggerElement: React.ReactElement<DialogTriggerChildProps>;
   onSave: (filter: FilterState) => void;
 }
 
-export const FilterDialog = ({
-  items,
-  childElement,
-  onSave,
-}: IFilterDialogProps) => {
+export const FilterDialog = React.forwardRef(({ items, triggerElement, onSave }: IFilterDialogProps, rootElement: any) => {
   const { t } = useTranslation();
   const { initialState, filter, filterItems } = useFilter();
   const { locale } = useGlobalGlobalContext();
-  const rootElement = React.useRef(null);
 
   const [currentFilter, setCurrentFilter] = React.useState<FilterState>(filter);
   const [filteredActivities, setFilteredActivities] = React.useState<number>();
@@ -98,7 +92,7 @@ export const FilterDialog = ({
 
   return (
     <Dialog>
-      <DialogTrigger disableButtonEnhancement>{childElement}</DialogTrigger>
+      <DialogTrigger disableButtonEnhancement>{triggerElement}</DialogTrigger>
       <DialogSurface>
         <DialogBody ref={rootElement}>
           {/* HEADER */}
@@ -243,4 +237,4 @@ export const FilterDialog = ({
       </DialogSurface>
     </Dialog>
   );
-};
+});

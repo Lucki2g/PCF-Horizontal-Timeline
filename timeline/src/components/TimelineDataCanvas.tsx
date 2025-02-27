@@ -14,6 +14,8 @@ import { useTranslation } from "react-i18next";
 import { useFilter } from "../../contexts/filter-context";
 import TimelineItemBlock, { TimelineItem } from "./TimelineItem";
 import { useGlobalGlobalContext } from "../../contexts/global-context";
+import { Button } from "@fluentui/react-components";
+import ItemDialog from "./dialogs/ItemDialog";
 
 // OBS: HTML Elements fill up the DOM extremely quickly causing lag and performance issues.
 // OBS: Lazy Loading would only work until elements were loaded.
@@ -276,8 +278,10 @@ export const TimelineDataCanvas = React.forwardRef<
       return arrangeItemsInRows();
     }, [items, filter.startDate, filter.endDate]);
 
-    // not optimal as it changes state on the parent rendering element
-    setHeight(height + ITEM_PADDING * 2 + rows.length * ySize + 2);
+
+    React.useEffect(() => {
+      setHeight(height + ITEM_PADDING * 2 + rows.length * ySize + 2);
+    }, [height, setHeight]);
 
     return (
       <div

@@ -153,11 +153,11 @@ export default function TimelineToolbar({
             content={t("action_filter")}
             withArrow
             relationship={"label"}
-          >
+          > 
             <FilterDialog
               onSave={onSave}
               items={items}
-              childElement={
+              triggerElement={
                 <Button
                   appearance="subtle"
                   size="small"

@@ -66,6 +66,24 @@ export const castToTimeZoneSource = (
     : defaultValue;
 };
 
+export type ItemEditType =
+  | "modal"
+  | "pane"
+  | "dropdown";
+export const castToItemEditType = (
+  value: string | undefined,
+  defaultValue: ItemEditType = "modal",
+): ItemEditType => {
+  const validValues: ItemEditType[] = [
+    "modal",
+    "pane",
+    "dropdown"
+  ];
+  return validValues.includes(value as ItemEditType)
+    ? (value as ItemEditType)
+    : defaultValue;
+};
+
 type GridStyle =
   | "grid"
   | "none"

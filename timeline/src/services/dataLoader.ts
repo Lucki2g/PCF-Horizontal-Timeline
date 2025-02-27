@@ -48,6 +48,17 @@ const loadDebugData = () => {
         entitytype: "team",
       },
     },
+    {
+      id: "5",
+      name: "LOCAL",
+      type: "email",
+      date: null,
+      owned: {
+        id: "2",
+        name: "Kaare",
+        entitytype: "systemuser",
+      },
+    },
     // {
     //     id: "2",
     //     name: "Another reminder",

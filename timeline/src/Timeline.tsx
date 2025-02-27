@@ -19,6 +19,7 @@ import {
 } from "./components/TimelineDataCanvas";
 import {
   castToGridStyle,
+  castToItemEditType,
   castToLocaleSource,
   castToTimeZoneSource,
   getBackground,
@@ -47,9 +48,8 @@ export default function Timeline({ context }: ITimelineProps) {
     setActivityInfo,
     setXSize,
     setClientUrl,
+    setItemEditType,
     timezone,
-    clientUrl,
-    activityInfo,
   } = useGlobalGlobalContext();
 
   const randomID = React.useMemo(() => {
@@ -191,6 +191,12 @@ export default function Timeline({ context }: ITimelineProps) {
       setActivityInfo(ACTIVITYINFO);
       setXSize(context.parameters.xsize.raw ?? 32);
       setClientUrl(DEBUG ? "" : (context as any).page.getClientUrl());
+
+      const EDITTYPE = castToItemEditType(
+        context.parameters.itemedittype.raw ?? "",
+        "modal",
+      );
+      setItemEditType(EDITTYPE);
 
       // initial data load
       await dataRefresh(timezone);

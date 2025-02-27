@@ -1,8 +1,6 @@
 import * as React from "react";
 import { I18nextProvider } from "react-i18next";
-import { FilterProvider } from "../contexts/filter-context";
 import i18n from "../contexts/i18n";
-import { DialogProvider } from "../contexts/dialog-context";
 import Timeline from "./Timeline";
 import { IInputs } from "../generated/ManifestTypes";
 import { GlobalProvider } from "../contexts/global-context";
