@@ -38,7 +38,7 @@ export const ItemDropdown = ({ children, item }: IItemDialogProps) => {
                     <div className='flex justify-between'>
                         <Persona 
                             name={item.ownerid?.name}
-                            secondaryText={item.activitytypecode}
+                            secondaryText={t(item.activitytypecode)}
                             presence={{ status: "unknown" }}
                         />
                         <span className={`${getIconClassName("RingerSolid")} text-[12px] -rotate-45`} style={{ color: priorityColor[item.prioritycode] }} />
@@ -79,14 +79,14 @@ export const ItemDropdown = ({ children, item }: IItemDialogProps) => {
                                 setIsOpen(false);
                                 console.log(updatedElement)
                             }}>
-                            {t("filter_save")}
+                            {t("dropdown_save")}
                         </Button>
                         <Button
                             size='small'
                             onClick={() => {
                                 setIsOpen(false);
                             }}>
-                            {t("filter_cancel")}
+                            {t("dropdown_close")}
                         </Button>
                     </div>
                 </div>

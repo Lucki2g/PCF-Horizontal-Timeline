@@ -27,6 +27,17 @@ export function useCalendarInformation() {
     );
 
     return {
+      strings: {
+        goToToday: t("datepicker_gototoday"),
+        months: [...Array(12).keys()].map((m) =>
+          formatterMonthLong.format(new Date(1970, m, 1))
+        ),
+        shortMonths: [...Array(12).keys()].map((m) =>
+          formatterMonthShort.format(new Date(1970, m, 1))
+        ),
+        days,
+        shortDays,
+      },
       calendarDayProps: {
         strings: {
           goToToday: t("datepicker_gototoday"),
