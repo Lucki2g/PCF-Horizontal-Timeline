@@ -60,7 +60,11 @@ const initialItems: TimelineItem[] = [];
 const itemReducer = (items: TimelineItem[], action: IItemAction) => {
   switch (action.type) {
     case "update":
-      return [...items, { ...action.payload }]
+      return items.map(item =>
+        item.id === action.payload.id
+          ? { ...item, ...action.payload } 
+          : item
+      );
     case "reset":
     return action.payload;
   }

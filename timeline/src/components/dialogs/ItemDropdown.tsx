@@ -9,6 +9,7 @@ import { useCalendarInformation } from '../../../hooks/useCalendarInformation';
 import { useGlobalGlobalContext } from '../../../contexts/global-context';
 import { updateTimelineItem } from '../../services/odataService';
 import { priorityColor } from '../../util';
+import { mapActivityToTimelineItem } from '../../services/dataLoader';
 
 interface IItemDialogProps {
     children: any;
@@ -76,7 +77,7 @@ export const ItemDropdown = ({ children, item }: IItemDialogProps) => {
                         onClick={async () => {
                             const updatedElement = await updateTimelineItem(clientUrl, itemState);
                             setIsOpen(false);
-                            itemDispatch(updatedElement);
+                            itemDispatch({ type: "update", payload: mapActivityToTimelineItem(updatedElement) });
                         }}>
                         {t("dropdown_save")}
                     </Button>

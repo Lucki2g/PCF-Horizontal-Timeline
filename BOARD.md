@@ -32,21 +32,23 @@ V1.1.0
 [x] BEAUTIFY/REFACTOR: - Action Buttons
 
 v2.0.0
+[x] UX: Complete refactor over to Fluent UI 9
+[x] TODO: Datepicker localization
+[x] TODO: Datepicker start/end date sanitization
+[!] Write about Attachment size limitations
+[x] BUG: Allocated width issues
+[-] FEATURE: Edit options
+  [x] frame
+  - dialog 
+  [x] dropdown
+  - drawer
+[x] FEATURE: Priority visualization
 
-- UX: Complete movement over to Fluent UI 9
-- TODO: Datepicker localization
-- TODO: Datepicker timezone control
-- TODO: Datepicker start/end date sanitization
-  [!] Write about Attachment size limitations
 
-v1.2.0 - CANCELLED
-
-- FEATURE: Edit options (dialog, dropdown, ModelDriven only options)
-- FEATURE: FluentUI Style
+Future
 - FEATURE: Fullscreen
   [-] FEATURE: Varying sizes of cells - ySize / fontSize
 - FEATURE: Count on Activity type chips inside filter
-- FEATURE: Priority visualization
 - FEATURE: Grey out finished activities
 - FEATURE: New Activity button
 - FEATURE: Attendies and activityparties, to apply to filter
@@ -59,3 +61,5 @@ v1.2.0 - CANCELLED
 - FEATURE: Darkmode
 - FEATURE: Colorblind mode
 - BUG: Fix the console error about state leak
+- FEATURE: Progress/spinner on fetch calls
+- TODO: Datepicker timezone control

@@ -71,7 +71,7 @@ export const TimelineDataCanvas = React.forwardRef<
     // Context
     const { t } = useTranslation();
     const { filter, filterItems } = useFilter();
-    const { locale, xSize, timezone, activityInfo, items } = useGlobalGlobalContext();
+    const { locale, xSize, timezone, items } = useGlobalGlobalContext();
 
 
     // Refs

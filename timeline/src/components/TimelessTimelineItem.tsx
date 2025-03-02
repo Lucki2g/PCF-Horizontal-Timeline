@@ -16,8 +16,6 @@ export default function TimelessTimelineItemBlock({
 }: ITimelessTimelineItemProps) {
   const { clientUrl, activityInfo, itemEditType } = useGlobalGlobalContext();
 
-  console.log(item)
-
   return (
     <FluentProvider theme={webLightTheme} className="w-full">
       { 

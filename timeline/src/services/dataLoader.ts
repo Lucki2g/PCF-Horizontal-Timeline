@@ -171,6 +171,14 @@ const loadDebugData = (): TimelineItem[] => {
   ];
 };
 
+export const mapActivityToTimelineItem = (activity: any): any => {
+  return {
+    id: activity["activityid"],
+    subject: activity["subject"],
+    scheduledend: activity["scheduledend"] ? new Date(activity["scheduledend"]) : null
+  };
+}
+
 const loadRealData = async (context: ComponentFramework.Context<IInputs>) => {
   const activities = context.parameters.activities.sortedRecordIds.map(
     (id: string): TimelineItem => {
