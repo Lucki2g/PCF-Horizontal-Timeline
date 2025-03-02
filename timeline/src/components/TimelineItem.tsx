@@ -9,6 +9,7 @@ import { DatePicker } from "@fluentui/react-datepicker-compat";
 import { t } from "i18next";
 import { getIconClassName } from "@fluentui/style-utilities";
 import { ItemDropdown } from "./dialogs/ItemDropdown";
+import ItemDialog from "./dialogs/ItemDialog";
 
 export interface IEntityReference {
     id: string;
@@ -21,10 +22,10 @@ export interface IEntityReference {
     subject: string;
     scheduledend: Date | null;
     activitytypecode: string;
+    prioritycode: number;
     // non-milestone data
     ownerid?: IEntityReference;
     createdon?: Date | null;
-    prioritycode?: string;
   }
 
 interface ITimelineItemProps {
@@ -50,7 +51,7 @@ export default function TimelineItemBlock({
 
   const itemRef = React.useRef<HTMLButtonElement>(null);
 
-  const { activityInfo, clientUrl, xSize } = useGlobalGlobalContext();
+  const { activityInfo, clientUrl, xSize, itemEditType } = useGlobalGlobalContext();
   const [leftAlignment, setLeftAlignment] = React.useState(0);
 
   React.useEffect(() => {
@@ -85,6 +86,57 @@ export default function TimelineItemBlock({
         return 0;
     })
   }, [itemRef, parentRef, filter.startDate, filter.endDate])
+
+  const GetItemInformation = () => {
+    switch (itemEditType) {
+        case "modal":
+            return (
+                <ItemDialog item={item}><Button
+                ref={itemRef}
+                size="small"
+                className={`group pointer-events-auto absolute bottom-full z-10 flex origin-center items-center justify-center overflow-hidden rounded-[4px] border border-solid border-gray-300 bg-white px-1 py-[2px] shadow-dynamics hover:cursor-pointer`}
+                style={{ left: -leftAlignment }}>
+                <span
+                    className="absolute left-0 -z-10 h-full w-1 transition-all duration-300 group-hover:w-full"
+                    style={{ backgroundColor: activityInfo[item.activitytypecode].color }}
+                ></span>
+                <p className="mx-1 whitespace-nowrap text-xs transition-colors duration-300 group-hover:text-white">
+                    {item.subject}
+                </p>
+                {activityInfo[item.activitytypecode]?.icon ? (
+                    <i className={`${getIconClassName(activityInfo[item.activitytypecode].icon)} flex h-4 w-4 items-center justify-center text-[12px] transition-colors duration-300 group-hover:text-white`} />
+                ) : (
+                    <></>
+                )}
+            </Button>
+                </ItemDialog>
+            )
+        case "pane":
+            return <></>;
+        case "dropdown":
+            return (
+                <ItemDropdown item={item}><Button
+                ref={itemRef}
+                size="small"
+                className={`group pointer-events-auto absolute bottom-full z-10 flex origin-center items-center justify-center overflow-hidden rounded-[4px] border border-solid border-gray-300 bg-white px-1 py-[2px] shadow-dynamics hover:cursor-pointer`}
+                style={{ left: -leftAlignment }}>
+                <span
+                    className="absolute left-0 -z-10 h-full w-1 transition-all duration-300 group-hover:w-full"
+                    style={{ backgroundColor: activityInfo[item.activitytypecode].color }}
+                ></span>
+                <p className="mx-1 whitespace-nowrap text-xs transition-colors duration-300 group-hover:text-white">
+                    {item.subject}
+                </p>
+                {activityInfo[item.activitytypecode]?.icon ? (
+                    <i className={`${getIconClassName(activityInfo[item.activitytypecode].icon)} flex h-4 w-4 items-center justify-center text-[12px] transition-colors duration-300 group-hover:text-white`} />
+                ) : (
+                    <></>
+                )}
+            </Button>
+                </ItemDropdown>
+            )
+    }
+  }
 
   return (
     <div className="absolute" style={{

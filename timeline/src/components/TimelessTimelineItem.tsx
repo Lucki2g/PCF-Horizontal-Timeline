@@ -25,8 +25,6 @@ export default function TimelessTimelineItemBlock({
     return (
       <ItemDialog 
         item={item}
-        info={activityInfo[item.activitytypecode]}
-        url={getHref(clientUrl, item.activitytypecode, item.id)}
       >
         <button
             className={`group pointer-events-auto absolute bottom-full z-10 flex origin-center items-center justify-center overflow-hidden rounded-[4px] border border-solid border-gray-300 bg-white px-1 py-[2px] shadow-dynamics hover:cursor-pointer`}

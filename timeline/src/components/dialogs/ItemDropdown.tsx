@@ -1,13 +1,14 @@
 import * as React from 'react'
 import { TimelineItem } from '../TimelineItem';
 import { ActivityInformation } from '../../icons/Icon';
-import { Button, Field, FluentProvider, Input, Popover, PopoverSurface, PopoverTrigger, webLightTheme } from '@fluentui/react-components';
+import { Button, Divider, Field, FluentProvider, Input, Persona, Popover, PopoverSurface, PopoverTrigger, webLightTheme } from '@fluentui/react-components';
 import { DatePicker } from '@fluentui/react-datepicker-compat';
 import { useTranslation } from 'react-i18next';
 import { getIconClassName } from "@fluentui/style-utilities";
 import { useCalendarInformation } from '../../../hooks/useCalendarInformation';
 import { useGlobalGlobalContext } from '../../../contexts/global-context';
 import { updateTimelineItem } from '../../services/odataService';
+import { priorityColor } from '../../util';
 
 interface IItemDialogProps {
     children: any;
@@ -16,9 +17,12 @@ interface IItemDialogProps {
 
 export const ItemDropdown = ({ children, item }: IItemDialogProps) => {
     
-    const { clientUrl } = useGlobalGlobalContext();
+    const { clientUrl, locale } = useGlobalGlobalContext();
     const { t } = useTranslation();
     const [isOpen, setIsOpen] = React.useState<boolean>(false);
+    const dateCalendarInformation = useCalendarInformation();
+
+    const [itemState, setItemState] = React.useState<TimelineItem>(item);
 
     return (
         <FluentProvider theme={webLightTheme}>
@@ -30,30 +34,42 @@ export const ItemDropdown = ({ children, item }: IItemDialogProps) => {
                     onTouchStart={(e) => e.stopPropagation()}
                     onTouchMove={(e) => e.stopPropagation()}>
                     <div className='flex flex-col'>
+                    {/* Information */}
+                    <div className='flex justify-between'>
+                        <Persona 
+                            name={item.ownerid?.name}
+                            secondaryText={item.activitytypecode}
+                            presence={{ status: "unknown" }}
+                        />
+                        <span className={`${getIconClassName("RingerSolid")} text-[12px] -rotate-45`} style={{ color: priorityColor[item.prioritycode] }} />
+                    </div>
+                    <Divider className='my-2' />
                     {/* Name */}
-                    <Field label={"Title"} size='small'>
+                    <Field label={t("dropdown_title")} size='small'>
                         <Input 
                             appearance='filled-darker'
-                            value={item.subject}
-                            onChange={(value) => {}}
+                            value={itemState.subject}
+                            onChange={(_, value) => setItemState({ ...itemState, subject: value.value })}
                         />
                     </Field>
                     {/* Date */}
-                    <Field label={"Date"} className='mt-2' size='small'>
+                    <Field label={t("dropdown_date")} className='mt-2' size='small'>
                         <DatePicker 
                             size='small'
-                            value={item.scheduledend}
+                            value={itemState.scheduledend}
                             appearance="filled-darker"
                             highlightSelectedMonth
                             showGoToToday
                             showCloseButton
                             contentAfter={<i className={`${getIconClassName("Calendar")} text-[11px]`} />}
-                            // calendar={dateCalendarInformation}
-                            onSelectDate={(date) => {}}
+                            calendar={dateCalendarInformation}
+                            formatDate={(date) => date?.toLocaleDateString(locale, { day: "numeric", month: "long", year: "numeric" }) ?? ""}
+                            onSelectDate={(date) => setItemState({ ...itemState, scheduledend: date ?? null })}
                         />
                     </Field>
+                    <Divider className='my-2' />
                     {/* Actions */}
-                    <div className='flex mt-2 w-full justify-between'>
+                    <div className='flex w-full justify-between'>
                         <Button
                             size='small'
                             appearance="primary"

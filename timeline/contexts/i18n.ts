@@ -29,6 +29,7 @@ i18n
           filter_startdate: "Start date",
           filter_enddate: "End date",
           filter_owner: "Owner",
+          filter_clear: "Reset filter",
           timeless_title: "Timeless items",
           timeless_description: "Following items have no due date set.",
           timeless_noitems: "No items...",
@@ -42,6 +43,15 @@ i18n
           action_next: "Go to: Next activity",
           action_filter: "Filter activities",
           action_timeless: "Show timeless items",
+          // version 2.0.0
+          datepicker_gototoday: "Go to today",
+          lookup_nomatches: "No matches found",
+          lookup_teams: "Teams",
+          lookup_users: "Users",
+          dropdown_title: "Subject",
+          dropdown_date: "Scheduled date",
+          dropdown_save: "Save",
+          dropdown_close: "Close",
         },
       },
       "da-DK": {
@@ -75,6 +85,15 @@ i18n
           action_next: "Gå til: Næste aktivitet",
           action_filter: "Filtrer aktiviteter",
           action_timeless: "Vis tidløse elementer",
+          // version 2.0.0
+          datepicker_gototoday: "Gå til i dag",
+          lookup_nomatches: "Ingen fundne resultater",
+          lookup_teams: "Hold",
+          lookup_users: "Brugere",
+          dropdown_title: "Emne",
+          dropdown_date: "Planlagt dato",
+          dropdown_save: "Gem",
+          dropdown_close: "Luk"
         },
       },
       "fr-FR": {
@@ -109,6 +128,15 @@ i18n
           action_next: "Aller à : Activité suivante",
           action_filter: "Filtrer les activités",
           action_timeless: "Afficher les éléments intemporels",
+          // version 2.0.0
+          datepicker_gototoday: "Aller à aujourd'hui",
+          lookup_nomatches: "Aucune correspondance trouvée",
+          lookup_teams: "Équipes",
+          lookup_users: "Utilisateurs",
+          dropdown_title: "Sujet",
+          dropdown_date: "Date prévue",
+          dropdown_save: "Enregistrer",
+          dropdown_close: "Fermer"
         },
       },
       "es-ES": {
@@ -143,6 +171,15 @@ i18n
           action_next: "Ir a: Siguiente actividad",
           action_filter: "Filtrar actividades",
           action_timeless: "Mostrar elementos sin tiempo",
+          // version 2.0.0
+          datepicker_gototoday: "Ir a hoy",
+          lookup_nomatches: "No se encontraron coincidencias",
+          lookup_teams: "Equipos",
+          lookup_users: "Usuarios",
+          dropdown_title: "Asunto",
+          dropdown_date: "Fecha programada",
+          dropdown_save: "Guardar",
+          dropdown_close: "Cerrar"
         },
       },
       "de-DE": {
@@ -177,6 +214,15 @@ i18n
           action_next: "Gehe zu: Nächste Aktivität",
           action_filter: "Aktivitäten filtern",
           action_timeless: "Zeitlose Elemente anzeigen",
+          // version 2.0.0
+          datepicker_gototoday: "Zum heutigen Datum",
+          lookup_nomatches: "Keine Übereinstimmungen gefunden",
+          lookup_teams: "Teams",
+          lookup_users: "Benutzer",
+          dropdown_title: "Betreff",
+          dropdown_date: "Geplantes Datum",
+          dropdown_save: "Speichern",
+          dropdown_close: "Schließen"
         },
       },
       "zh-CN": {
@@ -210,6 +256,15 @@ i18n
           action_next: "前往：下一个活动",
           action_filter: "筛选活动",
           action_timeless: "显示永恒项目",
+          // version 2.0.0
+          datepicker_gototoday: "转到今天",
+          lookup_nomatches: "未找到匹配项",
+          lookup_teams: "团队",
+          lookup_users: "用户",
+          dropdown_title: "主题",
+          dropdown_date: "预定日期",
+          dropdown_save: "保存",
+          dropdown_close: "关闭"
         },
       },
       "ja-JP": {
@@ -243,6 +298,15 @@ i18n
           action_next: "移動: 次のアクティビティ",
           action_filter: "アクティビティをフィルタ",
           action_timeless: "タイムレスなアイテムを表示",
+          // version 2.0.0
+          datepicker_gototoday: "今日に移動",
+          lookup_nomatches: "一致する項目が見つかりません",
+          lookup_teams: "チーム",
+          lookup_users: "ユーザー",
+          dropdown_title: "件名",
+          dropdown_date: "予定日",
+          dropdown_save: "保存",
+          dropdown_close: "閉じる"
         },
       },
       "ar-SA": {
@@ -276,6 +340,15 @@ i18n
           action_next: "انتقل إلى: النشاط التالي",
           action_filter: "تصفية الأنشطة",
           action_timeless: "عرض العناصر الخالدة",
+          // version 2.0.0
+          datepicker_gototoday: "اذهب إلى اليوم",
+          lookup_nomatches: "لم يتم العثور على مطابقة",
+          lookup_teams: "الفرق",
+          lookup_users: "المستخدمون",
+          dropdown_title: "الموضوع",
+          dropdown_date: "التاريخ المحدد",
+          dropdown_save: "حفظ",
+          dropdown_close: "إغلاق"
         },
       },
       "pt-BR": {
@@ -310,6 +383,15 @@ i18n
           action_next: "Ir para: Próxima atividade",
           action_filter: "Filtrar atividades",
           action_timeless: "Mostrar itens atemporais",
+          // version 2.0.0
+          datepicker_gototoday: "Ir para hoje",
+          lookup_nomatches: "Nenhuma correspondência encontrada",
+          lookup_teams: "Equipes",
+          lookup_users: "Usuários",
+          dropdown_title: "Assunto",
+          dropdown_date: "Data agendada",
+          dropdown_save: "Salvar",
+          dropdown_close: "Fechar"
         },
       },
       "it-IT": {
@@ -344,6 +426,15 @@ i18n
           action_next: "Vai a: Prossima attività",
           action_filter: "Filtra attività",
           action_timeless: "Mostra elementi senza tempo",
+          // version 2.0.0
+          datepicker_gototoday: "Vai ad oggi",
+          lookup_nomatches: "Nessuna corrispondenza trovata",
+          lookup_teams: "Squadre",
+          lookup_users: "Utenti",
+          dropdown_title: "Oggetto",
+          dropdown_date: "Data programmata",
+          dropdown_save: "Salva",
+          dropdown_close: "Chiudi"
         },
       },
       "hi-IN": {
@@ -378,6 +469,15 @@ i18n
           action_next: "जाएँ: अगली गतिविधि",
           action_filter: "गतिविधियों को फ़िल्टर करें",
           action_timeless: "टाइमलेस आइटम दिखाएं",
+          // version 2.0.0
+          datepicker_gototoday: "आज पर जाएँ",
+          lookup_nomatches: "कोई मिलान नहीं मिला",
+          lookup_teams: "टीमें",
+          lookup_users: "उपयोगकर्ता",
+          dropdown_title: "विषय",
+          dropdown_date: "निर्धारित तिथि",
+          dropdown_save: "सहेजें",
+          dropdown_close: "बंद करें"
         },
       },
       "nl-NL": {
@@ -412,6 +512,15 @@ i18n
           action_next: "Ga naar: Volgende activiteit",
           action_filter: "Activiteiten filteren",
           action_timeless: "Tijdloze items weergeven",
+          // version 2.0.0
+          datepicker_gototoday: "Ga naar vandaag",
+          lookup_nomatches: "Geen overeenkomsten gevonden",
+          lookup_teams: "Teams",
+          lookup_users: "Gebruikers",
+          dropdown_title: "Onderwerp",
+          dropdown_date: "Geplande datum",
+          dropdown_save: "Opslaan",
+          dropdown_close: "Sluiten"
         },
       },
       "sv-SE": {
@@ -445,6 +554,15 @@ i18n
           action_next: "Gå till: Nästa aktivitet",
           action_filter: "Filtrera aktiviteter",
           action_timeless: "Visa tidlösa objekt",
+          // version 2.0.0
+          datepicker_gototoday: "Gå till idag",
+          lookup_nomatches: "Inga träffar hittades",
+          lookup_teams: "Team",
+          lookup_users: "Användare",
+          dropdown_title: "Ämne",
+          dropdown_date: "Planerat datum",
+          dropdown_save: "Spara",
+          dropdown_close: "Stäng"
         },
       },
       "fi-FI": {
@@ -479,6 +597,15 @@ i18n
           action_next: "Siirry: Seuraava toiminta",
           action_filter: "Suodata aktiviteetit",
           action_timeless: "Näytä ajattomat kohteet",
+          // version 2.0.0
+          datepicker_gototoday: "Siirry tänään",
+          lookup_nomatches: "Ei osumia löytynyt",
+          lookup_teams: "Tiimit",
+          lookup_users: "Käyttäjät",
+          dropdown_title: "Aihe",
+          dropdown_date: "Aikataulutettu päivämäärä",
+          dropdown_save: "Tallenna",
+          dropdown_close: "Sulje"
         },
       },
     },

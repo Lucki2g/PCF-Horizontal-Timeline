@@ -2,13 +2,14 @@ import { IInputs } from "../../generated/ManifestTypes";
 import { IEntityReference, TimelineItem } from "../components/TimelineItem";
 import { DEBUG } from "../Timeline";
 
-const loadDebugData = () => {
+const loadDebugData = (): TimelineItem[] => {
   return [
     {
       id: "-1",
       subject: "UTC+01",
       activitytypecode: "appointment",
       scheduledend: new Date("2024-05-16T08:00:00.000+01:00"),
+      prioritycode: 0,
       ownerid: {
         id: "2",
         name: "Kaare",
@@ -20,6 +21,7 @@ const loadDebugData = () => {
       subject: "UTC+01",
       activitytypecode: "milestone",
       scheduledend: new Date("2025-02-26T08:00:00.000+01:00"),
+      prioritycode: 1,
       ownerid: {
         id: "2",
         name: "Kaare",
@@ -31,6 +33,7 @@ const loadDebugData = () => {
       subject: "UTC",
       activitytypecode: "phonecall",
       scheduledend: new Date("2024-05-16T08:00:00.000+00:00"),
+      prioritycode: 2,
       ownerid: {
         id: "2",
         name: "Kaare",
@@ -42,6 +45,7 @@ const loadDebugData = () => {
       subject: "LOCAL",
       activitytypecode: "email",
       scheduledend: new Date("2024-05-16T08:00:00.000"),
+      prioritycode: 1,
       ownerid: {
         id: "2",
         name: "Kaare",
@@ -53,6 +57,7 @@ const loadDebugData = () => {
       subject: "Remember the chicken",
       activitytypecode: "task",
       scheduledend: new Date("2024-10-29"),
+      prioritycode: 2,
       ownerid: {
         id: "1",
         name: "Kaares Team",
@@ -64,6 +69,7 @@ const loadDebugData = () => {
       subject: "LOCAL",
       activitytypecode: "email",
       scheduledend: null,
+      prioritycode: 1,
       ownerid: {
         id: "2",
         name: "Kaare",
@@ -167,7 +173,7 @@ const loadRealData = async (context: ComponentFramework.Context<IInputs>) => {
         scheduledend: scheduledEnd,
         activitytypecode: activity.getValue("activitytypecode") as string,
         ownerid: owner,
-        prioritycode: activity.getValue("prioritycode") as string,
+        prioritycode: activity.getValue("prioritycode") as number,
         createdon: new Date(activity.getValue("createdon") as string)
       };
     },
@@ -192,6 +198,7 @@ const loadRealData = async (context: ComponentFramework.Context<IInputs>) => {
       subject: milestones[milestone],
       activitytypecode: "milestone",
       scheduledend: date,
+      prioritycode: 1
     });
   }
   return activities;

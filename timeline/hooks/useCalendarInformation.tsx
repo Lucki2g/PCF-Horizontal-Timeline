@@ -3,13 +3,15 @@ import * as React from 'react';
 import { getIconClassName } from "@fluentui/style-utilities";
 import { useTranslation } from 'react-i18next';
 import { useGlobalGlobalContext } from '../contexts/global-context';
+import { Slot } from '@fluentui/react-components';
+import { CalendarProps } from '@fluentui/react-calendar-compat';
 
 export function useCalendarInformation() {
 
   const { t } = useTranslation();
   const { locale } = useGlobalGlobalContext();
 
-  return React.useMemo(() => {
+  return React.useMemo<NonNullable<Slot<Partial<CalendarProps>>>>(() => {
     // Create formatters
     const formatterMonthLong = new Intl.DateTimeFormat(locale, { month: 'long' });
     const formatterMonthShort = new Intl.DateTimeFormat(locale, { month: 'short' });
@@ -50,6 +52,17 @@ export function useCalendarInformation() {
         },
       },
       calendarMonthProps: {
+        strings: {
+          goToToday: t("datepicker_gototoday"),
+          months: [...Array(12).keys()].map((m) =>
+            formatterMonthLong.format(new Date(1970, m, 1))
+          ),
+          shortMonths: [...Array(12).keys()].map((m) =>
+            formatterMonthShort.format(new Date(1970, m, 1))
+          ),
+          days,
+          shortDays,
+        },
         navigationIcons: {
           upNavigation: (
             <i className={`${getIconClassName("Up")} text-[11px]`} />

@@ -126,6 +126,12 @@ export const lcidToBCP47Table: { [key: number]: string } = {
   2052: "zh-CN", // Chinese (Simplified, China)
 };
 
+export const priorityColor: { [key: number]: string } = {
+  0: "#5ea500", // Low
+  1: "#fe9a00", // Normal
+  2: "#e7000b" // High
+}
+
 export const getBackground = (context: any, GRIDSTYLE: string) => {
   switch (GRIDSTYLE) {
     case "stripes":

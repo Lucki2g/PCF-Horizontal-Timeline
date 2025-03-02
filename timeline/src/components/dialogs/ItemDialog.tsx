@@ -3,15 +3,18 @@ import { TimelineItem } from '../TimelineItem';
 import { Avatar, Button, Dialog, DialogActions, DialogBody, DialogContent, DialogSurface, DialogTitle, DialogTrigger, DialogTriggerChildProps, FluentProvider, Toolbar, webLightTheme } from '@fluentui/react-components';
 import { getIconClassName } from "@fluentui/style-utilities";
 import { ActivityInformation } from '../../icons/Icon';
+import { useGlobalGlobalContext } from '../../../contexts/global-context';
+import { getHref } from '../../util';
 
 interface IItemDialogProps {
     children: any;
     item: TimelineItem;
-    info: ActivityInformation;
-    url: string;
 }
 
-export default function ItemDialog({ item, info, url, children }: IItemDialogProps) {
+export default function ItemDialog({ item, children }: IItemDialogProps) {
+
+    const { clientUrl, activityInfo } = useGlobalGlobalContext();
+    const url = getHref(clientUrl, item.activitytypecode, item.id);
 
     return (
         <Dialog>
@@ -20,7 +23,7 @@ export default function ItemDialog({ item, info, url, children }: IItemDialogPro
                 <DialogBody>
                     <DialogTitle role="heading">
                         <div className='flex items-center'>
-                            <Avatar className='mr-4' shape='square' size={48} icon={<i className={`${getIconClassName(info.icon)}`} />}  />
+                            <Avatar className='mr-4' shape='square' size={48} icon={<i className={`${getIconClassName(activityInfo[item.activitytypecode].icon)}`} />}  />
                             {item.subject}
                         </div>
                     </DialogTitle>

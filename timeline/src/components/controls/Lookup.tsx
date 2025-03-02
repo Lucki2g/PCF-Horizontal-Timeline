@@ -62,14 +62,14 @@ export default function Lookup({
     query,
     options: mappedOptions,
     noOptionsElement: (
-      <TagPickerOption value="no-options">No matches found</TagPickerOption>
+      <TagPickerOption value="no-options">{t("lookup_nomatches")}</TagPickerOption>
     ),
     renderOption: (option) => {
       const optionData = toEntityReference(option);
       if (!optionData) return <></>;
       return (
         <TagPickerOption
-          secondaryContent={optionData.entitytype}
+          secondaryContent={t(optionData.entitytype)}
           media={
             <Avatar
               shape="square"
@@ -101,14 +101,14 @@ export default function Lookup({
     query,
     options: mappedOptions,
     noOptionsElement: (
-      <TagPickerOption value="no-matches">No matches found</TagPickerOption>
+      <TagPickerOption value="no-matches">{t("lookup_nomatches")}</TagPickerOption>
     ),
     renderOption: (option) => {
       const optionData = toEntityReference(option);
       if (!optionData) return <></>;
       return (
         <TagPickerOption
-          secondaryContent={optionData.entitytype}
+          secondaryContent={t(optionData.entitytype)}
           media={
             <Avatar
               shape="square"
@@ -177,10 +177,10 @@ export default function Lookup({
           />
         </TagPickerControl>
         <TagPickerList>
-          <TagPickerOptionGroup label={t("teams")}>
+          <TagPickerOptionGroup label={t("lookup_teams")}>
             {teams}
           </TagPickerOptionGroup>
-          <TagPickerOptionGroup label={t("users")}>
+          <TagPickerOptionGroup label={t("lookup_users")}>
             {users}
           </TagPickerOptionGroup>
         </TagPickerList>

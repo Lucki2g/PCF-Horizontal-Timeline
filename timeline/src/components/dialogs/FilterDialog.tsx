@@ -55,7 +55,7 @@ export const FilterDialog = React.forwardRef(({ items, triggerElement, onSave }:
                     .replace("{1}", "" + items.length)}
                 </Text>
               </div>
-              <Tooltip content={"clear filter"} relationship="label" withArrow>
+              <Tooltip content={t("filter_clear")} relationship="label" withArrow>
                 <Button
                   style={{ position: "relative" }}
                   shape="rounded"
@@ -108,6 +108,7 @@ export const FilterDialog = React.forwardRef(({ items, triggerElement, onSave }:
                 showCloseButton
                 contentAfter={<i className={`${getIconClassName("Calendar")} text-[11px]`} />}
                 calendar={dateCalendarInformation}
+                formatDate={(date) => date?.toLocaleDateString(locale, { day: "numeric", month: "long", year: "numeric" }) ?? ""}
                 onSelectDate={(date) =>
                   setCurrentFilter({
                     ...currentFilter,
@@ -133,6 +134,7 @@ export const FilterDialog = React.forwardRef(({ items, triggerElement, onSave }:
                 showCloseButton
                 contentAfter={<i className={`${getIconClassName("Calendar")} text-[11px]`} />}
                 calendar={dateCalendarInformation}
+                formatDate={(date) => date?.toLocaleDateString(locale, { day: "numeric", month: "long", year: "numeric" }) ?? ""}
                 onSelectDate={(date) =>
                   setCurrentFilter({
                     ...currentFilter,

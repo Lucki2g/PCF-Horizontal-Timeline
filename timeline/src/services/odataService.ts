@@ -24,7 +24,7 @@ export const updateTimelineItem = async (url: string, item: TimelineItem) => {
         : dataObject["ownerid@odata.bind"] = `/teams(${item.ownerid?.id})`
     }
 
-    const endpoint = `${organizationUrl}/api/data/${apiVersion}/${entityLogicalName}(${entityId})`
+    const endpoint = `${organizationUrl}/api/data/${apiVersion}/${entityLogicalName}s(${entityId})`
 
     return await fetch(endpoint, {
         method: "PATCH",

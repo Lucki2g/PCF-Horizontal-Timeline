@@ -3,6 +3,7 @@ import { useGlobalGlobalContext } from "../../../contexts/global-context";
 import { Field } from "@fluentui/react-field";
 import { InteractionTag, InteractionTagPrimary, TagGroup } from "@fluentui/react-tags"
 import { getIconClassName } from "@fluentui/style-utilities";
+import { useTranslation } from "react-i18next";
 
 interface IChipsProps {
   label: string;
@@ -12,6 +13,7 @@ interface IChipsProps {
 
 export default function Chips({ label, states, onChange }: IChipsProps) {
   const { activityInfo } = useGlobalGlobalContext();
+  const { t } = useTranslation();
 
   return (
     <Field className="my-1 w-full" label={label} orientation="horizontal">
@@ -40,7 +42,7 @@ export default function Chips({ label, states, onChange }: IChipsProps) {
                     }} />
                 }
               >
-                {type}
+                {t(type)}
               </InteractionTagPrimary>
             </InteractionTag>
           );
