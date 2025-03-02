@@ -13,8 +13,9 @@ import { IEntityReference, TimelineItem } from "../TimelineItem";
 import Chips from "../controls/Chips";
 import { CalendarStrings, DatePicker } from "@fluentui/react-datepicker-compat";
 import Lookup from "../controls/Lookup";
-import { getIcon, getIconClassName } from "@fluentui/style-utilities";
+import { getIconClassName } from "@fluentui/style-utilities";
 import { useGlobalGlobalContext } from "../../../contexts/global-context";
+import { useCalendarInformation } from "../../../hooks/useCalendarInformation";
 
 interface IFilterDialogProps {
   items: TimelineItem[];
@@ -34,61 +35,7 @@ export const FilterDialog = React.forwardRef(({ items, triggerElement, onSave }:
     setFilteredActivities(filterItems(currentFilter, items).length);
   }, [currentFilter]);
 
-  const dateCalendarInformation = React.useMemo(() => {
-    // formatters
-    const formatterMonthLong = new Intl.DateTimeFormat(locale, { month: "long" });
-    const formatterMonthShort = new Intl.DateTimeFormat(locale, { month: "short" });
-    const formatterDayLong = new Intl.DateTimeFormat(locale, { weekday: "long" });
-    const formatterDayShort = new Intl.DateTimeFormat(locale, { weekday: "narrow" });
-  
-    // January 4, 1970 is a Sunday.
-    const days = [...Array(7).keys()].map((d) =>
-      formatterDayLong.format(new Date(1970, 0, d + 4))
-    );
-    const shortDays = [...Array(7).keys()].map((d) =>
-      formatterDayShort.format(new Date(1970, 0, d + 4))
-    );
-  
-    return {
-      calendarDayProps: {
-        strings: {
-          goToToday: t("datepicker_gototoday"),
-          months: [...Array(12).keys()].map((m) =>
-            formatterMonthLong.format(new Date(1970, m, 1))
-          ),
-          shortMonths: [...Array(12).keys()].map((m) =>
-            formatterMonthShort.format(new Date(1970, m, 1))
-          ),
-          days,
-          shortDays,
-        },
-        navigationIcons: {
-          upNavigation: (
-            <i className={`${getIconClassName("Up")} text-[11px]`} />
-          ),
-          downNavigation: (
-            <i className={`${getIconClassName("Down")} text-[11px]`} />
-          ),
-          dismiss: (
-            <i className={`${getIconClassName("ChromeClose")} text-[11px]`} />
-          ),
-        },
-      },
-      calendarMonthProps: {
-        navigationIcons: {
-          upNavigation: (
-            <i className={`${getIconClassName("Up")} text-[11px]`} />
-          ),
-          downNavigation: (
-            <i className={`${getIconClassName("Down")} text-[11px]`} />
-          ),
-          dismiss: (
-            <i className={`${getIconClassName("ChromeClose")} text-[11px]`} />
-          ),
-        },
-      },
-    };
-  }, [locale]);
+  const dateCalendarInformation = useCalendarInformation();
 
   return (
     <Dialog>
@@ -139,7 +86,6 @@ export const FilterDialog = React.forwardRef(({ items, triggerElement, onSave }:
               label={t("filter_activitytypes")}
               states={currentFilter.itemTypes}
               onChange={(type: string, state: boolean) => {
-                console.log(type, "changed to", state);
                 setCurrentFilter({
                   ...currentFilter,
                   itemTypes: { ...currentFilter.itemTypes, [type]: state },
@@ -213,8 +159,8 @@ export const FilterDialog = React.forwardRef(({ items, triggerElement, onSave }:
               }
               currentValue={currentFilter.owner}
               options={items
-                .filter((i) => i.owned && i.owned !== null)
-                .map((i) => i.owned!)}
+                .filter((i) => i.ownerid && i.ownerid !== null)
+                .map((i) => i.ownerid!)}
             />
             {/* BUTTONS */}
             <Divider appearance="strong" />
@@ -223,7 +169,7 @@ export const FilterDialog = React.forwardRef(({ items, triggerElement, onSave }:
             <DialogTrigger disableButtonEnhancement>
               <Button
                 appearance="primary"
-                icon={<i className={`${getIconClassName("Save")}`} />}
+                icon={<i className={`${getIconClassName("Save")} text-[14px]`} />}
                 onClick={() => onSave(currentFilter)}
               >
                 {t("filter_save")}

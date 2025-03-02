@@ -4,7 +4,6 @@ import { Tooltip } from "@fluentui/react-tooltip";
 import { FilterState, useFilter } from "../../../contexts/filter-context";
 import { useGlobalLoaderContext } from "../../../contexts/loader-context";
 import { useTranslation } from "react-i18next";
-import { TimelineItem } from "../TimelineItem";
 import { getLeft } from "../../timeUtil";
 import { useGlobalGlobalContext } from "../../../contexts/global-context";
 import { FilterDialog } from "../dialogs/FilterDialog";
@@ -12,7 +11,6 @@ import * as React from "react";
 import { getIconClassName } from "@fluentui/style-utilities";
 
 interface ITimelineToolbar {
-  items: TimelineItem[];
   isPaneOpen: boolean;
   onSave: (filter: FilterState) => void;
   paneChange: () => void;
@@ -28,14 +26,13 @@ interface ITimelineToolbar {
 export default function TimelineToolbar({
   animate,
   timelineRef,
-  items,
   isPaneOpen,
   onSave,
   paneChange,
 }: ITimelineToolbar) {
   const { resetFilters, filterItems, filter } = useFilter();
   const { setState } = useGlobalLoaderContext();
-  const { xSize } = useGlobalGlobalContext();
+  const { xSize, items } = useGlobalGlobalContext();
   const { t } = useTranslation();
 
   const animateNext = () => {
@@ -44,11 +41,11 @@ export default function TimelineToolbar({
       timelineRef.current.scrollLeft + timelineRef.current.clientWidth / 2,
     );
     const activityLocations = filterItems(filter, items)
-      .filter((item) => item.date !== null)
+      .filter((item) => item.scheduledend !== null)
       .map((item) => {
         return {
           item: item,
-          left: Math.floor(getLeft(item.date!, filter.startDate, xSize)),
+          left: Math.floor(getLeft(item.scheduledend!, filter.startDate, xSize)),
         };
       });
 
@@ -73,11 +70,11 @@ export default function TimelineToolbar({
       timelineRef.current.scrollLeft + timelineRef.current.clientWidth / 2,
     );
     const activityLocations = filterItems(filter, items)
-      .filter((item) => item.date !== null)
+      .filter((item) => item.scheduledend !== null)
       .map((item) => {
         return {
           item: item,
-          left: Math.ceil(getLeft(item.date!, filter.startDate, xSize)),
+          left: Math.ceil(getLeft(item.scheduledend!, filter.startDate, xSize)),
         };
       });
 

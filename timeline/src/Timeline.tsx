@@ -35,7 +35,7 @@ interface ITimelineProps {
   context: ComponentFramework.Context<IInputs>;
 }
 
-export const DEBUG = true;
+export const DEBUG = false;
 
 export default function Timeline({ context }: ITimelineProps) {
   const size = context.mode.allocatedWidth;
@@ -50,6 +50,8 @@ export default function Timeline({ context }: ITimelineProps) {
     setClientUrl,
     setItemEditType,
     timezone,
+    items,
+    itemDispatch
   } = useGlobalGlobalContext();
 
   const randomID = React.useMemo(() => {
@@ -139,7 +141,6 @@ export default function Timeline({ context }: ITimelineProps) {
   const [isPaneOpen, setPaneOpen] = React.useState<boolean>(false);
   const [startX, setStartX] = React.useState<number>(0.0);
   const [left, setLeft] = React.useState<number>(0.0);
-  const [items, setItems] = React.useState<TimelineItem[]>([]);
   const [height, setHeight] = React.useState<number>(0);
   const [isAnimating, setIsAnimating] = React.useState<boolean>(false);
 
@@ -314,13 +315,13 @@ export default function Timeline({ context }: ITimelineProps) {
     let end = new Date("0000-01-01");
     const items = await loadData(context);
     for (const item of items) {
-      if (!item.date) continue;
-      if (item.date < start) start = item.date;
-      if (item.date > end) end = item.date;
+      if (!item.scheduledend) continue;
+      if (item.scheduledend < start) start = item.scheduledend;
+      if (item.scheduledend > end) end = item.scheduledend;
     }
 
     if (new Date() > end) end = new Date();
-    setItems(items);
+    itemDispatch({ type: "reset", payload: items });
     initializeFilter({
       search: "",
       itemTypes: Object.keys(ACTIVITYINFO).reduce(
@@ -337,7 +338,7 @@ export default function Timeline({ context }: ITimelineProps) {
   return loadingstate ? (
     <></>
   ) : (
-    <div className="relative flex h-full w-full select-none items-start justify-center font-dynamics text-dynamics-text">
+    <div className="relative flex h-full w-full select-none items-start justify-center font-dynamics text-dynamics-text" id="horizontal-timeline">
       {/* Loading */}
       {loadingstate ? <div className="h-1 w-full bg-black"></div> : <></>}
 
@@ -347,7 +348,6 @@ export default function Timeline({ context }: ITimelineProps) {
         animate={animateLeft}
         isPaneOpen={isPaneOpen}
         paneChange={() => setPaneOpen(!isPaneOpen)}
-        items={items}
         onSave={(filter: FilterState) => {
           setFilter(filter);
         }}
@@ -375,7 +375,6 @@ export default function Timeline({ context }: ITimelineProps) {
           uuid={randomID}
           ref={canvasRef}
           setHeight={(height: number) => setHeight(height)}
-          items={items.filter((i) => i.date !== null)}
           rounding={ROUNDING}
           options={OPTIONS}
           units={TIMEUNITS}
@@ -392,11 +391,11 @@ export default function Timeline({ context }: ITimelineProps) {
           {t("timeless_description")}
         </p>
         <div className="flex h-full w-full flex-col items-center justify-center overflow-y-scroll">
-          {items.filter((i) => i.date === null).length === 0 ? (
+          {items.filter((i) => i.scheduledend === null).length === 0 ? (
             <p className="text-xs">{t("timeless_noitems")}</p>
           ) : (
             items
-              .filter((i) => i.date === null)
+              .filter((i) => i.scheduledend === null)
               .map((i) => {
                 return <TimelessTimelineItemBlock key={i.id} item={i} />;
               })

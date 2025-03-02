@@ -55,10 +55,7 @@
     <property default-value='0' description-key="Hours position" display-name-key="Hours Position" name="hourspos" usage="input" of-type="Whole.None" />
     <property default-value='h23' description-key="Hours cycle" display-name-key="Hours Cycle" name="hourscycle" usage="input" of-type="SingleLine.Text" />
     
-    <data-set name="activities" display-name-key="activities">
-      <property-set name="name" display-name-key="name" description-key="name" of-type="SingleLine.Text" usage="bound" required="true" />
-      <property-set name="scheduledend" display-name-key="scheduledend" description-key="scheduledend" of-type="DateAndTime.DateAndTime" usage="bound" required="true" />
-    </data-set>
+    <data-set name="activities" display-name-key="activities"></data-set>
 
     <resources>
       <code path="index.ts" order="1"/>

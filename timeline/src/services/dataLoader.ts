@@ -6,10 +6,21 @@ const loadDebugData = () => {
   return [
     {
       id: "-1",
-      name: "UTC+01",
-      type: "appointment",
-      date: new Date("2024-05-16T08:00:00.000+01:00"),
-      owned: {
+      subject: "UTC+01",
+      activitytypecode: "appointment",
+      scheduledend: new Date("2024-05-16T08:00:00.000+01:00"),
+      ownerid: {
+        id: "2",
+        name: "Kaare",
+        entitytype: "systemuser",
+      },
+    },
+    {
+      id: "-10",
+      subject: "UTC+01",
+      activitytypecode: "milestone",
+      scheduledend: new Date("2025-02-26T08:00:00.000+01:00"),
+      ownerid: {
         id: "2",
         name: "Kaare",
         entitytype: "systemuser",
@@ -17,10 +28,10 @@ const loadDebugData = () => {
     },
     {
       id: "0",
-      name: "UTC",
-      type: "phonecall",
-      date: new Date("2024-05-16T08:00:00.000+00:00"),
-      owned: {
+      subject: "UTC",
+      activitytypecode: "phonecall",
+      scheduledend: new Date("2024-05-16T08:00:00.000+00:00"),
+      ownerid: {
         id: "2",
         name: "Kaare",
         entitytype: "systemuser",
@@ -28,10 +39,10 @@ const loadDebugData = () => {
     },
     {
       id: "2",
-      name: "LOCAL",
-      type: "email",
-      date: new Date("2024-05-16T08:00:00.000"),
-      owned: {
+      subject: "LOCAL",
+      activitytypecode: "email",
+      scheduledend: new Date("2024-05-16T08:00:00.000"),
+      ownerid: {
         id: "2",
         name: "Kaare",
         entitytype: "systemuser",
@@ -39,10 +50,10 @@ const loadDebugData = () => {
     },
     {
       id: "1",
-      name: "Remember the chicken",
-      type: "task",
-      date: new Date("2024-10-29"),
-      owned: {
+      subject: "Remember the chicken",
+      activitytypecode: "task",
+      scheduledend: new Date("2024-10-29"),
+      ownerid: {
         id: "1",
         name: "Kaares Team",
         entitytype: "team",
@@ -50,10 +61,10 @@ const loadDebugData = () => {
     },
     {
       id: "5",
-      name: "LOCAL",
-      type: "email",
-      date: null,
-      owned: {
+      subject: "LOCAL",
+      activitytypecode: "email",
+      scheduledend: null,
+      ownerid: {
         id: "2",
         name: "Kaare",
         entitytype: "systemuser",
@@ -152,10 +163,12 @@ const loadRealData = async (context: ComponentFramework.Context<IInputs>) => {
 
       return {
         id: id,
-        name: activity.getValue("name") as string,
-        date: scheduledEnd,
-        type: activity.getValue("activitytypecode") as string,
-        owned: owner,
+        subject: activity.getValue("subject") as string,
+        scheduledend: scheduledEnd,
+        activitytypecode: activity.getValue("activitytypecode") as string,
+        ownerid: owner,
+        prioritycode: activity.getValue("prioritycode") as string,
+        createdon: new Date(activity.getValue("createdon") as string)
       };
     },
   );
@@ -176,9 +189,9 @@ const loadRealData = async (context: ComponentFramework.Context<IInputs>) => {
     const date = new Date(result[milestone]);
     activities.push({
       id: milestone,
-      name: milestones[milestone],
-      type: "milestone",
-      date: date,
+      subject: milestones[milestone],
+      activitytypecode: "milestone",
+      scheduledend: date,
     });
   }
   return activities;

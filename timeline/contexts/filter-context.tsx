@@ -65,12 +65,12 @@ export const FilterProvider = ({ children }: { children: React.ReactNode }) => {
   const filterItems = (filter: FilterState, items: TimelineItem[]) => {
     return items.filter(
       (i) =>
-        i.name.toLowerCase().includes(filter.search) &&
-        filter.itemTypes[i.type] &&
-        i.date !== null &&
-        filter.startDate <= i.date &&
-        i.date <= filter.endDate &&
-        (filter.owner ? i.owned?.id === filter.owner?.id : true),
+        i.subject.toLowerCase().includes(filter.search) &&
+        filter.itemTypes[i.activitytypecode] &&
+        i.scheduledend !== null &&
+        filter.startDate <= i.scheduledend &&
+        i.scheduledend <= filter.endDate &&
+        (filter.owner ? i.ownerid?.id === filter.owner?.id : true),
     );
   };
 

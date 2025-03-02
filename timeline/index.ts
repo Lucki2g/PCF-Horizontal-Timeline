@@ -28,9 +28,21 @@ export class timeline
     notifyOutputChanged: () => void,
     state: ComponentFramework.Dictionary,
   ): void {
+    // allow for resize event triggers
     context.mode.trackContainerResize(true);
     this.notifyOutputChanged = notifyOutputChanged;
+    // fluent font icons initialization
     initializeIcons();
+    // ensure data is available in dataset
+    if (context.parameters.activities.addColumn) {
+      context.parameters.activities.addColumn("activitytypecode");
+      context.parameters.activities.addColumn("prioritycode");
+      context.parameters.activities.addColumn("ownerid");
+      context.parameters.activities.addColumn("createdon");
+      context.parameters.activities.addColumn("statecode");
+      context.parameters.activities.addColumn("scheduledend");
+      context.parameters.activities.addColumn("subject");
+    }
   }
 
   /**
