@@ -23,6 +23,7 @@ export interface IEntityReference {
     scheduledend: Date | null;
     activitytypecode: string;
     prioritycode: number;
+    statecode: number;
     // non-milestone data
     ownerid?: IEntityReference;
     createdon?: Date | null;
@@ -32,7 +33,6 @@ interface ITimelineItemProps {
   item: TimelineItem;
   rowIdx: number;
   rowCount: number;
-  timeunits: TimeUnit[];
   parentRef: React.RefObject<HTMLDivElement>;
 }
 
@@ -41,12 +41,10 @@ export default function TimelineItemBlock({
   item,
   rowIdx,
   rowCount,
-  timeunits,
 }: ITimelineItemProps) {
   // canvas app bug mitigation
-//   if (!item?.type) return <></>;
+  if (!item?.activitytypecode) return <></>;
 
-  const { settings } = useSettings();
   const { filter } = useFilter();
 
   const itemRef = React.useRef<HTMLButtonElement>(null);

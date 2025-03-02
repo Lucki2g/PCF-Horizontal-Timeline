@@ -932,6 +932,14 @@ video {
   padding-bottom: 2px;
 }
 
+.pr-5 {
+  padding-right: 1.25rem;
+}
+
+.pr-1 {
+  padding-right: 0.25rem;
+}
+
 .font-dynamics {
   font-family: "Segoe UI", "Segoe UI Web (West European)", -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif;
 }

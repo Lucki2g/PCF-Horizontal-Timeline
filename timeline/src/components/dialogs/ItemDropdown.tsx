@@ -17,7 +17,7 @@ interface IItemDialogProps {
 
 export const ItemDropdown = ({ children, item }: IItemDialogProps) => {
     
-    const { clientUrl, locale } = useGlobalGlobalContext();
+    const { clientUrl, locale, itemDispatch } = useGlobalGlobalContext();
     const { t } = useTranslation();
     const [isOpen, setIsOpen] = React.useState<boolean>(false);
     const dateCalendarInformation = useCalendarInformation();
@@ -74,9 +74,9 @@ export const ItemDropdown = ({ children, item }: IItemDialogProps) => {
                         appearance="primary"
                         icon={<i className={`${getIconClassName("Save")} text-[11px]`} />}
                         onClick={async () => {
-                            const updatedElement = await updateTimelineItem(clientUrl, item);
+                            const updatedElement = await updateTimelineItem(clientUrl, itemState);
                             setIsOpen(false);
-                            console.log(updatedElement)
+                            itemDispatch(updatedElement);
                         }}>
                         {t("dropdown_save")}
                     </Button>

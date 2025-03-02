@@ -4,9 +4,6 @@ const apiVersion = "v9.2";
 
 // in order to support both canvasapp, custompage and modeldriven I make calls diractly to the API instead of using the modeldriven SDK.
 export const updateTimelineItem = async (url: string, item: TimelineItem) => {
-
-    console.log("calling on item: ", item)
-
     const organizationUrl = url;
     const entityLogicalName = item.activitytypecode;
     const entityId = item.id;
@@ -28,6 +25,13 @@ export const updateTimelineItem = async (url: string, item: TimelineItem) => {
 
     return await fetch(endpoint, {
         method: "PATCH",
+        headers: {
+            "OData-MaxVersion": "4.0",
+            "OData-Version": "4.0",
+            "Accept": "application/json",
+            "Content-Type": "application/json; charset=utf-8",
+            "Prefer": "return=representation" // return updated record
+        },
         body: JSON.stringify(dataObject)
     })
     .then(response => {

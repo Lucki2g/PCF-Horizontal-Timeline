@@ -35,7 +35,7 @@ interface ITimelineProps {
   context: ComponentFramework.Context<IInputs>;
 }
 
-export const DEBUG = true;
+export const DEBUG = false;
 
 export default function Timeline({ context }: ITimelineProps) {
   const size = context.mode.allocatedWidth;
@@ -338,7 +338,9 @@ export default function Timeline({ context }: ITimelineProps) {
   return loadingstate ? (
     <></>
   ) : (
-    <div className="relative flex h-full w-full select-none items-start justify-center font-dynamics text-dynamics-text" id="horizontal-timeline">
+    <div className="relative flex h-full w-full select-none items-start justify-center font-dynamics text-dynamics-text" id="horizontal-timeline" style={{
+      maxWidth: context.mode.allocatedWidth
+    }}>
       {/* Loading */}
       {loadingstate ? <div className="h-1 w-full bg-black"></div> : <></>}
 
@@ -367,7 +369,6 @@ export default function Timeline({ context }: ITimelineProps) {
         style={{
           backgroundImage: BACKGROUND,
           backgroundColor: context.parameters.bgcolor.raw ?? "#fff",
-          width: context.mode.allocatedWidth
         }}
       >
         <TimelineDataCanvas
@@ -390,7 +391,7 @@ export default function Timeline({ context }: ITimelineProps) {
         <p className="mb-2 text-[9px] text-gray-500">
           {t("timeless_description")}
         </p>
-        <div className="flex h-full w-full flex-col items-center justify-center overflow-y-scroll">
+        <div className="flex h-full w-full flex-col items-center justify-center overflow-y-scroll pr-1">
           {items.filter((i) => i.scheduledend === null).length === 0 ? (
             <p className="text-xs">{t("timeless_noitems")}</p>
           ) : (

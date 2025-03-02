@@ -276,7 +276,7 @@ export const TimelineDataCanvas = React.forwardRef<
 
 
     React.useEffect(() => {
-      setHeight(height + ITEM_PADDING * 2 + rows.length * ySize + 2);
+      setHeight(height + ITEM_PADDING * 2 + (rows.length + 1) * ySize + 2);
     }, [height, setHeight]);
 
     return (
@@ -325,7 +325,6 @@ export const TimelineDataCanvas = React.forwardRef<
                   parentRef={containerRef}
                   rowIdx={rowIndex}
                   rowCount={rows.length - 1}
-                  timeunits={units}
                 />
               ))}
             </div>
