@@ -4,7 +4,7 @@ import { useSettings } from "../../hooks/SettingsState";
 import { useFilter } from "../../contexts/filter-context";
 import { getHref } from "../util";
 import { useGlobalGlobalContext } from "../../contexts/global-context";
-import { Popover, PopoverTrigger, Button, PopoverSurface, Field, Input } from "@fluentui/react-components";
+import { Popover, PopoverTrigger, Button, PopoverSurface, Field, Input, Badge, FluentProvider, webLightTheme, Tag, Avatar } from "@fluentui/react-components";
 import { DatePicker } from "@fluentui/react-datepicker-compat";
 import { t } from "i18next";
 import { getIconClassName } from "@fluentui/style-utilities";
@@ -87,85 +87,87 @@ export default function TimelineItemBlock({
     })
   }, [itemRef, parentRef, filter.startDate, filter.endDate])
 
-  const GetItemInformation = () => {
-    switch (itemEditType) {
-        case "modal":
-            return (
-                <ItemDialog item={item}><Button
-                ref={itemRef}
-                size="small"
-                className={`group pointer-events-auto absolute bottom-full z-10 flex origin-center items-center justify-center overflow-hidden rounded-[4px] border border-solid border-gray-300 bg-white px-1 py-[2px] shadow-dynamics hover:cursor-pointer`}
-                style={{ left: -leftAlignment }}>
-                <span
-                    className="absolute left-0 -z-10 h-full w-1 transition-all duration-300 group-hover:w-full"
-                    style={{ backgroundColor: activityInfo[item.activitytypecode].color }}
-                ></span>
-                <p className="mx-1 whitespace-nowrap text-xs transition-colors duration-300 group-hover:text-white">
-                    {item.subject}
-                </p>
-                {activityInfo[item.activitytypecode]?.icon ? (
-                    <i className={`${getIconClassName(activityInfo[item.activitytypecode].icon)} flex h-4 w-4 items-center justify-center text-[12px] transition-colors duration-300 group-hover:text-white`} />
-                ) : (
-                    <></>
-                )}
-            </Button>
-                </ItemDialog>
-            )
-        case "pane":
-            return <></>;
-        case "dropdown":
-            return (
-                <ItemDropdown item={item}><Button
-                ref={itemRef}
-                size="small"
-                className={`group pointer-events-auto absolute bottom-full z-10 flex origin-center items-center justify-center overflow-hidden rounded-[4px] border border-solid border-gray-300 bg-white px-1 py-[2px] shadow-dynamics hover:cursor-pointer`}
-                style={{ left: -leftAlignment }}>
-                <span
-                    className="absolute left-0 -z-10 h-full w-1 transition-all duration-300 group-hover:w-full"
-                    style={{ backgroundColor: activityInfo[item.activitytypecode].color }}
-                ></span>
-                <p className="mx-1 whitespace-nowrap text-xs transition-colors duration-300 group-hover:text-white">
-                    {item.subject}
-                </p>
-                {activityInfo[item.activitytypecode]?.icon ? (
-                    <i className={`${getIconClassName(activityInfo[item.activitytypecode].icon)} flex h-4 w-4 items-center justify-center text-[12px] transition-colors duration-300 group-hover:text-white`} />
-                ) : (
-                    <></>
-                )}
-            </Button>
-                </ItemDropdown>
-            )
-    }
-  }
-
   return (
     <div className="absolute" style={{
         left: item.scheduledend ? getLeft(item.scheduledend, filter.startDate, xSize) : 0,
         top: ITEM_PADDING + 10,
     }}>
-        <span className="border-dotted border-gray-500 border-l h-full absolute" style={{
-            height: ITEM_PADDING + 2 + (rowCount - rowIdx) * ySize,
-        }} />
-        <ItemDropdown item={item}>
-            <Button
-                ref={itemRef}
-                size="small"
-                className={`group pointer-events-auto absolute bottom-full z-10 flex origin-center items-center justify-center overflow-hidden rounded-[4px] border border-solid border-gray-300 bg-white px-1 py-[2px] shadow-dynamics hover:cursor-pointer`}
-                style={{ left: -leftAlignment }}>
-                <span
-                    className="absolute left-0 -z-10 h-full w-1 transition-all duration-300 group-hover:w-full"
-                    style={{ backgroundColor: activityInfo[item.activitytypecode].color }}
-                ></span>
-                <p className="mx-1 whitespace-nowrap text-xs transition-colors duration-300 group-hover:text-white">
-                    {item.subject}
-                </p>
-                {activityInfo[item.activitytypecode]?.icon ? (
-                    <i className={`${getIconClassName(activityInfo[item.activitytypecode].icon)} flex h-4 w-4 items-center justify-center text-[12px] transition-colors duration-300 group-hover:text-white`} />
-                ) : (
-                    <></>
-                )}
-            </Button>
-        </ItemDropdown>
+        {
+            item.activitytypecode === "milestone" 
+            ? (
+                <>
+                    <span className="border-solid border-gray-500 border-l h-full absolute" style={{
+                        height: ITEM_PADDING + 2 + (rowCount - rowIdx) * ySize,
+                    }} />
+                    <span className="border-solid border-gray-500 border-l h-full absolute" style={{
+                        bottom: ySize + 2,
+                        height: ITEM_PADDING + 2 + (rowIdx + 1) * ySize,
+                    }} />
+                    <Tag ref={itemRef}
+                        appearance="brand"
+                        size="small"
+                        shape="circular"
+                        media={<Avatar color="brand" icon={<i className={`${getIconClassName("Flag")} text-[11px]`} />} />}
+                        className="absolute bottom-full z-10 origin-center shadow-dynamics"
+                        style={{ left: -leftAlignment }}>
+                        {item.subject}
+                    </Tag>
+                </>
+            ) : (
+                <>
+                <span className="border-dotted border-gray-500 border-l h-full absolute" style={{
+                    height: ITEM_PADDING + 2 + (rowCount - rowIdx) * ySize,
+                }} />
+                <FluentProvider theme={webLightTheme}>
+                    { 
+                        itemEditType === "modal" ? (
+                            <ItemDialog item={item}>
+                                <Button
+                                ref={itemRef}
+                                size="small"
+                                className={`group pointer-events-auto absolute bottom-full z-10 flex origin-center items-center justify-center overflow-hidden rounded-[4px] border border-solid border-gray-300 bg-white px-1 py-[2px] shadow-dynamics hover:cursor-pointer`}
+                                style={{ left: -leftAlignment }}>
+                                    <span
+                                        className="absolute left-0 -z-10 h-full w-1 transition-all duration-300 group-hover:w-full"
+                                        style={{ backgroundColor: activityInfo[item.activitytypecode].color }}
+                                    ></span>
+                                    <p className="mx-1 whitespace-nowrap text-xs transition-colors duration-300 group-hover:text-white">
+                                        {item.subject}
+                                    </p>
+                                    {activityInfo[item.activitytypecode]?.icon ? (
+                                        <i className={`${getIconClassName(activityInfo[item.activitytypecode].icon)} flex h-4 w-4 items-center justify-center text-[12px] transition-colors duration-300 group-hover:text-white`} />
+                                    ) : (
+                                        <></>
+                                    )}
+                                </Button>
+                            </ItemDialog>
+                        ) : itemEditType === "dropdown" ? (
+                            <ItemDropdown item={item}>
+                                <Button
+                                    ref={itemRef}
+                                    size="small"
+                                    className={`group pointer-events-auto absolute bottom-full z-10 flex origin-center items-center justify-center overflow-hidden rounded-[4px] border border-solid border-gray-300 bg-white px-1 py-[2px] shadow-dynamics hover:cursor-pointer`}
+                                    style={{ left: -leftAlignment }}>
+                                    <span
+                                        className="absolute left-0 -z-10 h-full w-1 transition-all duration-300 group-hover:w-full"
+                                        style={{ backgroundColor: activityInfo[item.activitytypecode].color }}
+                                    ></span>
+                                    <p className="mx-1 whitespace-nowrap text-xs transition-colors duration-300 group-hover:text-white">
+                                        {item.subject}
+                                    </p>
+                                    {activityInfo[item.activitytypecode]?.icon ? (
+                                        <i className={`${getIconClassName(activityInfo[item.activitytypecode].icon)} flex h-4 w-4 items-center justify-center text-[12px] transition-colors duration-300 group-hover:text-white`} />
+                                    ) : (
+                                        <></>
+                                    )}
+                                </Button>
+                            </ItemDropdown>
+                        ) : <></>
+                        }
+                    </FluentProvider>
+                </>
+            )
+        }
     </div>
   );
 }

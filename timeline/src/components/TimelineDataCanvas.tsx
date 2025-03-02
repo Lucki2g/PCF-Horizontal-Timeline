@@ -306,9 +306,12 @@ export const TimelineDataCanvas = React.forwardRef<
             paddingBottom: ITEM_PADDING,
             width: totalWidth,
             maxWidth: totalWidth,
-            height: ITEM_PADDING * 2 + rows.length * ySize + height,
+            height: ITEM_PADDING * 2 + (rows.length + 1) * ySize + height,
           }}
         >
+          {/* Extra row for visibility */}
+          <div className="relative flex w-full" style={{ height: ySize }} />
+          {/* Data rows */}
           {rows.map((rowItems, rowIndex) => (
             <div
               key={"row-" + rowIndex}
