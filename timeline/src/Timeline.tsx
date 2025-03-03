@@ -35,7 +35,7 @@ interface ITimelineProps {
   context: ComponentFramework.Context<IInputs>;
 }
 
-export const DEBUG = true;
+export const DEBUG = false;
 
 export default function Timeline({ context }: ITimelineProps) {
   const size = context.mode.allocatedWidth;

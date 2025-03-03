@@ -30,7 +30,7 @@ export const ItemDropdown = ({ children, item }: IItemDialogProps) => {
     const [itemState, setItemState] = React.useState<TimelineItem>(item);
 
     // IMPOTANT i assume that format is HH:mm HH.mm with optional AM PM
-    const timeRegex = /^(\d{1,2})[:\.](\d{2})(?:\s*([AaPp][Mm]))?$/;
+    const timeRegex = /^(\d{1,2})[:.](\d{2})(?:\s*([AaPp][Mm]))?$/;
     
     // converts the date to the timezone for when displs
     const displayDate = itemState.scheduledend ? toZonedTime(itemState.scheduledend, timezone) : null;
@@ -49,12 +49,12 @@ export const ItemDropdown = ({ children, item }: IItemDialogProps) => {
     // new dates to be converted from timezone (user probvabliy) to UTC
     const onSelectDate: DatePickerProps["onSelectDate"] = (date) => {
         if (date) {
-        let utcDate = fromZonedTime(date, timezone);
-        // perserve date timelement
-        if (itemState.scheduledend) {
-            const currentDisplay = toZonedTime(itemState.scheduledend, timezone);
-            utcDate.setHours(currentDisplay.getHours(), currentDisplay.getMinutes(), currentDisplay.getSeconds());
-        }
+            const utcDate = fromZonedTime(date, timezone);
+            // perserve date timelement
+            if (itemState.scheduledend) {
+                const currentDisplay = toZonedTime(itemState.scheduledend, timezone);
+                utcDate.setHours(currentDisplay.getHours(), currentDisplay.getMinutes(), currentDisplay.getSeconds());
+            }
             setItemState({ ...itemState, scheduledend: utcDate });
         } else {
             setItemState({ ...itemState, scheduledend: null });

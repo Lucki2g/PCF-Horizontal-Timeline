@@ -141,7 +141,7 @@ export function getAvailableTimeUnitsV2(
       hoursInQuarter = 0,
       hoursInYear = 0;
 
-  let weekNumber = getISOWeekNumber(toZoned(currentDateUTC));
+  const weekNumber = getISOWeekNumber(toZoned(currentDateUTC));
 
   while (currentDateUTC <= endDate) {
     const zonedCurrent = toZoned(currentDateUTC);
