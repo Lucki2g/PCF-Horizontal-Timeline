@@ -55,6 +55,18 @@ The language of the control can be set in different ways. Supported methods are:
 
 ---
 
+### Item Edit Type
+
+How elements are opened from the timeline can be modified to currently only 2 options with more on the way.
+
+> [!IMPORTANT]
+> This is only supported in Version <b>≥ 2.0.0</b>
+
+- dropdown <b>[default]</b>
+- frame
+
+---
+
 ### Time units
 
 The control uses the <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DateTimeFormat">Intl.DateTimeFormat</a> object to enable language-sensitive date and time formatting. The control allows for the following formatting:
@@ -126,11 +138,12 @@ To control what timezone dates are shown in, you can base it on either:
 
 ### Custom table support
 
-When configuring the control you can give a json-formatted string that will describe supported tables.
+When configuring the control you can give a json-formatted string that will describe supported tables (must be an activity).
 
 > [!IMPORTANT]
 > In version <b>≥ 1.1.0</b> icons were introduced. Icon names are retrieved from <a href="https://fonts.google.com/icons">Google Material Icons</a>.
 > The reason for Google's Icons is due to it being a Fontbased library meaning bundle size is reduced when using dynamic icons.
+> In version <b>≥ 2.0.0</b> Fontbased icondata was moved to use Fluent UI mdl2 with webpack. To see available Icons visit <a href="https://www.flicon.io/">Fluent UI Icons</a> instead.
 
 ```
 {
@@ -141,30 +154,30 @@ When configuring the control you can give a json-formatted string that will desc
 }
 ```
 
-> Default
+> Default (v2.0.0)
 
 ```
 {
-  "task": {
-    "color": "#eab308",
-    "icon": "assignment_turned_in"
-  },
-  "appointment": {
-    "color": "#7e22ce",
-    "icon": "calendar_month"
-  },
-  "milestone": {
-    "color": "#e11d48",
-    "icon": ""
-  },
-  "email": {
-    "color": "#16a34a",
-    "icon": "mail"
-  },
-  "phonecall": {
-    "color": "#fb7185",
-    "icon": "call"
-  }
+   "task":{
+      "color":"#eab308",
+      "icon":"AccountActivity"
+   },
+   "appointment":{
+      "color":"#7e22ce",
+      "icon":"Calendar"
+   },
+   "milestone":{
+      "color":"#e11d48",
+      "icon":"Flag"
+   },
+   "email":{
+      "color":"#16a34a",
+      "icon":"Mail"
+   },
+   "phonecall":{
+      "color":"#fb7185",
+      "icon":"Phone"
+   }
 }
 ```
 
@@ -228,8 +241,11 @@ The background of the timeline items is customizable. There are a few default op
 > [!IMPORTANT]
 > In version <b>≥ 1.1.0</b>
 
+- none
+
 - stripes
-  ![alt text](image.png)
+
+![alt text](image.png)
 
 - dots
 
@@ -253,7 +269,7 @@ The background of the timeline items is customizable. There are a few default op
 ### Smaller features
 
 - Touch support
-- Canvas & Custom Page support
+- Canvas & Custom Page support (has not been checked in v2.0.0)
 
 # 🏆 Credits:
 
