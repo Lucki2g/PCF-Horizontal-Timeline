@@ -42,21 +42,21 @@ v2.0.0
 [x] FEATURE: Priority visualization
 [x] FEATURE: Date & Time picker for edit forms
 [x] BUG: Remove autocompletes from lookup
-[ ] BUG: Timeline becoming invisible sometimes
-[ ] BUG: Opening a dropdown moves entire timelines somestimes
 [x] FEATURE: open frame from other versions.
 [x] FEATURE: state/status visibility
-[ ] FEATURE: goto date quickaction in toolbar
-[ ] FEATURE: warnings/errors for unsupported configuration
-[ ] FEATURE: onClose of InlineFrameWindow update the selected item
+[x] FEATURE: goto date quickaction in toolbar
 
 
 Future
+- BUG: Timeline becoming invisible sometimes
+- Performance: Recude fluentproviders and fix mounting issues of fixed portaled elements
+- BUG: Opening a dropdown moves entire timelines somestimes
+- FEATURE: warnings/errors for unsupported configuration (toasts)
+- FEATURE: onClose of InlineFrameWindow update the selected item
 [-] FEATURE: Edit options
   - dialog 
   - drawer
-
-- FEATURE: Fullscreen
+- FEATURE: Fullscreen button
   [-] FEATURE: Varying sizes of cells - ySize / fontSize
 - FEATURE: Count on Activity type chips inside filter
 - FEATURE: Grey out finished activities
@@ -74,3 +74,4 @@ Future
 - FEATURE: Progress/spinner on fetch calls
 - TODO: Datepicker timezone control
 [!] Write about Attachment size limitations
+- AVAILABILIOTY: aria-labels on EVERYTHING

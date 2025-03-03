@@ -57,7 +57,10 @@ i18n
           statusreason_open: "Open",
           statusreason_completed: "Completed",
           statusreason_canceled: "Canceled",
-          statusreason_scheduled: "Scheduled"
+          statusreason_scheduled: "Scheduled",
+          action_goto: "Goto specific date",
+          goto_label: "Choose date to goto",
+          goto_goto: "Goto",
         },
       },
       "da-DK": {
@@ -105,7 +108,10 @@ i18n
           statusreason_open: "Åben",
           statusreason_completed: "Afsluttet",
           statusreason_canceled: "Annulleret",
-          statusreason_scheduled: "Planlagt"
+          statusreason_scheduled: "Planlagt",
+          action_goto: "Gå til specifik dato",
+          goto_label: "Vælg dato at gå til",
+          goto_goto: "Gå til"
         },
       },
       "fr-FR": {
@@ -154,7 +160,10 @@ i18n
           statusreason_open: "Ouvert",
           statusreason_completed: "Terminé",
           statusreason_canceled: "Annulé",
-          statusreason_scheduled: "Planifié"
+          statusreason_scheduled: "Planifié",
+          action_goto: "Aller à une date spécifique",
+          goto_label: "Choisissez une date à laquelle aller",
+          goto_goto: "Aller"
         },
       },
       "es-ES": {
@@ -203,7 +212,10 @@ i18n
           statusreason_open: "Abierto",
           statusreason_completed: "Completado",
           statusreason_canceled: "Cancelado",
-          statusreason_scheduled: "Programado"
+          statusreason_scheduled: "Programado",
+          action_goto: "Ir a una fecha específica",
+          goto_label: "Elija la fecha a la que ir",
+          goto_goto: "Ir"
         },
       },
       "de-DE": {
@@ -252,7 +264,10 @@ i18n
           statusreason_open: "Offen",
           statusreason_completed: "Abgeschlossen",
           statusreason_canceled: "Storniert",
-          statusreason_scheduled: "Geplant"
+          statusreason_scheduled: "Geplant",
+          action_goto: "Gehe zu bestimmtem Datum",
+          goto_label: "Wählen Sie das Datum zum Gehen",
+          goto_goto: "Gehe zu"
         },
       },
       "zh-CN": {
@@ -300,7 +315,10 @@ i18n
           statusreason_open: "打开",
           statusreason_completed: "已完成",
           statusreason_canceled: "已取消",
-          statusreason_scheduled: "已安排"
+          statusreason_scheduled: "已安排",
+          action_goto: "跳转到指定日期",
+          goto_label: "选择要跳转的日期",
+          goto_goto: "跳转"
         },
       },
       "ja-JP": {
@@ -348,7 +366,10 @@ i18n
           statusreason_open: "オープン",
           statusreason_completed: "完了",
           statusreason_canceled: "キャンセル済み",
-          statusreason_scheduled: "予定済み"
+          statusreason_scheduled: "予定済み",
+          action_goto: "特定の日付へ移動",
+          goto_label: "移動する日付を選択",
+          goto_goto: "移動"
         },
       },
       "ar-SA": {
@@ -396,7 +417,10 @@ i18n
           statusreason_open: "مفتوح",
           statusreason_completed: "مكتمل",
           statusreason_canceled: "ملغي",
-          statusreason_scheduled: "مجدول"
+          statusreason_scheduled: "مجدول",
+          action_goto: "انتقل إلى تاريخ محدد",
+          goto_label: "اختر التاريخ للانتقال إليه",
+          goto_goto: "انتقل"
         },
       },
       "pt-BR": {
@@ -445,7 +469,10 @@ i18n
           statusreason_open: "Aberto",
           statusreason_completed: "Concluído",
           statusreason_canceled: "Cancelado",
-          statusreason_scheduled: "Agendado"
+          statusreason_scheduled: "Agendado",
+          action_goto: "Ir para uma data específica",
+          goto_label: "Escolha a data para ir",
+          goto_goto: "Ir"
         },
       },
       "it-IT": {
@@ -494,7 +521,10 @@ i18n
           statusreason_open: "Aperto",
           statusreason_completed: "Completato",
           statusreason_canceled: "Annullato",
-          statusreason_scheduled: "Pianificato"
+          statusreason_scheduled: "Pianificato",
+          action_goto: "Vai a una data specifica",
+          goto_label: "Scegli la data a cui andare",
+          goto_goto: "Vai"
         },
       },
       "hi-IN": {
@@ -543,7 +573,10 @@ i18n
           statusreason_open: "खुला",
           statusreason_completed: "पूरा हुआ",
           statusreason_canceled: "रद्द",
-          statusreason_scheduled: "अनुसूचित"
+          statusreason_scheduled: "अनुसूचित",
+          action_goto: "निर्दिष्ट तिथि पर जाएँ",
+          goto_label: "जिस तिथि पर जाना है उसे चुनें",
+          goto_goto: "जाएँ"
         },
       },
       "nl-NL": {
@@ -592,7 +625,10 @@ i18n
           statusreason_open: "Open",
           statusreason_completed: "Voltooid",
           statusreason_canceled: "Geannuleerd",
-          statusreason_scheduled: "Gepland"
+          statusreason_scheduled: "Gepland",
+          action_goto: "Ga naar specifieke datum",
+          goto_label: "Kies een datum om naartoe te gaan",
+          goto_goto: "Ga naar"
         },
       },
       "sv-SE": {
@@ -640,7 +676,10 @@ i18n
           statusreason_open: "Öppen",
           statusreason_completed: "Slutförd",
           statusreason_canceled: "Avbruten",
-          statusreason_scheduled: "Schemalagd"
+          statusreason_scheduled: "Schemalagd",
+          action_goto: "Gå till specifikt datum",
+          goto_label: "Välj datum att gå till",
+          goto_goto: "Gå till"
         },
       },
       "fi-FI": {
@@ -689,7 +728,10 @@ i18n
           statusreason_open: "Avoin",
           statusreason_completed: "Valmis",
           statusreason_canceled: "Peruutettu",
-          statusreason_scheduled: "Ajoitettu"
+          statusreason_scheduled: "Ajoitettu",
+          action_goto: "Siirry tiettyyn päivämäärään",
+          goto_label: "Valitse päivämäärä siirtyäksesi",
+          goto_goto: "Siirry"
         },
       },
     },

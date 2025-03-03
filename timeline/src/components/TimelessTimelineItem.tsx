@@ -19,7 +19,7 @@ export default function TimelessTimelineItemBlock({
   return (
     <FluentProvider theme={webLightTheme} className="w-full">
       { 
-          itemEditType === "modal" ? (
+          itemEditType === "frame" ? (
               <InlineFrameWindowDialog item={item}>
                   <Button
                   size="small"

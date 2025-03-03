@@ -9,6 +9,9 @@ import { useGlobalGlobalContext } from "../../../contexts/global-context";
 import { FilterDialog } from "../dialogs/FilterDialog";
 import * as React from "react";
 import { getIconClassName } from "@fluentui/style-utilities";
+import { Dialog, DialogActions, DialogBody, DialogContent, DialogSurface, DialogTrigger, Field, FluentProvider, webLightTheme } from "@fluentui/react-components";
+import { DatePicker } from "@fluentui/react-datepicker-compat";
+import { useCalendarInformation } from "../../../hooks/useCalendarInformation";
 
 interface ITimelineToolbar {
   isPaneOpen: boolean;
@@ -32,8 +35,11 @@ export default function TimelineToolbar({
 }: ITimelineToolbar) {
   const { resetFilters, filterItems, filter } = useFilter();
   const { setState } = useGlobalLoaderContext();
-  const { xSize, items } = useGlobalGlobalContext();
+  const { xSize, items, locale } = useGlobalGlobalContext();
   const { t } = useTranslation();
+  const dateCalendarInformation = useCalendarInformation();
+
+  const [gotoDate, setGotoDate] = React.useState<Date | null>();
 
   const animateNext = () => {
     if (!timelineRef.current) return;
@@ -91,6 +97,17 @@ export default function TimelineToolbar({
     );
   };
 
+  const animateGoto = () => {
+    if (!gotoDate) return;
+    if (!timelineRef.current) return;
+    animate(
+      timelineRef.current.scrollLeft,
+      getLeft(gotoDate, filter.startDate, xSize) - timelineRef.current.clientWidth / 2,
+      timelineRef.current,
+      1000,
+    );
+  };
+
   return (
     <div className={`absolute left-2 top-2 z-20 flex`}>
       <div className="mr-1 flex items-center justify-center rounded-[4px] bg-white shadow-dynamics">
@@ -142,6 +159,54 @@ export default function TimelineToolbar({
               }
             />
           </Tooltip>
+          {/* Goto */}
+          <FluentProvider theme={webLightTheme}>
+            <Tooltip content={t("action_goto")} withArrow relationship={"label"}>
+              <Dialog>
+                <DialogTrigger disableButtonEnhancement>
+                  <Button
+                    appearance="subtle"
+                    size="small"
+                    icon={
+                      <i className={`${getIconClassName("GotoToday")} text-[12px]`} />
+                    }
+                  />
+                </DialogTrigger>
+                <DialogSurface>
+                  <DialogContent>
+                    <Field label={t("goto_label")} orientation="horizontal">
+                      <DatePicker
+                        className="my-2"
+                        appearance="filled-darker"
+                        highlightSelectedMonth
+                        showGoToToday
+                        showCloseButton
+                        value={gotoDate}
+                        contentAfter={<i className={`${getIconClassName("Calendar")} text-[11px]`} />}
+                        calendar={dateCalendarInformation}
+                        formatDate={(date) => date?.toLocaleDateString(locale, { day: "numeric", month: "long", year: "numeric" }) ?? ""}
+                        onSelectDate={(date) => setGotoDate(date ?? null)}
+                        minDate={filter.startDate}
+                        maxDate={filter.endDate}
+                      />
+                    </Field>
+                  </DialogContent>
+                  <DialogActions>
+                    <DialogTrigger disableButtonEnhancement>
+                      <Button appearance='primary' onClick={animateGoto}>
+                          {t("goto_goto")}
+                      </Button>
+                    </DialogTrigger>
+                    <DialogTrigger disableButtonEnhancement>
+                      <Button>
+                          {t("filter_close")}
+                      </Button>
+                    </DialogTrigger>
+                  </DialogActions>
+                </DialogSurface>
+              </Dialog>
+            </Tooltip>
+          </FluentProvider>
 
           <ToolbarDivider />
 
