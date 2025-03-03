@@ -2,14 +2,14 @@ import * as React from "react";
 import { getLeft, ITEM_PADDING, TimeUnit, ySize } from "../timeUtil";
 import { useSettings } from "../../hooks/SettingsState";
 import { useFilter } from "../../contexts/filter-context";
-import { getHref } from "../util";
+import { getHref, StateCode, StatusReason } from "../util";
 import { useGlobalGlobalContext } from "../../contexts/global-context";
 import { Popover, PopoverTrigger, Button, PopoverSurface, Field, Input, Badge, FluentProvider, webLightTheme, Tag, Avatar } from "@fluentui/react-components";
 import { DatePicker } from "@fluentui/react-datepicker-compat";
 import { t } from "i18next";
 import { getIconClassName } from "@fluentui/style-utilities";
 import { ItemDropdown } from "./dialogs/ItemDropdown";
-import ItemDialog from "./dialogs/ItemDialog";
+import InlineFrameWindowDialog from "./dialogs/InlineFrameWindowDialog";
 
 export interface IEntityReference {
     id: string;
@@ -23,7 +23,8 @@ export interface IEntityReference {
     scheduledend: Date | null;
     activitytypecode: string;
     prioritycode: number;
-    statecode: number;
+    statecode: StateCode;
+    statuscode: StatusReason;
     // non-milestone data
     ownerid?: IEntityReference;
     createdon?: Date | null;
@@ -118,8 +119,8 @@ export default function TimelineItemBlock({
                 }} />
                 <FluentProvider theme={webLightTheme}>
                     { 
-                        itemEditType === "modal" ? (
-                            <ItemDialog item={item}>
+                        itemEditType === "frame" ? (
+                            <InlineFrameWindowDialog item={item}>
                                 <Button
                                 ref={itemRef}
                                 size="small"
@@ -138,7 +139,7 @@ export default function TimelineItemBlock({
                                         <></>
                                     )}
                                 </Button>
-                            </ItemDialog>
+                            </InlineFrameWindowDialog>
                         ) : itemEditType === "dropdown" ? (
                             <ItemDropdown item={item}>
                                 <Button

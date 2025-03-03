@@ -52,6 +52,12 @@ i18n
           dropdown_date: "Scheduled date",
           dropdown_save: "Save",
           dropdown_close: "Close",
+          statecode_active: "Active",
+          statecode_deactive: "Deactive",
+          statusreason_open: "Open",
+          statusreason_completed: "Completed",
+          statusreason_canceled: "Canceled",
+          statusreason_scheduled: "Scheduled"
         },
       },
       "da-DK": {
@@ -93,7 +99,13 @@ i18n
           dropdown_title: "Emne",
           dropdown_date: "Planlagt dato",
           dropdown_save: "Gem",
-          dropdown_close: "Luk"
+          dropdown_close: "Luk",
+          statecode_active: "Aktiv",
+          statecode_deactive: "Deaktiveret",
+          statusreason_open: "Åben",
+          statusreason_completed: "Afsluttet",
+          statusreason_canceled: "Annulleret",
+          statusreason_scheduled: "Planlagt"
         },
       },
       "fr-FR": {
@@ -136,7 +148,13 @@ i18n
           dropdown_title: "Sujet",
           dropdown_date: "Date prévue",
           dropdown_save: "Enregistrer",
-          dropdown_close: "Fermer"
+          dropdown_close: "Fermer",
+          statecode_active: "Actif",
+          statecode_deactive: "Désactivé",
+          statusreason_open: "Ouvert",
+          statusreason_completed: "Terminé",
+          statusreason_canceled: "Annulé",
+          statusreason_scheduled: "Planifié"
         },
       },
       "es-ES": {
@@ -179,7 +197,13 @@ i18n
           dropdown_title: "Asunto",
           dropdown_date: "Fecha programada",
           dropdown_save: "Guardar",
-          dropdown_close: "Cerrar"
+          dropdown_close: "Cerrar",
+          statecode_active: "Activo",
+          statecode_deactive: "Desactivado",
+          statusreason_open: "Abierto",
+          statusreason_completed: "Completado",
+          statusreason_canceled: "Cancelado",
+          statusreason_scheduled: "Programado"
         },
       },
       "de-DE": {
@@ -222,7 +246,13 @@ i18n
           dropdown_title: "Betreff",
           dropdown_date: "Geplantes Datum",
           dropdown_save: "Speichern",
-          dropdown_close: "Schließen"
+          dropdown_close: "Schließen",
+          statecode_active: "Aktiv",
+          statecode_deactive: "Deaktiviert",
+          statusreason_open: "Offen",
+          statusreason_completed: "Abgeschlossen",
+          statusreason_canceled: "Storniert",
+          statusreason_scheduled: "Geplant"
         },
       },
       "zh-CN": {
@@ -264,7 +294,13 @@ i18n
           dropdown_title: "主题",
           dropdown_date: "预定日期",
           dropdown_save: "保存",
-          dropdown_close: "关闭"
+          dropdown_close: "关闭",
+          statecode_active: "活动",
+          statecode_deactive: "停用",
+          statusreason_open: "打开",
+          statusreason_completed: "已完成",
+          statusreason_canceled: "已取消",
+          statusreason_scheduled: "已安排"
         },
       },
       "ja-JP": {
@@ -306,7 +342,13 @@ i18n
           dropdown_title: "件名",
           dropdown_date: "予定日",
           dropdown_save: "保存",
-          dropdown_close: "閉じる"
+          dropdown_close: "閉じる",
+          statecode_active: "アクティブ",
+          statecode_deactive: "非アクティブ",
+          statusreason_open: "オープン",
+          statusreason_completed: "完了",
+          statusreason_canceled: "キャンセル済み",
+          statusreason_scheduled: "予定済み"
         },
       },
       "ar-SA": {
@@ -348,7 +390,13 @@ i18n
           dropdown_title: "الموضوع",
           dropdown_date: "التاريخ المحدد",
           dropdown_save: "حفظ",
-          dropdown_close: "إغلاق"
+          dropdown_close: "إغلاق",
+          statecode_active: "نشط",
+          statecode_deactive: "غير نشط",
+          statusreason_open: "مفتوح",
+          statusreason_completed: "مكتمل",
+          statusreason_canceled: "ملغي",
+          statusreason_scheduled: "مجدول"
         },
       },
       "pt-BR": {
@@ -391,7 +439,13 @@ i18n
           dropdown_title: "Assunto",
           dropdown_date: "Data agendada",
           dropdown_save: "Salvar",
-          dropdown_close: "Fechar"
+          dropdown_close: "Fechar",
+          statecode_active: "Ativo",
+          statecode_deactive: "Desativado",
+          statusreason_open: "Aberto",
+          statusreason_completed: "Concluído",
+          statusreason_canceled: "Cancelado",
+          statusreason_scheduled: "Agendado"
         },
       },
       "it-IT": {
@@ -434,7 +488,13 @@ i18n
           dropdown_title: "Oggetto",
           dropdown_date: "Data programmata",
           dropdown_save: "Salva",
-          dropdown_close: "Chiudi"
+          dropdown_close: "Chiudi",
+          statecode_active: "Attivo",
+          statecode_deactive: "Disattivato",
+          statusreason_open: "Aperto",
+          statusreason_completed: "Completato",
+          statusreason_canceled: "Annullato",
+          statusreason_scheduled: "Pianificato"
         },
       },
       "hi-IN": {
@@ -477,7 +537,13 @@ i18n
           dropdown_title: "विषय",
           dropdown_date: "निर्धारित तिथि",
           dropdown_save: "सहेजें",
-          dropdown_close: "बंद करें"
+          dropdown_close: "बंद करें",
+          statecode_active: "सक्रिय",
+          statecode_deactive: "निष्क्रिय",
+          statusreason_open: "खुला",
+          statusreason_completed: "पूरा हुआ",
+          statusreason_canceled: "रद्द",
+          statusreason_scheduled: "अनुसूचित"
         },
       },
       "nl-NL": {
@@ -520,7 +586,13 @@ i18n
           dropdown_title: "Onderwerp",
           dropdown_date: "Geplande datum",
           dropdown_save: "Opslaan",
-          dropdown_close: "Sluiten"
+          dropdown_close: "Sluiten",
+          statecode_active: "Actief",
+          statecode_deactive: "Gedeactiveerd",
+          statusreason_open: "Open",
+          statusreason_completed: "Voltooid",
+          statusreason_canceled: "Geannuleerd",
+          statusreason_scheduled: "Gepland"
         },
       },
       "sv-SE": {
@@ -562,7 +634,13 @@ i18n
           dropdown_title: "Ämne",
           dropdown_date: "Planerat datum",
           dropdown_save: "Spara",
-          dropdown_close: "Stäng"
+          dropdown_close: "Stäng",
+          statecode_active: "Aktiv",
+          statecode_deactive: "Inaktiv",
+          statusreason_open: "Öppen",
+          statusreason_completed: "Slutförd",
+          statusreason_canceled: "Avbruten",
+          statusreason_scheduled: "Schemalagd"
         },
       },
       "fi-FI": {
@@ -605,7 +683,13 @@ i18n
           dropdown_title: "Aihe",
           dropdown_date: "Aikataulutettu päivämäärä",
           dropdown_save: "Tallenna",
-          dropdown_close: "Sulje"
+          dropdown_close: "Sulje",
+          statecode_active: "Aktiivinen",
+          statecode_deactive: "Passiivinen",
+          statusreason_open: "Avoin",
+          statusreason_completed: "Valmis",
+          statusreason_canceled: "Peruutettu",
+          statusreason_scheduled: "Ajoitettu"
         },
       },
     },

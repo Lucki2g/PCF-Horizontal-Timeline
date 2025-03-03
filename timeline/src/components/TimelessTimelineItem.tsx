@@ -3,7 +3,7 @@ import { TimelineItem } from "./TimelineItem";
 import { getHref } from "../util";
 import { useGlobalGlobalContext } from "../../contexts/global-context";
 import { getIconClassName } from "@fluentui/style-utilities";
-import ItemDialog from "./dialogs/ItemDialog";
+import InlineFrameWindowDialog from "./dialogs/InlineFrameWindowDialog";
 import { FluentProvider, webLightTheme, Button } from "@fluentui/react-components";
 import { ItemDropdown } from "./dialogs/ItemDropdown";
 
@@ -20,7 +20,7 @@ export default function TimelessTimelineItemBlock({
     <FluentProvider theme={webLightTheme} className="w-full">
       { 
           itemEditType === "modal" ? (
-              <ItemDialog item={item}>
+              <InlineFrameWindowDialog item={item}>
                   <Button
                   size="small"
                   className={`w-full group pointer-events-auto relative bottom-full flex origin-center items-center justify-center overflow-hidden rounded-[4px] border border-solid border-gray-300 bg-white px-1 py-[2px] shadow-dynamics hover:cursor-pointer`}>
@@ -37,7 +37,7 @@ export default function TimelessTimelineItemBlock({
                           <></>
                       )}
                   </Button>
-              </ItemDialog>
+              </InlineFrameWindowDialog>
           ) : itemEditType === "dropdown" ? (
               <ItemDropdown item={item}>
                   <Button

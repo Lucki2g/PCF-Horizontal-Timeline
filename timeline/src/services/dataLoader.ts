@@ -1,6 +1,7 @@
 import { IInputs } from "../../generated/ManifestTypes";
 import { IEntityReference, TimelineItem } from "../components/TimelineItem";
 import { DEBUG } from "../Timeline";
+import { StateCode, StatusReason } from "../util";
 
 const loadDebugData = (): TimelineItem[] => {
   return [
@@ -11,6 +12,7 @@ const loadDebugData = (): TimelineItem[] => {
       scheduledend: new Date("2024-05-16T08:00:00.000+01:00"),
       prioritycode: 0,
       statecode: 0,
+      statuscode: 1,
       ownerid: {
         id: "2",
         name: "Kaare",
@@ -24,6 +26,7 @@ const loadDebugData = (): TimelineItem[] => {
       scheduledend: new Date("2025-02-26T08:00:00.000+01:00"),
       prioritycode: 1,
       statecode: 0,
+      statuscode: 2,
       ownerid: {
         id: "2",
         name: "Kaare",
@@ -37,6 +40,7 @@ const loadDebugData = (): TimelineItem[] => {
       scheduledend: new Date("2024-05-17T08:00:00.000+02:00"),
       prioritycode: 2,
       statecode: 1,
+      statuscode: 3,
       ownerid: {
         id: "2",
         name: "Kaare",
@@ -50,6 +54,7 @@ const loadDebugData = (): TimelineItem[] => {
       scheduledend: new Date("2024-05-18T08:00:00.000"),
       prioritycode: 1,
       statecode: 0,
+      statuscode: 1,
       ownerid: {
         id: "2",
         name: "Kaare",
@@ -63,6 +68,7 @@ const loadDebugData = (): TimelineItem[] => {
       scheduledend: new Date("2024-10-29"),
       prioritycode: 2,
       statecode: 0,
+      statuscode: 2,
       ownerid: {
         id: "1",
         name: "Kaares Team",
@@ -76,6 +82,7 @@ const loadDebugData = (): TimelineItem[] => {
       scheduledend: null,
       prioritycode: 1,
       statecode: 0,
+      statuscode: 3,
       ownerid: {
         id: "2",
         name: "Kaare",
@@ -89,6 +96,7 @@ const loadDebugData = (): TimelineItem[] => {
       scheduledend: null,
       prioritycode: 1,
       statecode: 1,
+      statuscode: 4,
       ownerid: {
         id: "2",
         name: "Kaare",
@@ -202,7 +210,8 @@ const loadRealData = async (context: ComponentFramework.Context<IInputs>) => {
         ownerid: owner,
         prioritycode: activity.getValue("prioritycode") as number,
         createdon: new Date(activity.getValue("createdon") as string),
-        statecode: activity.getValue("statecode") as number,
+        statecode: activity.getValue("statecode") as StateCode,
+        statuscode: activity.getValue("statuscode") as StatusReason,
       };
     },
   );
@@ -227,7 +236,8 @@ const loadRealData = async (context: ComponentFramework.Context<IInputs>) => {
       activitytypecode: "milestone",
       scheduledend: date,
       prioritycode: 1,
-      statecode: 0
+      statecode: 0,
+      statuscode: 1
     });
   }
   return activities;

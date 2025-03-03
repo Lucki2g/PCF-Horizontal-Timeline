@@ -50,7 +50,7 @@ const initialState: GlobalContextProps = {
   setXSize: () => {},
   clientUrl: "",
   setClientUrl: () => {},
-  itemEditType: "modal",
+  itemEditType: "dropdown",
   setItemEditType: () => {},
   items: [],
   itemDispatch: () => {},
@@ -89,7 +89,7 @@ export const GlobalProvider = ({ children }: { children: ReactNode }) => {
   const [locale, setLocale] = React.useState<string>(initialState.locale);
   const [timezone, setTimeZone] = React.useState<string>(initialState.timezone);
   const [options, setOptions] = React.useState<TimeOptions>({ } as TimeOptions);
-  const [itemEditType, setItemEditType] = React.useState<ItemEditType>("modal");
+  const [itemEditType, setItemEditType] = React.useState<ItemEditType>("dropdown");
   const [activityInfo, setActivityInfo] = React.useState<{
     [schemaname: string]: ActivityInformation;
   }>(initialState.activityInfo);

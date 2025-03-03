@@ -1,17 +1,18 @@
 import * as React from 'react'
 import { TimelineItem } from '../TimelineItem';
 import { ActivityInformation } from '../../icons/Icon';
-import { Button, Divider, Field, FluentProvider, Input, Persona, Popover, PopoverSurface, PopoverTrigger, webLightTheme } from '@fluentui/react-components';
+import { Badge, Button, Divider, Field, FluentProvider, Input, Persona, Popover, PopoverSurface, PopoverTrigger, Tag, TagGroup, webLightTheme } from '@fluentui/react-components';
 import { DatePicker, DatePickerProps } from '@fluentui/react-datepicker-compat';
 import { useTranslation } from 'react-i18next';
 import { getIconClassName } from "@fluentui/style-utilities";
 import { useCalendarInformation } from '../../../hooks/useCalendarInformation';
 import { useGlobalGlobalContext } from '../../../contexts/global-context';
 import { updateTimelineItem } from '../../services/odataService';
-import { priorityColor } from '../../util';
+import { priorityColor, StateCodeName, StatusReasonName } from '../../util';
 import { mapActivityToTimelineItem } from '../../services/dataLoader';
 import { formatDateToTimeString, TimePicker, TimePickerProps } from '@fluentui/react-timepicker-compat';
 import { toZonedTime, fromZonedTime } from 'date-fns-tz';
+import InlineFrameWindowDialog from './InlineFrameWindowDialog';
 
 
 interface IItemDialogProps {
@@ -83,7 +84,7 @@ export const ItemDropdown = ({ children, item }: IItemDialogProps) => {
                 }
 
                 const currentDisplay = toZonedTime(itemState.scheduledend, timezone);
-                // important! I assume choice is in format hh:mm. TODO if sec needs supported
+
                 currentDisplay.setHours(parsedHours, parsedMinutes);
                 // convert updated displayed date back to UTC
                 const newUtcDate = fromZonedTime(currentDisplay, timezone);
@@ -109,10 +110,20 @@ export const ItemDropdown = ({ children, item }: IItemDialogProps) => {
                 <div className='flex justify-between'>
                     <Persona 
                         name={item.ownerid?.name}
-                        secondaryText={t(item.activitytypecode)}
+                        secondaryText={
+                            <TagGroup>
+                                <Tag size='extra-small' appearance='brand' role="list-item">{t(StateCodeName[item.statecode])}</Tag>
+                                <Tag size='extra-small' appearance='brand'role="list-item">{t(StatusReasonName[item.statuscode])}</Tag>
+                            </TagGroup>
+                        }
                         presence={{ status: "unknown" }}
                     />
-                    <span className={`${getIconClassName("RingerSolid")} text-[12px] -rotate-45`} style={{ color: priorityColor[item.prioritycode] }} />
+                    <div className='flex flex-col'>
+                        <span className={`${getIconClassName("RingerSolid")} text-[12px] -rotate-45`} style={{ color: priorityColor[item.prioritycode] }} />
+                        <InlineFrameWindowDialog item={item}>
+                            <button className={`${getIconClassName("NavigateExternalInline")} text-[12px]`} />
+                        </InlineFrameWindowDialog>
+                    </div>
                 </div>
                 <Divider className='my-2' />
                 {/* Name */}

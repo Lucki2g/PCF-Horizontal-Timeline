@@ -39,6 +39,30 @@ export function uuidv4() {
   });
 }
 
+export type StateCode = 
+  | 0 // Active
+  | 1; // Deactive
+
+export type StatusReason =
+  | 1 // Open
+  | 2 // Completed
+  | 3 // Canceled
+  | 4; // Scheduled
+
+// gets the i18 translation logicalname
+export const StateCodeName: { [key: number]: string } = {
+  0: "statecode_active",
+  1: "statecode_deactive",
+}
+
+// gets the i18 translation logicalname
+export const StatusReasonName: { [key: number]: string } = {
+  1: "statusreason_open",
+  2: "statusreason_completed",
+  3: "statusreason_canceled",
+  4: "statusreason_scheduled"
+}
+
 type LocaleSource = "override" | "systemuser" | "browser" | "organisation";
 export const castToLocaleSource = (
   value: string | undefined,
@@ -48,7 +72,7 @@ export const castToLocaleSource = (
     "override",
     "systemuser",
     "browser",
-    "organisation",
+    // "organisation",
   ];
   return validValues.includes(value as LocaleSource)
     ? (value as LocaleSource)
@@ -67,16 +91,18 @@ export const castToTimeZoneSource = (
 };
 
 export type ItemEditType =
-  | "modal"
-  | "pane"
+  | "frame"
+  // | "dialog"
+  // | "pane"
   | "dropdown";
 export const castToItemEditType = (
   value: string | undefined,
-  defaultValue: ItemEditType = "modal",
+  defaultValue: ItemEditType = "dropdown",
 ): ItemEditType => {
   const validValues: ItemEditType[] = [
-    "modal",
-    "pane",
+    "frame",
+    // "pane",
+    // "dialog",
     "dropdown"
   ];
   return validValues.includes(value as ItemEditType)

@@ -36,22 +36,26 @@ v2.0.0
 [x] TODO: Datepicker localization
 [x] TODO: Datepicker start/end date sanitization
 [x] BUG: Allocated width issues
-[-] FEATURE: Edit options
+[x] FEATURE: Edit options
   [x] frame
-  - dialog 
   [x] dropdown
-  - drawer
 [x] FEATURE: Priority visualization
 [x] FEATURE: Date & Time picker for edit forms
 [x] BUG: Remove autocompletes from lookup
 [ ] BUG: Timeline becoming invisible sometimes
 [ ] BUG: Opening a dropdown moves entire timelines somestimes
-[ ] FEATURE: open frame from other versions.
-[ ] FEATURE: state/status visibility
+[x] FEATURE: open frame from other versions.
+[x] FEATURE: state/status visibility
 [ ] FEATURE: goto date quickaction in toolbar
+[ ] FEATURE: warnings/errors for unsupported configuration
+[ ] FEATURE: onClose of InlineFrameWindow update the selected item
 
 
 Future
+[-] FEATURE: Edit options
+  - dialog 
+  - drawer
+
 - FEATURE: Fullscreen
   [-] FEATURE: Varying sizes of cells - ySize / fontSize
 - FEATURE: Count on Activity type chips inside filter

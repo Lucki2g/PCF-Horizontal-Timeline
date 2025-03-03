@@ -11,7 +11,7 @@ interface IItemDialogProps {
     item: TimelineItem;
 }
 
-export default function ItemDialog({ item, children }: IItemDialogProps) {
+export default function InlineFrameWindowDialog({ item, children }: IItemDialogProps) {
 
     const { clientUrl, activityInfo } = useGlobalGlobalContext();
     const url = getHref(clientUrl, item.activitytypecode, item.id);

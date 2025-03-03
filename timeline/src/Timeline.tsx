@@ -198,7 +198,7 @@ export default function Timeline({ context }: ITimelineProps) {
 
       const EDITTYPE = castToItemEditType(
         context.parameters.itemedittype.raw ?? "",
-        "modal",
+        "dropdown",
       );
       setItemEditType(EDITTYPE);
 
