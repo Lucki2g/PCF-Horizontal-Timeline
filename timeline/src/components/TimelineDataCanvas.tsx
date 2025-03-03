@@ -1,7 +1,6 @@
 ﻿import * as React from "react";
 import {
   fontSize,
-  getAvailableTimeUnits,
   getAvailableTimeUnitsV2,
   getLeft,
   ITEM_PADDING,
@@ -12,13 +11,14 @@ import {
 } from "../timeUtil";
 import { useTranslation } from "react-i18next";
 import { useFilter } from "../../contexts/filter-context";
-import TimelineItemBlock, { TimelineItem } from "./TimelineItem";
 import { useGlobalGlobalContext } from "../../contexts/global-context";
+import TimelineItemBlock, { TimelineItem } from "./TimelineItem";
 
 // OBS: HTML Elements fill up the DOM extremely quickly causing lag and performance issues.
 // OBS: Lazy Loading would only work until elements were loaded.
 // OBS: Virtualization batches scroll events causing "blinking" when scrolling.
 // OBS: Browsers have limits for the canvas area, hence why there is a limit on visible dates. This limit is controlled by available system memory and other factors.
+// Using canvas rendering was my solution to all these limitations (alternative could be to limit visible area or do picture cacheing)
 
 export type RoundingType = "year" | "quarter" | "month" | "day" | "none";
 
@@ -35,10 +35,8 @@ export interface TimeOptions {
 }
 
 interface TimelineDataCanvasProps {
-  options: TimeOptions;
   rounding: RoundingType;
   units: TimeUnit[];
-  items: TimelineItem[];
   uuid: string;
   width: number;
   setHeight: (height: number) => void;
@@ -56,8 +54,6 @@ export const TimelineDataCanvas = React.forwardRef<
   (
     {
       setHeight,
-      items,
-      options,
       rounding,
       units,
       uuid,
@@ -73,7 +69,8 @@ export const TimelineDataCanvas = React.forwardRef<
     // Context
     const { t } = useTranslation();
     const { filter, filterItems } = useFilter();
-    const { locale, xSize, timezone } = useGlobalGlobalContext();
+    const { locale, xSize, timezone, items, options } = useGlobalGlobalContext();
+
 
     // Refs
     const canvasRef = React.useRef<HTMLCanvasElement>(null);
@@ -239,17 +236,17 @@ export const TimelineDataCanvas = React.forwardRef<
       item1: TimelineItem,
       item2: TimelineItem,
     ): boolean => {
-      const left1 = getLeft(item1.date!, filter.startDate, xSize);
-      const left2 = getLeft(item2.date!, filter.startDate, xSize);
-      const width1 = (fontSize / 2) * item1.name.length + 32;
-      const width2 = (fontSize / 2) * item2.name.length + 32;
+      const left1 = getLeft(item1.scheduledend!, filter.startDate, xSize);
+      const left2 = getLeft(item2.scheduledend!, filter.startDate, xSize);
+      const width1 = (fontSize / 2) * item1.subject.length + 32;
+      const width2 = (fontSize / 2) * item2.subject.length + 32;
       return !(left1 + width1 < left2 || left2 + width2 < left1);
     };
 
     const arrangeItemsInRows = (): TimelineItem[][] => {
       const newRows: TimelineItem[][] = [];
 
-      items.forEach((item) => {
+      items.filter((i) => i.scheduledend !== null).forEach((item) => {
         let placed = false;
 
         for (const row of newRows) {
@@ -275,8 +272,10 @@ export const TimelineDataCanvas = React.forwardRef<
       return arrangeItemsInRows();
     }, [items, filter.startDate, filter.endDate]);
 
-    // not optimal as it changes state on the parent rendering element
-    setHeight(height + ITEM_PADDING * 2 + rows.length * ySize + 2);
+
+    React.useEffect(() => {
+      setHeight(height + ITEM_PADDING * 2 + (rows.length + 1) * ySize + 2);
+    }, [height, setHeight]);
 
     return (
       <div
@@ -305,9 +304,12 @@ export const TimelineDataCanvas = React.forwardRef<
             paddingBottom: ITEM_PADDING,
             width: totalWidth,
             maxWidth: totalWidth,
-            height: ITEM_PADDING * 2 + rows.length * ySize + height,
+            height: ITEM_PADDING * 2 + (rows.length + 1) * ySize + height,
           }}
         >
+          {/* Extra row for visibility */}
+          <div className="relative flex w-full" style={{ height: ySize }} />
+          {/* Data rows */}
           {rows.map((rowItems, rowIndex) => (
             <div
               key={"row-" + rowIndex}
@@ -315,13 +317,12 @@ export const TimelineDataCanvas = React.forwardRef<
               style={{ height: ySize }}
             >
               {filterItems(filter, rowItems).map((item) => (
-                <TimelineItemBlock
+                <TimelineItemBlock 
                   key={"item-" + item.id}
                   item={item}
                   parentRef={containerRef}
                   rowIdx={rowIndex}
                   rowCount={rows.length - 1}
-                  timeunits={units}
                 />
               ))}
             </div>

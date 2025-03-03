@@ -1,52 +1,107 @@
 import { IInputs } from "../../generated/ManifestTypes";
 import { IEntityReference, TimelineItem } from "../components/TimelineItem";
 import { DEBUG } from "../Timeline";
+import { StateCode, StatusReason } from "../util";
 
-const loadDebugData = () => {
+const loadDebugData = (): TimelineItem[] => {
   return [
     {
       id: "-1",
-      name: "UTC+01",
-      type: "appointment",
-      date: new Date("2024-05-16T08:00:00.000+01:00"),
-      owned: {
-          id: "2",
-          name: "Kaare",
-          entitytype: "systemuser"
-      }
+      subject: "UTC+01",
+      activitytypecode: "appointment",
+      scheduledend: new Date("2024-05-16T08:00:00.000+01:00"),
+      prioritycode: 0,
+      statecode: 0,
+      statuscode: 1,
+      ownerid: {
+        id: "2",
+        name: "Kaare",
+        entitytype: "systemuser",
+      },
+    },
+    {
+      id: "-10",
+      subject: "UTC+01",
+      activitytypecode: "milestone",
+      scheduledend: new Date("2025-02-26T08:00:00.000+01:00"),
+      prioritycode: 1,
+      statecode: 0,
+      statuscode: 2,
+      ownerid: {
+        id: "2",
+        name: "Kaare",
+        entitytype: "systemuser",
+      },
     },
     {
       id: "0",
-      name: "UTC",
-      type: "phonecall",
-      date: new Date("2024-05-16T08:00:00.000+00:00"),
-      owned: {
-          id: "2",
-          name: "Kaare",
-          entitytype: "systemuser"
-      }
+      subject: "UTC+02",
+      activitytypecode: "phonecall",
+      scheduledend: new Date("2024-05-17T08:00:00.000+02:00"),
+      prioritycode: 2,
+      statecode: 1,
+      statuscode: 3,
+      ownerid: {
+        id: "2",
+        name: "Kaare",
+        entitytype: "systemuser",
+      },
     },
     {
       id: "2",
-      name: "LOCAL",
-      type: "email",
-      date: new Date("2024-05-16T08:00:00.000"),
-      owned: {
-          id: "2",
-          name: "Kaare",
-          entitytype: "systemuser"
-      }
+      subject: "LOCAL",
+      activitytypecode: "email",
+      scheduledend: new Date("2024-05-18T08:00:00.000"),
+      prioritycode: 1,
+      statecode: 0,
+      statuscode: 1,
+      ownerid: {
+        id: "2",
+        name: "Kaare",
+        entitytype: "systemuser",
+      },
     },
     {
       id: "1",
-      name: "Remember the chicken",
-      type: "task",
-      date: new Date("2024-10-29"),
-      owned: {
-          id: "1",
-          name: "Kaares Team",
-          entitytype: "team"
-      }
+      subject: "Remember the chicken",
+      activitytypecode: "task",
+      scheduledend: new Date("2024-10-29"),
+      prioritycode: 2,
+      statecode: 0,
+      statuscode: 2,
+      ownerid: {
+        id: "1",
+        name: "Kaares Team",
+        entitytype: "team",
+      },
+    },
+    {
+      id: "5",
+      subject: "LOCAL",
+      activitytypecode: "email",
+      scheduledend: null,
+      prioritycode: 1,
+      statecode: 0,
+      statuscode: 3,
+      ownerid: {
+        id: "2",
+        name: "Kaare",
+        entitytype: "systemuser",
+      },
+    },
+    {
+      id: "12",
+      subject: "LOCAL",
+      activitytypecode: "email",
+      scheduledend: null,
+      prioritycode: 1,
+      statecode: 1,
+      statuscode: 4,
+      ownerid: {
+        id: "2",
+        name: "Kaare",
+        entitytype: "systemuser",
+      },
     },
     // {
     //     id: "2",
@@ -124,6 +179,14 @@ const loadDebugData = () => {
   ];
 };
 
+export const mapActivityToTimelineItem = (activity: any): any => {
+  return {
+    id: activity["activityid"],
+    subject: activity["subject"],
+    scheduledend: activity["scheduledend"] ? new Date(activity["scheduledend"]) : null
+  };
+}
+
 const loadRealData = async (context: ComponentFramework.Context<IInputs>) => {
   const activities = context.parameters.activities.sortedRecordIds.map(
     (id: string): TimelineItem => {
@@ -141,10 +204,14 @@ const loadRealData = async (context: ComponentFramework.Context<IInputs>) => {
 
       return {
         id: id,
-        name: activity.getValue("name") as string,
-        date: scheduledEnd,
-        type: activity.getValue("activitytypecode") as string,
-        owned: owner,
+        subject: activity.getValue("subject") as string,
+        scheduledend: scheduledEnd,
+        activitytypecode: activity.getValue("activitytypecode") as string,
+        ownerid: owner,
+        prioritycode: activity.getValue("prioritycode") as number,
+        createdon: new Date(activity.getValue("createdon") as string),
+        statecode: activity.getValue("statecode") as StateCode,
+        statuscode: activity.getValue("statuscode") as StatusReason,
       };
     },
   );
@@ -165,9 +232,12 @@ const loadRealData = async (context: ComponentFramework.Context<IInputs>) => {
     const date = new Date(result[milestone]);
     activities.push({
       id: milestone,
-      name: milestones[milestone],
-      type: "milestone",
-      date: date,
+      subject: milestones[milestone],
+      activitytypecode: "milestone",
+      scheduledend: date,
+      prioritycode: 1,
+      statecode: 0,
+      statuscode: 1
     });
   }
   return activities;

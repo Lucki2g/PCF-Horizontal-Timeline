@@ -9,7 +9,6 @@ import {
   ySize,
 } from "./timeUtil";
 import { IEntityReference, TimelineItem } from "./components/TimelineItem";
-import TimelineActions from "./components/TimelineActions";
 import { FilterState, useFilter } from "../contexts/filter-context";
 import TimelessTimelineItemBlock from "./components/TimelessTimelineItem";
 import { useTranslation } from "react-i18next";
@@ -20,6 +19,7 @@ import {
 } from "./components/TimelineDataCanvas";
 import {
   castToGridStyle,
+  castToItemEditType,
   castToLocaleSource,
   castToTimeZoneSource,
   getBackground,
@@ -29,6 +29,7 @@ import {
 import { ActivityInformation } from "./icons/Icon";
 import { useGlobalGlobalContext } from "../contexts/global-context";
 import { loadData } from "./services/dataLoader";
+import TimelineToolbar from "./components/toolbars/TimelineToolbar";
 
 interface ITimelineProps {
   context: ComponentFramework.Context<IInputs>;
@@ -47,28 +48,17 @@ export default function Timeline({ context }: ITimelineProps) {
     setActivityInfo,
     setXSize,
     setClientUrl,
+    setItemEditType,
+    setOptions,
     timezone,
-    locale,
-    clientUrl,
-    activityInfo,
+    items,
+    itemDispatch
   } = useGlobalGlobalContext();
 
   const randomID = React.useMemo(() => {
     return uuidv4();
   }, []);
 
-  // Settings
-  const OPTIONS: TimeOptions = {
-    years: context.parameters.yearsformat.raw ?? "full",
-    quarterPrefix: context.parameters.quartersformat.raw ?? "",
-    months: context.parameters.monthsformat.raw ?? "long",
-    weeksPrefix: context.parameters.weeksformat.raw ?? "",
-    days: context.parameters.daysformat.raw ?? "numeric",
-    hours: context.parameters.hoursformat.raw ?? "numeric",
-    hourCycle: context.parameters.hourscycle.raw ?? "23h",
-    minutes: "2-digit",
-    seconds: "2-digit",
-  } as TimeOptions;
   const ROUNDING = (context.parameters.rounding.raw ?? "day") as any;
   const TIMEUNITSUNSORTED: { value: TimeUnit; sort: number }[] = [];
   if (context.parameters.yearsenabled.raw)
@@ -106,21 +96,40 @@ export default function Timeline({ context }: ITimelineProps) {
   ).map((i) => i.value);
   const ACTIVITYINFO = JSON.parse(
     context.parameters.activitydata.raw ??
-      '{"task":{"color":"#eab308"},"appointment":{"color":"#7e22ce"},"milestone":{"color":"#e11d48"},"email":{"color":"#16a34a"},"phonecall":{"color":"#fb7185"}}',
+      `{
+        "task": {
+            "color": "#eab308",
+            "icon": "AccountActivity"
+        },
+        "appointment": {
+            "color": "#7e22ce",
+            "icon": "Calendar"
+        },
+        "milestone": {
+            "color": "#e11d48",
+            "icon": "Flag"
+        },
+        "email": {
+            "color": "#16a34a",
+            "icon": "Mail"
+        },
+        "phonecall": {
+            "color": "#fb7185",
+            "icon": "Phone"
+        }
+    }`,
   ) as { [schemaname: string]: ActivityInformation };
   const GRIDSTYLE = castToGridStyle(
     context.parameters.bgstyle.raw ?? "",
     "grid",
   );
   const BACKGROUND: string = getBackground(context, GRIDSTYLE); // does this open for XSS? - TODO come back and check
-  
 
   // States
   const [isMouseDown, setMouseDown] = React.useState<boolean>(false);
   const [isPaneOpen, setPaneOpen] = React.useState<boolean>(false);
   const [startX, setStartX] = React.useState<number>(0.0);
   const [left, setLeft] = React.useState<number>(0.0);
-  const [items, setItems] = React.useState<TimelineItem[]>([]);
   const [height, setHeight] = React.useState<number>(0);
   const [isAnimating, setIsAnimating] = React.useState<boolean>(false);
 
@@ -154,6 +163,20 @@ export default function Timeline({ context }: ITimelineProps) {
       }
       setLocale(locale);
 
+      // Settings
+      const options: TimeOptions = {
+        years: context.parameters.yearsformat.raw ?? "full",
+        quarterPrefix: context.parameters.quartersformat.raw ?? "",
+        months: context.parameters.monthsformat.raw ?? "long",
+        weeksPrefix: context.parameters.weeksformat.raw ?? "",
+        days: context.parameters.daysformat.raw ?? "numeric",
+        hours: context.parameters.hoursformat.raw ?? "numeric",
+        hourCycle: context.parameters.hourscycle.raw ?? "23h",
+        minutes: "2-digit",
+        seconds: "2-digit",
+      } as TimeOptions;
+      setOptions(options);
+
       const timezoneSource = castToTimeZoneSource(
         context.parameters.timezonesource.raw ?? "",
         "browser",
@@ -172,6 +195,12 @@ export default function Timeline({ context }: ITimelineProps) {
       setActivityInfo(ACTIVITYINFO);
       setXSize(context.parameters.xsize.raw ?? 32);
       setClientUrl(DEBUG ? "" : (context as any).page.getClientUrl());
+
+      const EDITTYPE = castToItemEditType(
+        context.parameters.itemedittype.raw ?? "",
+        "dropdown",
+      );
+      setItemEditType(EDITTYPE);
 
       // initial data load
       await dataRefresh(timezone);
@@ -289,13 +318,13 @@ export default function Timeline({ context }: ITimelineProps) {
     let end = new Date("0000-01-01");
     const items = await loadData(context);
     for (const item of items) {
-      if (!item.date) continue;
-      if (item.date < start) start = item.date;
-      if (item.date > end) end = item.date;
+      if (!item.scheduledend) continue;
+      if (item.scheduledend < start) start = item.scheduledend;
+      if (item.scheduledend > end) end = item.scheduledend;
     }
 
     if (new Date() > end) end = new Date();
-    setItems(items);
+    itemDispatch({ type: "reset", payload: items });
     initializeFilter({
       search: "",
       itemTypes: Object.keys(ACTIVITYINFO).reduce(
@@ -312,17 +341,18 @@ export default function Timeline({ context }: ITimelineProps) {
   return loadingstate ? (
     <></>
   ) : (
-    <div className="relative flex h-full w-full select-none items-start justify-center font-dynamics text-dynamics-text">
+    <div className="relative flex h-full w-full select-none items-start justify-center font-dynamics text-dynamics-text" id="horizontal-timeline" style={{
+      maxWidth: context.mode.allocatedWidth
+    }}>
       {/* Loading */}
       {loadingstate ? <div className="h-1 w-full bg-black"></div> : <></>}
 
       {/* Actions */}
-      <TimelineActions
+      <TimelineToolbar
         timelineRef={timelineRef}
         animate={animateLeft}
         isPaneOpen={isPaneOpen}
         paneChange={() => setPaneOpen(!isPaneOpen)}
-        items={items}
         onSave={(filter: FilterState) => {
           setFilter(filter);
         }}
@@ -349,9 +379,7 @@ export default function Timeline({ context }: ITimelineProps) {
           uuid={randomID}
           ref={canvasRef}
           setHeight={(height: number) => setHeight(height)}
-          items={items.filter((i) => i.date !== null)}
           rounding={ROUNDING}
-          options={OPTIONS}
           units={TIMEUNITS}
         />
       </div>
@@ -365,12 +393,12 @@ export default function Timeline({ context }: ITimelineProps) {
         <p className="mb-2 text-[9px] text-gray-500">
           {t("timeless_description")}
         </p>
-        <div className="flex h-full w-full flex-col items-center justify-center overflow-y-scroll">
-          {items.filter((i) => i.date === null).length === 0 ? (
+        <div className="flex h-full w-full flex-col items-center justify-center overflow-y-scroll pr-1">
+          {items.filter((i) => i.scheduledend === null).length === 0 ? (
             <p className="text-xs">{t("timeless_noitems")}</p>
           ) : (
             items
-              .filter((i) => i.date === null)
+              .filter((i) => i.scheduledend === null)
               .map((i) => {
                 return <TimelessTimelineItemBlock key={i.id} item={i} />;
               })

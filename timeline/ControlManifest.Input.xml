@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <manifest>
-  <control namespace="ape.dataset.timeline" constructor="timeline" version="1.1.0" display-name-key="timeline" description-key="timeline description" control-type="virtual" >
+  <control namespace="ape.dataset.timeline" constructor="timeline" version="2.0.0" display-name-key="timeline" description-key="timeline description" control-type="virtual" >
     <external-service-usage enabled="false">
     </external-service-usage>
 
     <!-- dataset node represents a set of entity records on CDS; alFlow more than one datasets -->
     <property description-key="Model Driven App ID" display-name-key="App ID" name="appid" usage="input" of-type="SingleLine.Text" />
     <property default-value='day' description-key="Rounding method (the smallest shown item)" display-name-key="Rounding" name="rounding" usage="input" of-type="SingleLine.Text" />
+
+    <!-- ITEMS -->
+    <property default-value='dropdown' description-key="How should items open?" display-name-key="Item Edit Type" name="itemedittype" usage="input" of-type="SingleLine.Text" required="true" />
 
     <!-- LOCALIZATION -->
     <property default-value='systemuser' description-key="Where should the language come from?" display-name-key="Local Source" name="localesource" usage="input" of-type="SingleLine.Text" required="true" />
@@ -15,7 +18,7 @@
     <property default-value='UTC' description-key="Timezone in IANA Time Zone Database format" display-name-key="Timezone" name="timezone" usage="input" of-type="SingleLine.Text" />
     
     <!-- ITEMS -->
-    <property default-value='{"task":{"color":"#eab308","icon":"assignment_turned_in"},"appointment":{"color":"#7e22ce","icon":"calendar_month"},"milestone":{"color":"#e11d48","icon":""},"email":{"color":"#16a34a","icon":"mail"},"phonecall":{"color":"#fb7185","icon":"call"}}' description-key="activitydata" display-name-key="Activitydata" name="activitydata" usage="input" of-type="SingleLine.TextArea" />
+    <property default-value='{"task":{"color":"#eab308","icon":"AccountActivity"},"appointment":{"color":"#7e22ce","icon":"Calendar"},"milestone":{"color":"#e11d48","icon":"Flag"},"email":{"color":"#16a34a","icon":"Mail"},"phonecall":{"color":"#fb7185","icon":"Phone"}}' description-key="activitydata" display-name-key="Activitydata" name="activitydata" usage="input" of-type="SingleLine.TextArea" />
     <property default-value='{"createdon":"Created On","estimatedclosedate":"Estimated Close","actualclose":"Actual Close"}' description-key="milestonedata" display-name-key="Milestones" name="milestonedata" usage="input" of-type="SingleLine.TextArea" />
 
     <!-- SIZING -->
@@ -52,17 +55,14 @@
     <property default-value='0' description-key="Hours position" display-name-key="Hours Position" name="hourspos" usage="input" of-type="Whole.None" />
     <property default-value='h23' description-key="Hours cycle" display-name-key="Hours Cycle" name="hourscycle" usage="input" of-type="SingleLine.Text" />
     
-    <data-set name="activities" display-name-key="activities">
-      <property-set name="name" display-name-key="name" description-key="name" of-type="SingleLine.Text" usage="bound" required="true" />
-      <property-set name="scheduledend" display-name-key="scheduledend" description-key="scheduledend" of-type="DateAndTime.DateAndTime" usage="bound" required="true" />
-    </data-set>
+    <data-set name="activities" display-name-key="activities"></data-set>
 
     <resources>
       <code path="index.ts" order="1"/>
-      <platform-library name="React" version="16.8.6" />
+      <platform-library name="React" version="16.14.0" />
+      <platform-library name="Fluent" version="9.46.2" />
       <css path="css/styles.css" order="1" />
       <!-- UNCOMMENT TO ADD MORE RESOURCES
-      <platform-library name="Fluent" version="8.29.0" />
       -->
     </resources>
     <feature-usage>

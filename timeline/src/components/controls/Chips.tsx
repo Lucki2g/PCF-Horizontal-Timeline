@@ -1,6 +1,9 @@
 import * as React from "react";
-import { hexToRgb } from "../../util";
 import { useGlobalGlobalContext } from "../../../contexts/global-context";
+import { Field } from "@fluentui/react-field";
+import { InteractionTag, InteractionTagPrimary, TagGroup } from "@fluentui/react-tags"
+import { getIconClassName } from "@fluentui/style-utilities";
+import { useTranslation } from "react-i18next";
 
 interface IChipsProps {
   label: string;
@@ -10,61 +13,41 @@ interface IChipsProps {
 
 export default function Chips({ label, states, onChange }: IChipsProps) {
   const { activityInfo } = useGlobalGlobalContext();
+  const { t } = useTranslation();
 
   return (
-    <div className="my-1 flex w-full flex-col text-xs">
-      <div className="relative flex flex-wrap justify-start rounded-[4px] bg-neutral-100 p-2 pt-5">
+    <Field className="my-1 w-full" label={label} orientation="horizontal">
+      <TagGroup size="small" style={{ display: "flex", flexWrap: "wrap" }}>
         {Object.keys(states).map((type) => {
+          const data = activityInfo[type];
+
           return (
-            <Chip
+            <InteractionTag
               key={type}
-              label={type}
-              color={activityInfo[type].color}
-              active={states[type]}
-              onClicked={(state: boolean) => onChange(type, state)}
-            />
+              style={{
+                borderStyle: "solid",
+                borderColor: states[type] ? data.color : "#7E7E7E",
+                borderWidth: "1px",
+                position: "relative",
+                margin: "2px 0",
+              }}
+              value={type}
+              onClick={() => onChange(type, !states[type])}
+            >
+              <InteractionTagPrimary
+                media={
+                  <i className={`${getIconClassName(data.icon)} flex h-[20px] w-[20px] items-center justify-center rounded-[4px] text-[11px] text-white opacity-55`}
+                    style={{
+                      backgroundColor: states[type] ? data.color : "#7E7E7E",
+                    }} />
+                }
+              >
+                {t(type)}
+              </InteractionTagPrimary>
+            </InteractionTag>
           );
         })}
-        <p className="absolute left-2 top-0.5 text-start text-xs font-semibold tracking-wide text-gray-500">
-          {label}
-        </p>
-      </div>
-    </div>
-  );
-}
-
-interface IChipProps {
-  label: string;
-  color: string;
-  active: boolean;
-  onClicked: (state: boolean) => void;
-}
-
-function Chip({ label, color, active, onClicked }: IChipProps) {
-  return (
-    <div className="my-px flex items-center justify-end">
-      <input
-        type="checkbox"
-        id={label}
-        tabIndex={1}
-        className="peer hidden"
-        checked={active}
-      />
-      <div
-        className={`mr-1 cursor-pointer select-none rounded-[4px] border border-solid bg-opacity-30 px-2 py-0.5 shadow-dynamics transition-colors duration-150`}
-        style={{
-          color: active ? color : "#6b7280",
-          borderColor: active ? color : "#6b7280",
-          backgroundColor: active
-            ? `rgba(${hexToRgb(color)}, 0.15)`
-            : `rgba(${hexToRgb("#6b7280")}, 0.15)`,
-        }}
-        onClick={() => onClicked(!active)}
-      >
-        <label htmlFor={label} className="pointer-events-none text-xs">
-          {label}
-        </label>
-      </div>
-    </div>
+      </TagGroup>
+    </Field>
   );
 }

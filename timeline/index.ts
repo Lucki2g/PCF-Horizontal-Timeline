@@ -1,4 +1,5 @@
 import { IInputs, IOutputs } from "./generated/ManifestTypes";
+import { initializeIcons } from '@fluentui/font-icons-mdl2';
 import * as React from "react";
 import DataSetInterfaces = ComponentFramework.PropertyHelper.DataSetApi;
 import App from "./src/App";
@@ -27,13 +28,21 @@ export class timeline
     notifyOutputChanged: () => void,
     state: ComponentFramework.Dictionary,
   ): void {
+    // allow for resize event triggers
     context.mode.trackContainerResize(true);
     this.notifyOutputChanged = notifyOutputChanged;
-    const googleIconFont = document.createElement("link");
-    googleIconFont.setAttribute("rel", "stylesheet");
-    googleIconFont.setAttribute("type", "text/css");
-    googleIconFont.setAttribute("href", "https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200");
-    document.getElementsByTagName("head")[0].appendChild(googleIconFont)
+    // fluent font icons initialization
+    initializeIcons();
+    // ensure data is available in dataset
+    if (context.parameters.activities.addColumn) {
+      context.parameters.activities.addColumn("activitytypecode");
+      context.parameters.activities.addColumn("prioritycode");
+      context.parameters.activities.addColumn("ownerid");
+      context.parameters.activities.addColumn("createdon");
+      context.parameters.activities.addColumn("statecode");
+      context.parameters.activities.addColumn("scheduledend");
+      context.parameters.activities.addColumn("subject");
+    }
   }
 
   /**

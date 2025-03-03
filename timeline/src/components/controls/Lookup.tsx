@@ -1,6 +1,12 @@
+import { IEntityReference } from "../TimelineItem";
 import * as React from "react";
-import { IEntityReference, TimelineItem } from "../TimelineItem";
-import { getIcon } from "../../util";
+import { Field } from "@fluentui/react-field";
+import { Avatar } from "@fluentui/react-avatar";
+import { Tag } from "@fluentui/react-tags"
+import { TagPicker, TagPickerControl, TagPickerGroup, TagPickerList, TagPickerOption, TagPickerOptionGroup, useTagPickerFilter, TagPickerInput } from '@fluentui/react-tag-picker';
+import { useTranslation } from "react-i18next";
+import { getIconClassName } from "@fluentui/style-utilities";
+// https://github.com/microsoft/fluentui/wiki/Using-icons/f60fc129945263782708736c8c518b3d30653c8e, https://uifabricicons.azurewebsites.net/, https://www.flicon.io/
 
 interface ILookupProps {
   options: IEntityReference[];
@@ -17,119 +23,169 @@ export default function Lookup({
   currentValue,
   handleChange,
 }: ILookupProps) {
-  const inputRef = React.useRef<HTMLInputElement>(null);
-
-  const [isOpen, setIsOpen] = React.useState<boolean>(false);
   const [query, setQuery] = React.useState<string>(currentValue?.name ?? "");
-  const [focused, setFocused] = React.useState<boolean>(false);
+  const [selectedOption, setSelectedOption] =
+    React.useState<IEntityReference | null>(currentValue);
+
+  const { t } = useTranslation();
 
   React.useEffect(() => {
-    if (!isOpen && query) setQuery("");
-  }, [isOpen]);
+    setSelectedOption(currentValue);
+  }, [currentValue]);
 
-  const selectOption = (option: IEntityReference) => {
+  const onOptionSelect = (_: any, data: any) => {
+    if (data.value === "no-options") return;
+
+    if (data.selectedOptions.length === 0) return selectOption(null);
+    const newest = data.selectedOptions[data.selectedOptions.length - 1];
+    selectOption(newest);
+  };
+
+  const selectOption = (option: string | null) => {
+    const entity = toEntityReference(option);
+    setSelectedOption(entity);
+    handleChange(entity);
     setQuery("");
-    handleChange(option);
-    setIsOpen((isOpen) => !isOpen);
   };
 
-  const toggle = (
-    e: React.MouseEvent<HTMLInputElement, MouseEvent> | MouseEvent,
-  ) => {
-    setIsOpen(e && e.target === inputRef.current);
-  };
+  const toEntityReference = (id: string | null) =>
+    options.find((o) => o.id === id) ?? null;
 
-  const filter = (options: IEntityReference[]) => {
-    return options
-      .filter((option: IEntityReference) => {
-        return option.name.toLowerCase().includes(query.toLowerCase());
-      })
-      .reduce((acc: IEntityReference[], option: IEntityReference) => {
-        const exists = acc.some((o) => o.id === option.id);
-        return exists ? acc : [...acc, option];
-      }, []);
-  };
+  const mappedOptions = options
+    .reduce((acc: IEntityReference[], option: IEntityReference) => {
+      const exists = acc.some((o) => o.id === option.id);
+      return exists ? acc : [...acc, option];
+    }, [])
+    .map((o) => o.id);
 
-  React.useEffect(() => {
-    document.addEventListener("click", toggle);
-    return () => document.removeEventListener("click", toggle);
-  }, []);
+  const teams = useTagPickerFilter({
+    query,
+    options: mappedOptions,
+    noOptionsElement: (
+      <TagPickerOption value="no-options">{t("lookup_nomatches")}</TagPickerOption>
+    ),
+    renderOption: (option) => {
+      const optionData = toEntityReference(option);
+      if (!optionData) return <></>;
+      return (
+        <TagPickerOption
+          secondaryContent={t(optionData.entitytype)}
+          media={
+            <Avatar
+              shape="square"
+              color="colorful"
+              idForColor={optionData.name}
+              icon={<i className={`${getIconClassName("Group")} h-[24px] w-[24px] text-[24px]`} />}
+            />
+          }
+          key={option}
+          value={option}
+        >
+          {optionData.name}
+        </TagPickerOption>
+      );
+    },
+    filter: (option) => {
+      const optionData = toEntityReference(option);
+      if (!optionData) return false;
 
-  const getInput = (): string => {
-    if (query) return query;
-    if (currentValue) return currentValue.name;
-    return "";
-  };
+      return (
+        option !== (selectedOption?.id ?? "") &&
+        optionData.name.toLowerCase().includes(query.toLowerCase()) &&
+        optionData.entitytype === "team"
+      );
+    },
+  });
+
+  const users = useTagPickerFilter({
+    query,
+    options: mappedOptions,
+    noOptionsElement: (
+      <TagPickerOption value="no-matches">{t("lookup_nomatches")}</TagPickerOption>
+    ),
+    renderOption: (option) => {
+      const optionData = toEntityReference(option);
+      if (!optionData) return <></>;
+      return (
+        <TagPickerOption
+          secondaryContent={t(optionData.entitytype)}
+          media={
+            <Avatar
+              shape="square"
+              color="colorful"
+              idForColor={optionData.name}
+              icon={<i className={`${getIconClassName("Contact")} h-[24px] w-[24px] text-[24px]`} />}
+            />
+          }
+          key={option}
+          value={option}
+        >
+          {optionData.name}
+        </TagPickerOption>
+      );
+    },
+    filter: (option) => {
+      const optionData = toEntityReference(option);
+      if (!optionData) return false;
+
+      return (
+        optionData.id !== (selectedOption?.id ?? "") &&
+        optionData.name.toLowerCase().includes(query.toLowerCase()) &&
+        optionData.entitytype === "systemuser"
+      );
+    },
+  });
 
   return (
-    <div className="my-2 w-full flex-col">
-      <div className="relative w-full">
-        <input
-          ref={inputRef}
-          value={getInput()}
-          onChange={(e) => {
-            setQuery(e.target.value);
-            handleChange(null);
-          }}
-          onClick={toggle}
-          onFocus={() => setFocused(true)}
-          onBlur={() => setFocused(false)}
-          type="text"
-          tabIndex={1}
-          className="peer box-border w-full rounded-[4px] bg-neutral-100 p-2 pt-5 focus:outline-none"
-        ></input>
-
-        <div
-          className="absolute left-2 flex items-center transition-[top]"
-          style={{ top: focused || getInput().length > 0 ? "2px" : "14px" }}
-        >
-          <span className="material-symbols-rounded w-4 h-4" style={{ fontSize: "16px" }}>search</span>
-          <label
-            className={`text-start font-semibold tracking-wide transition-all duration-150 ${focused ? "text-cyan-400" : "text-gray-500"} ${focused || getInput().length > 0 ? "text-xs" : "text-sm"}`}
-          >
-            {label}
-          </label>
-        </div>
-
-        {description ? (
-          <p className="text-[8px] text-gray-400">{description}</p>
-        ) : (
-          <></>
-        )}
-        {/* DROP DOWN */}
-        <div
-          className={`${isOpen ? "h-auto max-h-32 overflow-y-auto p-2 shadow-dynamics" : "h-0 p-0"} absolute top-14 z-50 flex w-full flex-col rounded-[4px] bg-white transition-all duration-150`}
-        >
-          {isOpen ? (
-            filter(options).map((user) => {
-              return (
-                <button
-                  key={`filter-${user.id}`}
-                  className="flex w-full items-center rounded-[4px] p-1 transition-all duration-150 hover:bg-gray-50"
-                  onClick={() => selectOption(user)}
-                >
-                  <span className="mr-2 flex justify-center items-center">
-                    {getIcon(user.entitytype)}
-                  </span>
-                  <div className="flex flex-col text-start">
-                    <p className="semibold truncate text-sm text-dynamics-text">
-                      {user.name}
-                    </p>
-                    <p className="truncate text-xs text-gray-400">
-                      {user.entitytype}
-                    </p>
-                  </div>
-                </button>
-              );
-            })
-          ) : (
-            <></>
-          )}
-        </div>
-        <div
-          className={`peer-focus:transform-origin-center absolute bottom-0 left-1/2 h-0.5 w-0 -translate-x-1/2 transform rounded-b-[4px] bg-gradient-to-r from-cyan-400 to-sky-600 transition-all duration-300 peer-focus:w-full`}
-        ></div>
-      </div>
-    </div>
+    <Field
+      label={label}
+      orientation="horizontal"
+      className="relative my-1 w-full"
+    >
+      <TagPicker
+        onOptionSelect={onOptionSelect}
+        selectedOptions={selectedOption ? [selectedOption.name] : []}
+        appearance="filled-darker"
+      >
+        <TagPickerControl expandIcon={<i className={`${getIconClassName("Search")} text-[11px]`} />}>
+          <TagPickerGroup>
+            {selectedOption ? (
+              <Tag
+                value={selectedOption.name}
+                shape="rounded"
+                dismissIcon={<i className={`${getIconClassName("ChromeClose")} text-[11px]`} />}
+                media={
+                  <Avatar
+                    shape="square"
+                    color="colorful"
+                    idForColor={selectedOption.name}
+                    icon={
+                       <i className={`${getIconClassName(selectedOption.entitytype === "team" ? "Group" : "Contact")} h-[20px] w-[20px] text-[11px] flex justify-center items-center`} />
+                    }
+                  />
+                }
+              >
+                {selectedOption.name}
+              </Tag>
+            ) : (
+              <></>
+            )}
+          </TagPickerGroup>
+          <TagPickerInput
+            autoComplete="off"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+          />
+        </TagPickerControl>
+        <TagPickerList>
+          <TagPickerOptionGroup label={t("lookup_teams")}>
+            {teams}
+          </TagPickerOptionGroup>
+          <TagPickerOptionGroup label={t("lookup_users")}>
+            {users}
+          </TagPickerOptionGroup>
+        </TagPickerList>
+      </TagPicker>
+    </Field>
   );
 }

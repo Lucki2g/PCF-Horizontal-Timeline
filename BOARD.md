@@ -27,22 +27,51 @@ V1.1.0
 [x] REFACTOR: Change icons to use Lucide
 [x] FEATURE: Tooltips on actions
 [x] BUG: Must find a way to reduce PCF size (most likely lucide issue with dynamic icons)
-- AVAILABILITY: Update translations with new tooltips
-- FEATURE: Fullscreen
-[-] FEATURE: Varying sizes of cells - ySize / fontSize
+[x] AVAILABILITY: Update translations with new tooltips
+[x] FEATURE: Icon upload for custom tables (lucide icons)
+[x] BEAUTIFY/REFACTOR: - Action Buttons
+
+v2.0.0
+[x] UX: Complete refactor over to Fluent UI 9
+[x] TODO: Datepicker localization
+[x] TODO: Datepicker start/end date sanitization
+[x] BUG: Allocated width issues
+[x] FEATURE: Edit options
+  [x] frame
+  [x] dropdown
+[x] FEATURE: Priority visualization
+[x] FEATURE: Date & Time picker for edit forms
+[x] BUG: Remove autocompletes from lookup
+[x] FEATURE: open frame from other versions.
+[x] FEATURE: state/status visibility
+[x] FEATURE: goto date quickaction in toolbar
+
+
+Future
+- BUG: Timeline becoming invisible sometimes
+- Performance: Recude fluentproviders and fix mounting issues of fixed portaled elements
+- BUG: Opening a dropdown moves entire timelines somestimes
+- FEATURE: warnings/errors for unsupported configuration (toasts)
+- FEATURE: onClose of InlineFrameWindow update the selected item
+[-] FEATURE: Edit options
+  - dialog 
+  - drawer
+- FEATURE: Fullscreen button
+  [-] FEATURE: Varying sizes of cells - ySize / fontSize
 - FEATURE: Count on Activity type chips inside filter
-- FEATURE: Priority visualization
 - FEATURE: Grey out finished activities
 - FEATURE: New Activity button
 - FEATURE: Attendies and activityparties, to apply to filter
-[-] FEATURE: Process support (status change dates etc.) - BPF Support
+  [-] FEATURE: Process support (status change dates etc.) - BPF Support
 - AVAILABILITY: Translation of custom schemanames
 - BUG: Support multiple timelines on one form
 - FEATURE: Spinner på refresh
-[x] FEATURE: Icon upload for custom tables (lucide icons)
-[x] BEAUTIFY/REFACTOR: - Action Buttons
 - BUG: Left Stick is odd-looking when all the way left on the timeline
 - FEATURE: Increase modal height size
 - FEATURE: Darkmode
 - FEATURE: Colorblind mode
 - BUG: Fix the console error about state leak
+- FEATURE: Progress/spinner on fetch calls
+- TODO: Datepicker timezone control
+[!] Write about Attachment size limitations
+- AVAILABILIOTY: aria-labels on EVERYTHING
