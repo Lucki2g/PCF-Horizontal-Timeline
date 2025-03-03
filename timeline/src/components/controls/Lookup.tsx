@@ -172,6 +172,7 @@ export default function Lookup({
             )}
           </TagPickerGroup>
           <TagPickerInput
+            autoComplete="off"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
           />

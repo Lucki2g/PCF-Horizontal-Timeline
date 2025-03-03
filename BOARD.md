@@ -43,7 +43,7 @@ v2.0.0
   - drawer
 [x] FEATURE: Priority visualization
 [x] FEATURE: Date & Time picker for edit forms
-[ ] BUG: Remove autocompletes from lookup
+[x] BUG: Remove autocompletes from lookup
 [ ] BUG: Timeline becoming invisible sometimes
 [ ] BUG: Opening a dropdown moves entire timelines somestimes
 [ ] FEATURE: open frame from other versions.
