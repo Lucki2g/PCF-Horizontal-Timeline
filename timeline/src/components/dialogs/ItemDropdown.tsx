@@ -27,6 +27,9 @@ export const ItemDropdown = ({ children, item }: IItemDialogProps) => {
 
     // important that scheduled date is UTC
     const [itemState, setItemState] = React.useState<TimelineItem>(item);
+
+    // IMPOTANT i assume that format is HH:mm HH.mm with optional AM PM
+    const timeRegex = /^(\d{1,2})[:\.](\d{2})(?:\s*([AaPp][Mm]))?$/;
     
     // converts the date to the timezone for when displs
     const displayDate = itemState.scheduledend ? toZonedTime(itemState.scheduledend, timezone) : null;
@@ -64,13 +67,28 @@ export const ItemDropdown = ({ children, item }: IItemDialogProps) => {
         setTimePickerValue(timeString ?? "");
 
         if (timeString && itemState.scheduledend) {
-            const currentDisplay = toZonedTime(itemState.scheduledend, timezone);
-            // important! I assume choice is in format hh:mm. TODO if sec needs supported
-            const [hours, minutes] = timeString.split(':').map(Number);
-            currentDisplay.setHours(hours, minutes);
-            // convert updated displayed date back to UTC
-            const newUtcDate = fromZonedTime(currentDisplay, timezone);
-            setItemState({ ...itemState, scheduledend: newUtcDate });
+            const match = timeString.match(timeRegex);
+            if (match) {
+                let parsedHours = parseInt(match[1], 10);
+                const parsedMinutes = parseInt(match[2], 10);
+        
+                // adjust if format is h12 or h11
+                if ((options.hourCycle === 'h12' || options.hourCycle === 'h11') && match[3]) {
+                    const dp = match[3].toLowerCase();
+                    if (dp.startsWith('p') && parsedHours < 12) {
+                        parsedHours += 12;
+                    } else if (dp.startsWith('a') && parsedHours === 12) {
+                        parsedHours = 0;
+                    }
+                }
+
+                const currentDisplay = toZonedTime(itemState.scheduledend, timezone);
+                // important! I assume choice is in format hh:mm. TODO if sec needs supported
+                currentDisplay.setHours(parsedHours, parsedMinutes);
+                // convert updated displayed date back to UTC
+                const newUtcDate = fromZonedTime(currentDisplay, timezone);
+                setItemState({ ...itemState, scheduledend: newUtcDate });
+            }
         }
     };
 
