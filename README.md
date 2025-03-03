@@ -71,7 +71,7 @@ How elements are opened from the timeline can be modified to currently only 2 op
 
 The control uses the <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DateTimeFormat">Intl.DateTimeFormat</a> object to enable language-sensitive date and time formatting. The control allows for the following formatting:
 
-> [!INFO]
+> [!NOTE]
 > There are individual toggles to enable/disable the date information entirely.
 
 > Years
