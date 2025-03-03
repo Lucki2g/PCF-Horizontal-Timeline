@@ -35,7 +35,6 @@ v2.0.0
 [x] UX: Complete refactor over to Fluent UI 9
 [x] TODO: Datepicker localization
 [x] TODO: Datepicker start/end date sanitization
-[!] Write about Attachment size limitations
 [x] BUG: Allocated width issues
 [-] FEATURE: Edit options
   [x] frame
@@ -43,6 +42,13 @@ v2.0.0
   [x] dropdown
   - drawer
 [x] FEATURE: Priority visualization
+[x] FEATURE: Date & Time picker for edit forms
+[ ] BUG: Remove autocompletes from lookup
+[ ] BUG: Timeline becoming invisible sometimes
+[ ] BUG: Opening a dropdown moves entire timelines somestimes
+[ ] FEATURE: open frame from other versions.
+[ ] FEATURE: state/status visibility
+[ ] FEATURE: goto date quickaction in toolbar
 
 
 Future
@@ -63,3 +69,4 @@ Future
 - BUG: Fix the console error about state leak
 - FEATURE: Progress/spinner on fetch calls
 - TODO: Datepicker timezone control
+[!] Write about Attachment size limitations

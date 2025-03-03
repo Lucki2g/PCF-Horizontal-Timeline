@@ -20,6 +20,8 @@
     "@fluentui/font-icons-mdl2": "^8.5.58",
     "@fluentui/react-components": "^9.60.0",
     "@fluentui/react-datepicker-compat": "^0.5.0",
+    "@fluentui/react-timepicker-compat": "^0.3.0",
+    "date-fns-tz": "^3.2.0",
     "i18next": "^23.5.1",
     "i18next-browser-languagedetector": "^8.0.2",
     "react-dom": "^16.14.0",

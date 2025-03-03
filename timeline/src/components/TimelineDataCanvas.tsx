@@ -35,7 +35,6 @@ export interface TimeOptions {
 }
 
 interface TimelineDataCanvasProps {
-  options: TimeOptions;
   rounding: RoundingType;
   units: TimeUnit[];
   uuid: string;
@@ -55,7 +54,6 @@ export const TimelineDataCanvas = React.forwardRef<
   (
     {
       setHeight,
-      options,
       rounding,
       units,
       uuid,
@@ -71,7 +69,7 @@ export const TimelineDataCanvas = React.forwardRef<
     // Context
     const { t } = useTranslation();
     const { filter, filterItems } = useFilter();
-    const { locale, xSize, timezone, items } = useGlobalGlobalContext();
+    const { locale, xSize, timezone, items, options } = useGlobalGlobalContext();
 
 
     // Refs

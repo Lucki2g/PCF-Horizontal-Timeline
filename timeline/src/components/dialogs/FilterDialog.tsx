@@ -52,7 +52,7 @@ export const FilterDialog = React.forwardRef(({ items, triggerElement, onSave }:
                 <Text role="p">
                   {t("filter_count")
                     .replace("{0}", "" + filteredActivities)
-                    .replace("{1}", "" + items.length)}
+                    .replace("{1}", "" + items.filter(i => i.scheduledend !== null).length)}
                 </Text>
               </div>
               <Tooltip content={t("filter_clear")} relationship="label" withArrow>

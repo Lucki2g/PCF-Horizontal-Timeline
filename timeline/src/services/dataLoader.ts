@@ -32,9 +32,9 @@ const loadDebugData = (): TimelineItem[] => {
     },
     {
       id: "0",
-      subject: "UTC",
+      subject: "UTC+02",
       activitytypecode: "phonecall",
-      scheduledend: new Date("2024-05-16T08:00:00.000+00:00"),
+      scheduledend: new Date("2024-05-17T08:00:00.000+02:00"),
       prioritycode: 2,
       statecode: 1,
       ownerid: {
@@ -47,7 +47,7 @@ const loadDebugData = (): TimelineItem[] => {
       id: "2",
       subject: "LOCAL",
       activitytypecode: "email",
-      scheduledend: new Date("2024-05-16T08:00:00.000"),
+      scheduledend: new Date("2024-05-18T08:00:00.000"),
       prioritycode: 1,
       statecode: 0,
       ownerid: {

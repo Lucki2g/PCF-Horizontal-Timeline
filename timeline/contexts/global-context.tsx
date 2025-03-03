@@ -6,6 +6,8 @@ import { LoaderProvider } from "./loader-context";
 import { FilterProvider } from "./filter-context";
 import { ItemEditType } from "../src/util";
 import { TimelineItem } from "../src/components/TimelineItem";
+import { TimeOptions } from "../src/timeUtil";
+import { OptionState } from "@fluentui/react-components";
 
 // the idea is to make this changeable at runtime by the user, with personilized settings
 
@@ -32,6 +34,9 @@ type GlobalContextProps = {
 
   items: TimelineItem[],
   itemDispatch: (action: IItemAction) => void;
+
+  options: TimeOptions;
+  setOptions: (options: TimeOptions) => void;
 };
 
 const initialState: GlobalContextProps = {
@@ -48,7 +53,9 @@ const initialState: GlobalContextProps = {
   itemEditType: "modal",
   setItemEditType: () => {},
   items: [],
-  itemDispatch: () => {}
+  itemDispatch: () => {},
+  options: {} as TimeOptions,
+  setOptions: () => {},
 };
 
 type ItemReducerActions = "update" | "reset";
@@ -81,6 +88,7 @@ export const GlobalProvider = ({ children }: { children: ReactNode }) => {
   // others settings and data
   const [locale, setLocale] = React.useState<string>(initialState.locale);
   const [timezone, setTimeZone] = React.useState<string>(initialState.timezone);
+  const [options, setOptions] = React.useState<TimeOptions>({ } as TimeOptions);
   const [itemEditType, setItemEditType] = React.useState<ItemEditType>("modal");
   const [activityInfo, setActivityInfo] = React.useState<{
     [schemaname: string]: ActivityInformation;
@@ -113,6 +121,8 @@ export const GlobalProvider = ({ children }: { children: ReactNode }) => {
         setClientUrl,
         itemEditType,
         setItemEditType,
+        options,
+        setOptions,
         // items
         items,
         itemDispatch,

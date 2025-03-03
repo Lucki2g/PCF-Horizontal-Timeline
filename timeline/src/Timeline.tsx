@@ -35,7 +35,7 @@ interface ITimelineProps {
   context: ComponentFramework.Context<IInputs>;
 }
 
-export const DEBUG = false;
+export const DEBUG = true;
 
 export default function Timeline({ context }: ITimelineProps) {
   const size = context.mode.allocatedWidth;
@@ -49,6 +49,7 @@ export default function Timeline({ context }: ITimelineProps) {
     setXSize,
     setClientUrl,
     setItemEditType,
+    setOptions,
     timezone,
     items,
     itemDispatch
@@ -58,18 +59,6 @@ export default function Timeline({ context }: ITimelineProps) {
     return uuidv4();
   }, []);
 
-  // Settings
-  const OPTIONS: TimeOptions = {
-    years: context.parameters.yearsformat.raw ?? "full",
-    quarterPrefix: context.parameters.quartersformat.raw ?? "",
-    months: context.parameters.monthsformat.raw ?? "long",
-    weeksPrefix: context.parameters.weeksformat.raw ?? "",
-    days: context.parameters.daysformat.raw ?? "numeric",
-    hours: context.parameters.hoursformat.raw ?? "numeric",
-    hourCycle: context.parameters.hourscycle.raw ?? "23h",
-    minutes: "2-digit",
-    seconds: "2-digit",
-  } as TimeOptions;
   const ROUNDING = (context.parameters.rounding.raw ?? "day") as any;
   const TIMEUNITSUNSORTED: { value: TimeUnit; sort: number }[] = [];
   if (context.parameters.yearsenabled.raw)
@@ -173,6 +162,20 @@ export default function Timeline({ context }: ITimelineProps) {
           break;
       }
       setLocale(locale);
+
+      // Settings
+      const options: TimeOptions = {
+        years: context.parameters.yearsformat.raw ?? "full",
+        quarterPrefix: context.parameters.quartersformat.raw ?? "",
+        months: context.parameters.monthsformat.raw ?? "long",
+        weeksPrefix: context.parameters.weeksformat.raw ?? "",
+        days: context.parameters.daysformat.raw ?? "numeric",
+        hours: context.parameters.hoursformat.raw ?? "numeric",
+        hourCycle: context.parameters.hourscycle.raw ?? "23h",
+        minutes: "2-digit",
+        seconds: "2-digit",
+      } as TimeOptions;
+      setOptions(options);
 
       const timezoneSource = castToTimeZoneSource(
         context.parameters.timezonesource.raw ?? "",
@@ -377,7 +380,6 @@ export default function Timeline({ context }: ITimelineProps) {
           ref={canvasRef}
           setHeight={(height: number) => setHeight(height)}
           rounding={ROUNDING}
-          options={OPTIONS}
           units={TIMEUNITS}
         />
       </div>
