@@ -14,6 +14,11 @@ It is built as an alternative to the classic Vertical Timeline by Microsoft, tha
 
 Hopefully you'll find it useful.
 
+![image](https://github.com/user-attachments/assets/c509d214-9893-4ecf-9987-89dae72457fa)
+
+![image](https://github.com/user-attachments/assets/27732ce3-191d-4ff1-91be-8611ad67b087)
+
+
 # ⚙️ Features & Configuration
 
 ### Localization
