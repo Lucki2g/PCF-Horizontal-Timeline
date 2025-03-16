@@ -114,6 +114,7 @@ export default function TimelineToolbar({
         <Toolbar size="small">
           {/* Refresh timeline */}
           <Tooltip
+            mountNode={timelineRef.current}
             content={t("action_refresh")}
             withArrow
             relationship={"label"}
@@ -135,6 +136,7 @@ export default function TimelineToolbar({
 
           {/* Previous */}
           <Tooltip
+            mountNode={timelineRef.current}
             content={t("action_previous")}
             withArrow
             relationship={"label"}
@@ -149,7 +151,11 @@ export default function TimelineToolbar({
             />
           </Tooltip>
           {/* Next */}
-          <Tooltip content={t("action_next")} withArrow relationship={"label"}>
+          <Tooltip 
+            mountNode={timelineRef.current}
+            content={t("action_next")} 
+            withArrow 
+            relationship={"label"}>
             <Button
               appearance="subtle"
               size="small"
@@ -161,7 +167,11 @@ export default function TimelineToolbar({
           </Tooltip>
           {/* Goto */}
           <FluentProvider theme={webLightTheme}>
-            <Tooltip content={t("action_goto")} withArrow relationship={"label"}>
+            <Tooltip 
+            mountNode={timelineRef.current} 
+            content={t("action_goto")} 
+            withArrow 
+            relationship={"label"}>
               <Dialog>
                 <DialogTrigger disableButtonEnhancement>
                   <Button
@@ -212,6 +222,7 @@ export default function TimelineToolbar({
 
           {/* Filter */}
           <Tooltip
+            mountNode={timelineRef.current}
             content={t("action_filter")}
             withArrow
             relationship={"label"}
@@ -235,6 +246,7 @@ export default function TimelineToolbar({
 
           {/* Next */}
           <Tooltip
+            mountNode={timelineRef.current}
             content={t("action_timeless")}
             withArrow
             relationship={"label"}

@@ -25,6 +25,7 @@ export const ItemDropdown = ({ children, item }: IItemDialogProps) => {
     const { t } = useTranslation();
     const [isOpen, setIsOpen] = React.useState<boolean>(false);
     const dateCalendarInformation = useCalendarInformation();
+    const itemRef = React.useRef<HTMLDivElement | null>(null);
 
     // important that scheduled date is UTC
     const [itemState, setItemState] = React.useState<TimelineItem>(item);
@@ -100,7 +101,7 @@ export const ItemDropdown = ({ children, item }: IItemDialogProps) => {
     return (
         <Popover withArrow open={isOpen} onOpenChange={(_, open) => setIsOpen(open.open)}>
             <PopoverTrigger disableButtonEnhancement>{children}</PopoverTrigger>
-            <PopoverSurface className="pointer-events-auto z-50" 
+            <PopoverSurface ref={itemRef} className="pointer-events-auto z-50" 
                 onMouseDown={(e) => e.stopPropagation()}
                 onMouseMove={(e) => e.stopPropagation()}
                 onTouchStart={(e) => e.stopPropagation()}
@@ -137,6 +138,7 @@ export const ItemDropdown = ({ children, item }: IItemDialogProps) => {
                 {/* Date */}
                 <Field label={t("dropdown_date")} className='mt-2' size='small'>
                     <DatePicker 
+                        mountNode={itemRef.current}
                         size='small'
                         value={itemState.scheduledend}
                         appearance="filled-darker"
@@ -152,6 +154,7 @@ export const ItemDropdown = ({ children, item }: IItemDialogProps) => {
                 <Field className='mt-2' size='small'>
                     <TimePicker 
                         hourCycle={options.hourCycle}
+                        expandIcon={<i className={`${getIconClassName("ChevronDown")} text-[11px]`} />}
                         size='small'
                         appearance='filled-darker'
                         freeform
