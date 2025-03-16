@@ -232,6 +232,15 @@ export default function Timeline({ context }: ITimelineProps) {
     refresh();
   }, [loadingstate]);
 
+  React.useEffect(() => {
+    const canvas = document.getElementById(
+      `canvas-${randomID}`,
+    ) as HTMLCanvasElement;
+    if (!canvas || !canvasRef.current) return;
+    const left = Number.parseFloat(canvas.style.left.replace("px", ""));
+    canvasRef.current.draw(canvas, left);
+  }, [context.mode.allocatedWidth]);
+
   // Events
   function mouseDown(e: any, mobile: boolean = false) {
     setMouseDown(true);

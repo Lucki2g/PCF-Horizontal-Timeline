@@ -48,7 +48,9 @@ v2.0.0
 
 
 Future
+- BUG: Icon on timepicker not set (results in unknown unicode character)
 - BUG: Timeline becoming invisible sometimes
+- FEATURE: Assign an activity
 - Performance: Recude fluentproviders and fix mounting issues of fixed portaled elements
 - BUG: Opening a dropdown moves entire timelines somestimes
 - FEATURE: warnings/errors for unsupported configuration (toasts)
