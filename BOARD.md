@@ -50,8 +50,8 @@ v2.0.1
 [x] BUG: Icon on timepicker not set (results in unknown unicode character)
 [x] BUG: Fix the console error about state leak
 [x] BUG: Timepicker missing styling
-[ ] BUG: Fix the invalid date format error in console
-[ ] UX: Min width of the section (if no items present).
+[x] BUG: Fix the invalid date format error in console
+[x] UX: Min width of the section (if no items present).
 [ ] FEATURE: Fullscreen button
 
 Future
