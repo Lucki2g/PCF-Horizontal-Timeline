@@ -147,7 +147,7 @@ export const ItemDropdown = ({ children, item }: IItemDialogProps) => {
                         showCloseButton
                         contentAfter={<i className={`${getIconClassName("Calendar")} text-[11px]`} />}
                         calendar={dateCalendarInformation}
-                        formatDate={(date) => date !== undefined && date ? date.toLocaleDateString(locale, { day: "numeric", month: "long", year: "numeric" }) : ""}
+                        formatDate={(date) => date instanceof Date && date ? date.toLocaleDateString(locale, { day: "numeric", month: "long", year: "numeric" }) : ""}
                         onSelectDate={onSelectDate}
                     />
                 </Field>

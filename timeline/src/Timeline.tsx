@@ -34,11 +34,12 @@ import TimelineToolbar from "./components/toolbars/TimelineToolbar";
 
 interface ITimelineProps {
   context: ComponentFramework.Context<IInputs>;
+  fluentProviderMount: HTMLElement | null;
 }
 
 export const DEBUG = false;
 
-export default function Timeline({ context }: ITimelineProps) {
+export default function Timeline({ context, fluentProviderMount }: ITimelineProps) {
   const size = context.mode.allocatedWidth;
   if (size <= 0) return <></>;
 
@@ -359,6 +360,7 @@ export default function Timeline({ context }: ITimelineProps) {
 
       {/* Actions */}
       <TimelineToolbar
+        fluentProviderMount={fluentProviderMount}
         timelineRef={timelineRef}
         animate={animateLeft}
         isPaneOpen={isPaneOpen}

@@ -196,9 +196,6 @@ const loadRealData = async (context: ComponentFramework.Context<IInputs>) => {
           ? null
           : new Date(activity.getValue("scheduledend") as string);
 
-
-      console.log(activity)
-
       const owner = {
         id: (activity.getValue("ownerid") as any).id.guid,
         name: (activity.getValue("ownerid") as any).name,
