@@ -194,7 +194,7 @@ export default function TimelineToolbar({
                         value={gotoDate}
                         contentAfter={<i className={`${getIconClassName("Calendar")} text-[11px]`} />}
                         calendar={dateCalendarInformation}
-                        formatDate={(date) => date?.toLocaleDateString(locale, { day: "numeric", month: "long", year: "numeric" }) ?? ""}
+                        formatDate={(date) => date !== undefined && date ? date.toLocaleDateString(locale, { day: "numeric", month: "long", year: "numeric" }) : ""}
                         onSelectDate={(date) => setGotoDate(date ?? null)}
                         minDate={filter.startDate}
                         maxDate={filter.endDate}
@@ -228,6 +228,7 @@ export default function TimelineToolbar({
             relationship={"label"}
           > 
             <FilterDialog
+              mountNode={timelineRef.current}
               onSave={onSave}
               items={items}
               triggerElement={

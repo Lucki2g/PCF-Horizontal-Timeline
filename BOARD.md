@@ -46,9 +46,15 @@ v2.0.0
 [x] FEATURE: state/status visibility
 [x] FEATURE: goto date quickaction in toolbar
 
+v2.0.1
+[x] BUG: Icon on timepicker not set (results in unknown unicode character)
+[x] BUG: Fix the console error about state leak
+[x] BUG: Timepicker missing styling
+[ ] BUG: Fix the invalid date format error in console
+[ ] UX: Min width of the section (if no items present).
+[ ] FEATURE: Fullscreen button
 
 Future
-- BUG: Icon on timepicker not set (results in unknown unicode character)
 - BUG: Timeline becoming invisible sometimes
 - FEATURE: Assign an activity
 - Performance: Recude fluentproviders and fix mounting issues of fixed portaled elements
@@ -58,7 +64,6 @@ Future
 [-] FEATURE: Edit options
   - dialog 
   - drawer
-- FEATURE: Fullscreen button
   [-] FEATURE: Varying sizes of cells - ySize / fontSize
 - FEATURE: Count on Activity type chips inside filter
 - FEATURE: Grey out finished activities
@@ -72,7 +77,6 @@ Future
 - FEATURE: Increase modal height size
 - FEATURE: Darkmode
 - FEATURE: Colorblind mode
-- BUG: Fix the console error about state leak
 - FEATURE: Progress/spinner on fetch calls
 - TODO: Datepicker timezone control
 [!] Write about Attachment size limitations

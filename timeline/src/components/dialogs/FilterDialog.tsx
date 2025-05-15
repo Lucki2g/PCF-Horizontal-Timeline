@@ -21,9 +21,10 @@ interface IFilterDialogProps {
   items: TimelineItem[];
   triggerElement: React.ReactElement<DialogTriggerChildProps>;
   onSave: (filter: FilterState) => void;
+  mountNode: HTMLElement | null;
 }
 
-export const FilterDialog = React.forwardRef(({ items, triggerElement, onSave }: IFilterDialogProps, rootElement: any) => {
+export const FilterDialog = React.forwardRef(({ items, triggerElement, onSave, mountNode }: IFilterDialogProps, rootElement: any) => {
   const { t } = useTranslation();
   const { initialState, filter, filterItems } = useFilter();
   const { locale } = useGlobalGlobalContext();
@@ -40,7 +41,7 @@ export const FilterDialog = React.forwardRef(({ items, triggerElement, onSave }:
   return (
     <Dialog>
       <DialogTrigger disableButtonEnhancement>{triggerElement}</DialogTrigger>
-      <DialogSurface>
+      <DialogSurface mountNode={mountNode}>
         <DialogBody ref={rootElement}>
           {/* HEADER */}
           <DialogTitle role="heading">
@@ -108,7 +109,7 @@ export const FilterDialog = React.forwardRef(({ items, triggerElement, onSave }:
                 showCloseButton
                 contentAfter={<i className={`${getIconClassName("Calendar")} text-[11px]`} />}
                 calendar={dateCalendarInformation}
-                formatDate={(date) => date?.toLocaleDateString(locale, { day: "numeric", month: "long", year: "numeric" }) ?? ""}
+                formatDate={(date) => date !== undefined && date ? date.toLocaleDateString(locale, { day: "numeric", month: "long", year: "numeric" }) : ""}
                 onSelectDate={(date) =>
                   setCurrentFilter({
                     ...currentFilter,
@@ -134,7 +135,7 @@ export const FilterDialog = React.forwardRef(({ items, triggerElement, onSave }:
                 showCloseButton
                 contentAfter={<i className={`${getIconClassName("Calendar")} text-[11px]`} />}
                 calendar={dateCalendarInformation}
-                formatDate={(date) => date?.toLocaleDateString(locale, { day: "numeric", month: "long", year: "numeric" }) ?? ""}
+                formatDate={(date) => date !== undefined && date ? date.toLocaleDateString(locale, { day: "numeric", month: "long", year: "numeric" }) : ""}
                 onSelectDate={(date) =>
                   setCurrentFilter({
                     ...currentFilter,

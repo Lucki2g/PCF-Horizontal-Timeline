@@ -147,12 +147,13 @@ export const ItemDropdown = ({ children, item }: IItemDialogProps) => {
                         showCloseButton
                         contentAfter={<i className={`${getIconClassName("Calendar")} text-[11px]`} />}
                         calendar={dateCalendarInformation}
-                        formatDate={(date) => date?.toLocaleDateString(locale, { day: "numeric", month: "long", year: "numeric" }) ?? ""}
+                        formatDate={(date) => date !== undefined && date ? date.toLocaleDateString(locale, { day: "numeric", month: "long", year: "numeric" }) : ""}
                         onSelectDate={onSelectDate}
                     />
                 </Field>
                 <Field className='mt-2' size='small'>
                     <TimePicker 
+                        mountNode={itemRef.current}
                         hourCycle={options.hourCycle}
                         expandIcon={<i className={`${getIconClassName("ChevronDown")} text-[11px]`} />}
                         size='small'

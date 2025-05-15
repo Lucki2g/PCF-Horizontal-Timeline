@@ -8,6 +8,7 @@ import {
   TimeUnit,
   ySize,
 } from "./timeUtil";
+import { addDays } from 'date-fns';
 import { IEntityReference, TimelineItem } from "./components/TimelineItem";
 import { FilterState, useFilter } from "../contexts/filter-context";
 import TimelessTimelineItemBlock from "./components/TimelessTimelineItem";
@@ -341,7 +342,7 @@ export default function Timeline({ context }: ITimelineProps) {
         {},
       ),
       startDate: removeDayFromDateAndRound(start, timezone),
-      endDate: addDayToDateAndRound(end, timezone),
+      endDate: addDayToDateAndRound(addDays(end, 7), timezone),
       owner: null,
     });
     setState(false);
