@@ -9,7 +9,17 @@ import { useGlobalGlobalContext } from "../../../contexts/global-context";
 import { FilterDialog } from "../dialogs/FilterDialog";
 import * as React from "react";
 import { getIconClassName } from "@fluentui/style-utilities";
-import { Dialog, DialogActions, DialogBody, DialogContent, DialogSurface, DialogTrigger, Field, FluentProvider, webLightTheme } from "@fluentui/react-components";
+import {
+  Dialog,
+  DialogActions,
+  DialogBody,
+  DialogContent,
+  DialogSurface,
+  DialogTrigger,
+  Field,
+  FluentProvider,
+  webLightTheme,
+} from "@fluentui/react-components";
 import { DatePicker } from "@fluentui/react-datepicker-compat";
 import { useCalendarInformation } from "../../../hooks/useCalendarInformation";
 
@@ -51,7 +61,9 @@ export default function TimelineToolbar({
       .map((item) => {
         return {
           item: item,
-          left: Math.floor(getLeft(item.scheduledend!, filter.startDate, xSize)),
+          left: Math.floor(
+            getLeft(item.scheduledend!, filter.startDate, xSize),
+          ),
         };
       });
 
@@ -75,23 +87,33 @@ export default function TimelineToolbar({
     const centerOfCanvas = Math.round(
       timelineRef.current.scrollLeft + timelineRef.current.clientWidth / 2,
     );
+
     const activityLocations = filterItems(filter, items)
       .filter((item) => item.scheduledend !== null)
       .map((item) => {
         return {
           item: item,
-          left: Math.ceil(getLeft(item.scheduledend!, filter.startDate, xSize)),
+          left: Math.floor(
+            getLeft(item.scheduledend!, filter.startDate, xSize),
+          ),
         };
       });
 
+    // Sort in descending order to find the closest previous item
     const nextActivityLocation = activityLocations
-      .sort((a, b) => a.left - b.left)
-      .reverse()
+      .sort((a, b) => b.left - a.left) // Sort descending instead of ascending then reversing
       .find((item) => item.left < centerOfCanvas);
+
     if (!nextActivityLocation) return;
+
+    // Use the same Math.floor calculation as in animateNext for consistency
+    const targetPosition = Math.floor(
+      nextActivityLocation.left - timelineRef.current.clientWidth / 2,
+    );
+
     animate(
       timelineRef.current.scrollLeft,
-      nextActivityLocation.left - timelineRef.current.clientWidth / 2,
+      targetPosition,
       timelineRef.current,
       1000,
     );
@@ -102,7 +124,8 @@ export default function TimelineToolbar({
     if (!timelineRef.current) return;
     animate(
       timelineRef.current.scrollLeft,
-      getLeft(gotoDate, filter.startDate, xSize) - timelineRef.current.clientWidth / 2,
+      getLeft(gotoDate, filter.startDate, xSize) -
+        timelineRef.current.clientWidth / 2,
       timelineRef.current,
       1000,
     );
@@ -154,21 +177,25 @@ export default function TimelineToolbar({
               appearance="subtle"
               size="small"
               onClick={animateNext}
-              icon={
-                <i className={`${getIconClassName("Next")} text-[12px]`} />
-              }
+              icon={<i className={`${getIconClassName("Next")} text-[12px]`} />}
             />
           </Tooltip>
           {/* Goto */}
           <FluentProvider theme={webLightTheme}>
-            <Tooltip content={t("action_goto")} withArrow relationship={"label"}>
+            <Tooltip
+              content={t("action_goto")}
+              withArrow
+              relationship={"label"}
+            >
               <Dialog>
                 <DialogTrigger disableButtonEnhancement>
                   <Button
                     appearance="subtle"
                     size="small"
                     icon={
-                      <i className={`${getIconClassName("GotoToday")} text-[12px]`} />
+                      <i
+                        className={`${getIconClassName("GotoToday")} text-[12px]`}
+                      />
                     }
                   />
                 </DialogTrigger>
@@ -182,9 +209,19 @@ export default function TimelineToolbar({
                         showGoToToday
                         showCloseButton
                         value={gotoDate}
-                        contentAfter={<i className={`${getIconClassName("Calendar")} text-[11px]`} />}
+                        contentAfter={
+                          <i
+                            className={`${getIconClassName("Calendar")} text-[11px]`}
+                          />
+                        }
                         calendar={dateCalendarInformation}
-                        formatDate={(date) => date?.toLocaleDateString(locale, { day: "numeric", month: "long", year: "numeric" }) ?? ""}
+                        formatDate={(date) =>
+                          date?.toLocaleDateString(locale, {
+                            day: "numeric",
+                            month: "long",
+                            year: "numeric",
+                          }) ?? ""
+                        }
                         onSelectDate={(date) => setGotoDate(date ?? null)}
                         minDate={filter.startDate}
                         maxDate={filter.endDate}
@@ -193,14 +230,12 @@ export default function TimelineToolbar({
                   </DialogContent>
                   <DialogActions>
                     <DialogTrigger disableButtonEnhancement>
-                      <Button appearance='primary' onClick={animateGoto}>
-                          {t("goto_goto")}
+                      <Button appearance="primary" onClick={animateGoto}>
+                        {t("goto_goto")}
                       </Button>
                     </DialogTrigger>
                     <DialogTrigger disableButtonEnhancement>
-                      <Button>
-                          {t("filter_close")}
-                      </Button>
+                      <Button>{t("filter_close")}</Button>
                     </DialogTrigger>
                   </DialogActions>
                 </DialogSurface>
@@ -215,7 +250,7 @@ export default function TimelineToolbar({
             content={t("action_filter")}
             withArrow
             relationship={"label"}
-          > 
+          >
             <FilterDialog
               onSave={onSave}
               items={items}
@@ -224,7 +259,9 @@ export default function TimelineToolbar({
                   appearance="subtle"
                   size="small"
                   icon={
-                    <i className={`${getIconClassName("Filter")} text-[12px]`} />
+                    <i
+                      className={`${getIconClassName("Filter")} text-[12px]`}
+                    />
                   }
                 />
               }
@@ -244,7 +281,9 @@ export default function TimelineToolbar({
               size="small"
               onClick={paneChange}
               icon={
-                <i className={`${getIconClassName(isPaneOpen ? "OpenPane" : "ClosePane")} text-[12px]`}/>
+                <i
+                  className={`${getIconClassName(isPaneOpen ? "OpenPane" : "ClosePane")} text-[12px]`}
+                />
               }
             />
           </Tooltip>
