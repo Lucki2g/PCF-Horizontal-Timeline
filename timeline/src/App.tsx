@@ -12,11 +12,21 @@ interface IAppProps {
 }
 
 export default function App({ context }: IAppProps) {
+
+  // Get all elements with the class
+  const elements = document.querySelectorAll('.fui-FluentProvider');
+
+  // Find the outermost one (closest to the root of the DOM)
+  const outermost: HTMLElement | null = Array.from(elements).find(el => {
+    // None of its ancestors also have the same class
+    return !el.closest('.fui-FluentProvider') || el.closest('.fui-FluentProvider') === el;
+  }) as HTMLElement ?? null;
+
   return (
     <FluentProvider theme={webLightTheme}>
       <I18nextProvider i18n={i18n}>
         <GlobalProvider>
-          <Timeline context={context} />
+          <Timeline context={context} fluentProviderMount={outermost} />
         </GlobalProvider>
       </I18nextProvider>
     </FluentProvider>

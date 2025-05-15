@@ -6,6 +6,7 @@ import { Tag } from "@fluentui/react-tags"
 import { TagPicker, TagPickerControl, TagPickerGroup, TagPickerList, TagPickerOption, TagPickerOptionGroup, useTagPickerFilter, TagPickerInput } from '@fluentui/react-tag-picker';
 import { useTranslation } from "react-i18next";
 import { getIconClassName } from "@fluentui/style-utilities";
+import { FluentProvider, webLightTheme } from "@fluentui/react-components";
 // https://github.com/microsoft/fluentui/wiki/Using-icons/f60fc129945263782708736c8c518b3d30653c8e, https://uifabricicons.azurewebsites.net/, https://www.flicon.io/
 
 interface ILookupProps {
@@ -137,55 +138,57 @@ export default function Lookup({
   });
 
   return (
-    <Field
-      label={label}
-      orientation="horizontal"
-      className="relative my-1 w-full"
-    >
-      <TagPicker
-        onOptionSelect={onOptionSelect}
-        selectedOptions={selectedOption ? [selectedOption.name] : []}
-        appearance="filled-darker"
+    <FluentProvider theme={webLightTheme}>
+      <Field
+        label={label}
+        orientation="horizontal"
+        className="relative my-1 w-full"
       >
-        <TagPickerControl expandIcon={<i className={`${getIconClassName("Search")} text-[11px]`} />}>
-          <TagPickerGroup>
-            {selectedOption ? (
-              <Tag
-                value={selectedOption.name}
-                shape="rounded"
-                dismissIcon={<i className={`${getIconClassName("ChromeClose")} text-[11px]`} />}
-                media={
-                  <Avatar
-                    shape="square"
-                    color="colorful"
-                    idForColor={selectedOption.name}
-                    icon={
-                       <i className={`${getIconClassName(selectedOption.entitytype === "team" ? "Group" : "Contact")} h-[20px] w-[20px] text-[11px] flex justify-center items-center`} />
-                    }
-                  />
-                }
-              >
-                {selectedOption.name}
-              </Tag>
-            ) : (
-              <></>
-            )}
-          </TagPickerGroup>
-          <TagPickerInput
-            autoComplete="off"
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-          />
-        </TagPickerControl>
-        <TagPickerList>
-          <TagPickerOptionGroup label={t("lookup_teams")}>
-            {teams}
-          </TagPickerOptionGroup>
-          <TagPickerOptionGroup label={t("lookup_users")}>
-            {users}
-          </TagPickerOptionGroup>
-        </TagPickerList>
-      </TagPicker>
-    </Field>
+        <TagPicker
+          onOptionSelect={onOptionSelect}
+          selectedOptions={selectedOption ? [selectedOption.name] : []}
+          appearance="filled-darker"
+        >
+          <TagPickerControl expandIcon={<i className={`${getIconClassName("Search")} text-[11px]`} />}>
+            <TagPickerGroup>
+              {selectedOption ? (
+                <Tag
+                  value={selectedOption.name}
+                  shape="rounded"
+                  dismissIcon={<i className={`${getIconClassName("ChromeClose")} text-[11px]`} />}
+                  media={
+                    <Avatar
+                      shape="square"
+                      color="colorful"
+                      idForColor={selectedOption.name}
+                      icon={
+                        <i className={`${getIconClassName(selectedOption.entitytype === "team" ? "Group" : "Contact")} h-[20px] w-[20px] text-[11px] flex justify-center items-center`} />
+                      }
+                    />
+                  }
+                >
+                  {selectedOption.name}
+                </Tag>
+              ) : (
+                <></>
+              )}
+            </TagPickerGroup>
+            <TagPickerInput
+              autoComplete="off"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+            />
+          </TagPickerControl>
+          <TagPickerList>
+            <TagPickerOptionGroup label={t("lookup_teams")}>
+              {teams}
+            </TagPickerOptionGroup>
+            <TagPickerOptionGroup label={t("lookup_users")}>
+              {users}
+            </TagPickerOptionGroup>
+          </TagPickerList>
+        </TagPicker>
+      </Field>
+    </FluentProvider>
   );
 }

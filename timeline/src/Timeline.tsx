@@ -8,6 +8,7 @@ import {
   TimeUnit,
   ySize,
 } from "./timeUtil";
+import { addDays } from 'date-fns';
 import { IEntityReference, TimelineItem } from "./components/TimelineItem";
 import { FilterState, useFilter } from "../contexts/filter-context";
 import TimelessTimelineItemBlock from "./components/TimelessTimelineItem";
@@ -33,11 +34,12 @@ import TimelineToolbar from "./components/toolbars/TimelineToolbar";
 
 interface ITimelineProps {
   context: ComponentFramework.Context<IInputs>;
+  fluentProviderMount: HTMLElement | null;
 }
 
 export const DEBUG = false;
 
-export default function Timeline({ context }: ITimelineProps) {
+export default function Timeline({ context, fluentProviderMount }: ITimelineProps) {
   const size = context.mode.allocatedWidth;
   if (size <= 0) return <></>;
 
@@ -232,6 +234,15 @@ export default function Timeline({ context }: ITimelineProps) {
     refresh();
   }, [loadingstate]);
 
+  React.useEffect(() => {
+    const canvas = document.getElementById(
+      `canvas-${randomID}`,
+    ) as HTMLCanvasElement;
+    if (!canvas || !canvasRef.current) return;
+    const left = Number.parseFloat(canvas.style.left.replace("px", ""));
+    canvasRef.current.draw(canvas, left);
+  }, [context.mode.allocatedWidth]);
+
   // Events
   function mouseDown(e: any, mobile: boolean = false) {
     setMouseDown(true);
@@ -332,7 +343,7 @@ export default function Timeline({ context }: ITimelineProps) {
         {},
       ),
       startDate: removeDayFromDateAndRound(start, timezone),
-      endDate: addDayToDateAndRound(end, timezone),
+      endDate: addDayToDateAndRound(addDays(end, 7), timezone),
       owner: null,
     });
     setState(false);
@@ -349,6 +360,7 @@ export default function Timeline({ context }: ITimelineProps) {
 
       {/* Actions */}
       <TimelineToolbar
+        fluentProviderMount={fluentProviderMount}
         timelineRef={timelineRef}
         animate={animateLeft}
         isPaneOpen={isPaneOpen}

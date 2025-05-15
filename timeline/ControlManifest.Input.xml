@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <manifest>
-  <control namespace="ape.dataset.timeline" constructor="timeline" version="2.0.0" display-name-key="timeline" description-key="timeline description" control-type="virtual" >
+  <control namespace="ape.dataset.timeline" constructor="timeline" version="2.0.1" display-name-key="timeline" description-key="timeline description" control-type="virtual" >
     <external-service-usage enabled="false">
     </external-service-usage>
 
